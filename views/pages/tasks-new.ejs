@@ -1,0 +1,217 @@
+<main class="container">
+  <div class="mt-5">
+    <form
+      class="d-flex flex-column flex-wrap align-items-center justify-content-center handleable" action="/api/tasks" data-onSuccessType="redirect" data-onSuccessValue="/tasks?success=new" id="create-task-form">
+      <h1 class="h3 mb-3 fw-normal">New Task</h1>
+
+      <% if(ingestionActive) { %>
+      <div class="alert alert-warning text-center">
+        <i class="bi-exclamation-triangle"></i> Image ingestion in
+        progress. Some images may not be available for task creation.
+      </div>
+     <% } %>
+
+      <div>
+        <div class="form-floating mb-1">
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            placeholder="My Task Name"
+            required
+          />
+          <label for="name">Task Name</label>
+        </div>
+
+        <div class="form-floating">
+          <select required class="form-select form-control" name="assignee" id="assignee">
+
+            <option></option>
+            <option disabled>--- USERS ---</option>
+            <% for (const user of users) { %>
+
+              <option value="<%=user.id%>"><%=user.username%></option>
+
+            <% } %>
+
+            <option disabled>--- MACHINE LEARNING ---</option>
+            <option value="ml-v1">ML Config: V1 Classifier</option>
+            <option value="ml-v2">ML Config: V2 Classifier</option>
+
+
+          </select>
+          <label for="assignee">Assignee</label>
+        </div>
+
+        <div class="form-floating">
+          <fieldset>
+            <p class="mt-4">Camera Side</p>
+            <div class="row gx-3">
+              <div class="col-6">
+                <input
+                  class="btn-check"
+                  type="radio"
+                  value="left"
+                  name="orientation"
+                  id="left"
+                />
+                <label
+                  class="btn-primary btn w-100"
+                  for="left">
+                  Left
+                </label>
+              </div>
+              <div class="col-6">
+                <input
+                  class="btn-check"
+                  type="radio"
+                  value="right"
+                  name="orientation"
+                  id="right"
+                  checked/>
+                <label
+                  class="btn btn-primary w-100"
+                  for="right">
+                  Right
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <p class="mt-1">
+          To leverage Division Lines, only select images from one side of the
+          plane
+        </p>
+
+        <div class="mt-4">
+          <div
+            class="alert alert-info text-center d-flex justify-content-between align-items-center">
+            <p class="m-0">
+              <span id="totalFilteredImages"><%=imageCountTotal%></span>
+              <span>&nbsp;of&nbsp;</span>
+              <span id="totalImageCount"><%=imageCountTotal%></span>
+            </p>
+            <button class="btn btn-primary btn-sm ms-5" type="button"  id="imageSelectionModalTrigger">
+              Select Images
+            </button>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="filterName" name="filterName" value="">
+      <input type="hidden" id="filterSource" name="filterSource" value="">
+      <input type="hidden" id="filterDateStart" name="filterDateStart" value="">
+      <input type="hidden" id="filterDateEnd" name="filterDateEnd" value="">
+      <input type="hidden" id="filterSubsetStart" name="filterSubsetStart" value="">
+      <input type="hidden" id="filterSubsetEnd" name="filterSubsetEnd" value="">
+      <input type="hidden" id="filteredImageCount" name="filteredImageCount" value="<%=imageCountTotal%>">
+      <button
+        class=" btn btn-lg btn-primary mt-3"
+        type="submit">Submit</button>
+    </form>
+
+<!-- BEGIN MODAL -->
+    <div class="modal fade" id="imageSelectionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Select Images</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <form id="imageSelectionForm">
+          <div class="modal-body">
+            <div class="input-group mb-1">
+              <div class="form-floating">
+                <input type="text" id="originalFilenameLower" name="originalFilenameLower" class="form-control" />
+                <label for="originalFilenameLower">File Name</label>
+              </div>
+              <i class="input-group-text bi-search"></i>
+            </div>
+
+            <div class="form-floating mb-1">
+              <input
+                type="text"
+                list="sourceTask"
+                name="sourceTask"
+                id="taskNamesDataList"
+                class="form-control"
+              />
+              <label for="sourceTask">Duplicate From Existing Task</label>
+              <datalist id="sourceTask">
+                <% for (const task of tasks) { %>
+
+                  <option value="<%=task.displayName%>" />
+
+                <% } %>
+
+
+              </datalist>
+            </div>
+
+            <p class="mt-4">Time Image Was Taken</p>
+            <div
+              class="input-group date bootstrap-datepicker mb-1"
+              id="datepicker1">
+              <div class="form-floating">
+                <input type="text" id="startDate" name="startDate" class="form-control" />
+                <label for="startDate">Start</label>
+              </div>
+              <i class="input-group-text  bi-calendar input-group-addon"></i>
+            </div>
+
+            <div class="input-group date bootstrap-datepicker" id="datepicker2">
+              <div class="form-floating">
+                <input type="text" id="endDate" name="endDate" class="form-control" />
+                <label for="endDate">End</label>
+              </div>
+              <i class="input-group-text bi-calendar input-group-addon"></i>
+            </div>
+
+            <div class="form-floating">
+              <fieldset>
+                <p class="mt-4">Subset Range (inclusive)</p>
+                <div class="row gx-3">
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="subsetStart"
+                      id="subsetStart"
+                      placeholder="20"
+                    />
+                    <label for="floatingInput">From</label>
+                  </div>
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="subsetEnd"
+                      id="subsetEnd"
+                      placeholder="50"
+                    />
+                    <label for="floatingInput">To</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          </form>
+          <div class="modal-footer d-flex justify-content-between">
+            <em><span id="filteredImageCountModal"><%=imageCountTotal%></span> matching images</em>
+            <button
+              type="submit"
+              class="btn btn-primary" id="imageSelectionFormSubmit">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- END MODAL -->
+
+  </div>
+</main>

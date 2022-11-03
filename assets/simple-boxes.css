@@ -1,0 +1,77 @@
+.simpleBoxesOuterWrapper{
+
+  text-align: center;
+  padding-top: 100px;
+}
+
+.simpleBoxesInnerWrapper{
+  height: 455px;
+  overflow: scroll;
+  pos
+}
+
+.simpleBoxesImageAndCanvasWrapper{
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#imageToBox{
+  height: 455px;
+  position: absolute;
+  top: 0;
+  left : 0;
+}
+
+.canvasToBox{
+  height: 0;
+  width: 0;
+  position: absolute;
+  top: 0;
+  left : 0;
+}
+
+i.trashIcon{
+  color: white;
+  font-size: 15px;
+  z-index: 100000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+i.tagIcon{
+  color: white;
+  font-size: 15px;
+  z-index: 100000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.labelSelectorWrapper{
+  background-color: #fff;
+  z-index: 100001;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+
+}
+
+.labelSelectorWrapper.closed{
+
+  display: none;
+}
+
+.labelSelector{
+
+}

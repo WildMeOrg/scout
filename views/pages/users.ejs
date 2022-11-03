@@ -1,0 +1,46 @@
+<main class="container">
+
+
+      <div class="alert alert-success pageSuccessAlert" data-successType="new" id="newUserAlert" role="alert">
+        <i class="bi-person"></i> New user created successfully
+      </div>
+
+      <div class="alert alert-success pageSuccessAlert" data-successType="edited" id="editedUserAlert" role="alert">
+        <i class="bi-check"></i> User edited successfully
+      </div>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Role</th>
+            <th class="text-end" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+
+
+          <% for (const user of users) { %>
+
+          <tr>
+            <th scope="row"><%=user.displayUsername%></th>
+            <td>
+              <% if(user.role == 'admin'){ %>
+                Lab Lead
+              <% } else { %>
+                Annotator
+              <% } %>
+            </td>
+            <td class="text-end">
+              <a href="/users/<%=user.id%>" data-userId="<%=user.id%>" class="<% if(userRole !== 'admin') { %>disabled <% } %>editUserButton btn btn-sm btn-secondary">Edit</a>
+            </td>
+          </tr>
+
+          <% } %>
+
+        </tbody>
+      </table>
+    </main>

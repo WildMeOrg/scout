@@ -1,0 +1,139 @@
+/* Custom styles */
+
+#sidebar-opened{
+  display: none;
+}
+
+#gtColumnRight{
+  display: none;
+}
+
+
+#sidebar-closed{
+
+}
+
+.formError {display: none;}
+
+.alert {text-align: center !important; }
+
+.pageSuccessAlert {display: none;}
+
+#annotationOuterWrapper{
+  text-align: center;
+}
+
+#annotationInnerWrapper{
+  display: inline-block;
+  overflow: scroll;
+  height: 455px;
+  max-width: 100%;
+}
+
+#imageToAnnotate{
+ height: 455px;
+}
+
+
+#groundTruthOuterWrapper{
+  text-align: center;
+}
+
+.groundTruthInnerWrapper{
+  display: inline-block;
+  overflow: scroll;
+  height: 455px;
+  max-width: 100%;
+}
+
+
+.groundTruthInnerWrapperReadOnly{
+  display: inline-block;
+  overflow: scroll;
+  height: 455px;
+  max-width: 100%;
+  overflow: hidden !important;
+}
+
+#lineCloserWrapper{
+  display: none;
+}
+
+
+
+.lineDivisionWrapper svg{
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 455px;
+  width: 100px;
+}
+
+
+#imageToGroundTruth, #imageComparison{
+ height: 455px;
+}
+
+.ldBoxInnerWrapper{
+  height: 455px;
+}
+
+#ldBoxLeft{
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#imageToLineDraw{
+  height: 455px;
+
+}
+
+#lineDrawNextImage{
+  height: 455px;
+}
+
+.form-range{
+  visibility: hidden;
+}
+
+.dropdown-item{
+  cursor: pointer;
+}
+
+#exportProgressBarWrapper{
+  height: 30px;
+  width: 500px;
+}
+
+#exportProgressBar{
+
+}
+
+.loginFormInput, .loginFormError{
+  width: 300px;
+}
+
+
+
+
+/** New style for the annotation outlines **/
+svg.a9s-annotationlayer .a9s-selection .a9s-inner,
+svg.a9s-annotationlayer .a9s-annotation .a9s-inner  {
+  stroke: rgba(228, 0, 14, 1);
+}
+
+
+/** Corner handles **/
+svg.a9s-annotationlayer .a9s-handle .a9s-handle-inner {
+  fill:rgba(228, 0, 14, 1);;
+  stroke:rgba(228, 0, 14, 1);
+}
+
+.a9s-annotation.editable .a9s-inner:hover{
+  fill: rgba(228, 0, 14, 0.39) !important;
+}
+
+svg.a9s-annotationlayer .a9s-annotation .a9s-inner{
+  fill: rgba(228, 0, 14, 0.39)
+}

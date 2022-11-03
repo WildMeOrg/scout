@@ -1,0 +1,22 @@
+<main class="container">
+  <div
+    class="d-flex flex-column justify-content-center align-items-center pt-5">
+    <p class="h1 mt-5 mb-4"><i class="bi-filetype-csv"></i></p>
+
+    <% if(exportData.progress < 1){ %>
+    <p id="exportPleaseWait" class="h4">Your export is being generated. Please wait.</p>
+    <p>
+      <div class="progress" id="exportProgressBarWrapper">
+        <div id="exportProgressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-label="Progress bar" aria-valuenow="<%=exportData.progress*100%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=exportData.progress*100%>%"></div>
+      </div>
+    </p>
+    <% } %>
+    <% if(exportData.progress == 1){ %>
+    <p id="exportReady" class="h4">Your export is ready.</p>
+    <br />
+    <a href="/csvs/<%=exportData.id%>" class="pulse px-auto my-3 btn btn-primary">Download</a>
+    <br />
+    <p>Please right-click to "save as".</p>
+    <% } %>
+  </div>
+</main>

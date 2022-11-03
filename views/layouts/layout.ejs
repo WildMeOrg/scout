@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= pageTitle %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+     <meta name="robots" content="noindex">
+
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/min/production.min.css">
+    <!--STYLES END-->
+    <link rel="stylesheet" href="/icons/bootstrap-icons.css">
+
+    <script>
+      clientData = '<%-clientData%>';
+      window.data = JSON.parse(clientData);
+    </script>
+
+    <% if(typeof(secondaryNav) != 'undefined' && (secondaryNav == 'annotation' || secondaryNav == 'gt')){ %>
+      <link rel="stylesheet" href="/simple-boxes.css">
+    <% } %>
+
+
+  </head>
+  <body>
+    <% if(loggedIn){ %>
+    <header>
+      <div class="px-3 py-2 text-bg-dark">
+        <div class="container">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-start">
+            <a
+              href="/"
+              class="d-flex align-items-center my-0 me-auto text-white text-decoration-none">
+              <img src="/images/logo-white-svg.svg" height="24" />
+            </a>
+
+            <ul class="nav justify-content-center my-0 text-small">
+              <li>
+                <a href="/tasks" class="nav-link text-white"> Tasks </a>
+              </li>
+              <li>
+                <a href="/users" class="nav-link text-white"> Users </a>
+              </li>
+              <li>
+                <button id="logoutButton" class="btn btn-link nav-link text-white">Logout</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <% if(typeof(secondaryNav) != 'undefined' && secondaryNav == 'tasks'){ %>
+    <div class="px-3 py-2 border-bottom mb-3">
+        <% if(userRole == 'admin'){ %>
+            <div class="container d-flex justify-content-between">
+                <a href="/tasks/new" class="btn btn-primary"><i class="bi-plus"></i> Create Task</a>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Export Filtered Results
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><div id="exportAnnotations" class="dropdown-item">Export Annotations</div></li>
+                    <li><div id="exportImages" class="dropdown-item">Export Images</div></li>
+                  </ul>
+                </div>
+            </div>
+              <% } %>
+        </div>
+    <% } %>
+
+    <% if(typeof(secondaryNav) != 'undefined' && secondaryNav == 'annotation'){ %>
+      <div class="py-2 border-bottom mb-3">
+        <div class="container d-flex flex-wrap justify-content-center">
+          <div class="d-flex justify-content-between w-100">
+
+            <button id="annotationBackButton" <% if(!backEnabled) { %>disabled<% } %> class="btn btn-primary">
+              <i class="bi-chevron-left"></i>
+            </button>
+
+            <div class="btn-group">
+              <button id="annotationZoomIn" class="btn btn-light"><i class="bi-zoom-in"></i></button>
+              <button id="annotationZoomOut" class="btn btn-light"><i class="bi-zoom-out"></i></button>
+              <button
+                type="button"
+                class="btn btn-light"
+                data-bs-title="Available actions"
+                data-bs-content="
+                <p>Click and drag to create an annotation and select the classification. </p>
+                <p>Use the scroll bars to pan through the image. </p>
+                <p>Click an existing annotation to adjust or edit the annotation.</p>"
+                data-toggle="popover">
+                <i class="bi-info-circle"></i>
+              </button>
+
+            </div>
+            <button id="annotationDoneButton" class="btn btn-primary">Done <i class="bi-chevron-right"></i></button>
+          </div>
+          <div class="text-end"></div>
+        </div>
+      </div>
+      <% } %>
+
+      <% if(typeof(secondaryNav) != 'undefined' && secondaryNav == 'gt'){ %>
+        <div id="sidebar-closed">
+        <div class="py-2 border-bottom mb-3">
+          <div class="container d-flex flex-wrap justify-content-center">
+            <div class="d-flex justify-content-between w-100">
+
+              <button <% if(!backEnabled) { %>disabled<% } %> class="gtBackButton btn btn-primary">
+                <i class="bi-chevron-left"></i>
+              </button>
+
+              <div class="btn-group">
+                <button id="" class="gtZoomIn btn btn-light"><i class="bi-zoom-in"></i></button>
+                <button id="" class="gtZoomOut btn btn-light"><i class="bi-zoom-out"></i></button>
+                <button id="gtOpenSidebar" class=" btn btn-light"><i class="bi-layout-sidebar-inset-reverse"></i></button>
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  data-bs-title="Available actions"
+                  data-bs-content="
+                  <p>Click and drag to create an annotation and select the classification. </p>
+                  <p>Use the scroll bars to pan through the image. </p>
+                  <p>Click an existing annotation to adjust or edit the annotation.</p>"
+                  data-toggle="popover">
+                  <i class="bi-info-circle"></i>
+                </button>
+
+              </div>
+              <button class="gtDoneButton btn btn-primary">Done <i class="bi-chevron-right"></i></button>
+            </div>
+            <div class="text-end"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sidebar-opened">
+        <div class="row px-5 py-2 border-bottom mb-3 d-flex align-items-center">
+          <div class="col-6 container d-flex flex-wrap justify-content-center">
+            <div class="d-flex justify-content-between w-100">
+
+              <button <% if(!backEnabled) { %>disabled<% } %> class="gtBackButton btn btn-primary">
+                <i class="bi-chevron-left"></i>
+              </button>
+
+
+              <div class="btn-group">
+                <button  class="gtZoomIn btn btn-light"><i class="bi-zoom-in"></i></button>
+                <button class="gtZoomOut btn btn-light"><i class="bi-zoom-out"></i></button>
+                <button id="gtCloseSidebar" class=" btn btn-light active">
+                  <i class="bi-layout-sidebar-inset-reverse"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  data-bs-title="Available actions"
+                  data-bs-content="
+                  <p>Click and drag to create an annotation and select the classification. </p>
+                  <p>Use the scroll bars to pan through the image. </p>
+                  <p>Click an existing annotation to adjust or edit the annotation.</p>"
+                  data-toggle="popover">
+                  <i class="bi-info-circle"></i>
+                </button>
+
+
+              </div>
+              <button class="gtDoneButton btn btn-primary">Done <i class=" bi-chevron-right"></i></a>
+            </div>
+            <div class="text-end"></div>
+          </div>
+          <div class="col-6 container d-flex flex-wrap justify-content-end">
+            <div class="w-50 form-floating">
+              <select class="form-select form-control" name="referenceTask" id="referenceTaskDropdown">
+                <option value="" selected>Select a Reference Task</option>
+                <% for(const comparisonTask of comparisonTasks) { %>
+                <option value="<%=comparisonTask.id%>"><%=comparisonTask.taskData.displayName%></option>
+                <% } %>
+              </select>
+              <label for="referenceTask">Reference Task</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+        <% } %>
+
+
+      <% if(typeof(secondaryNav) !== 'undefined' && secondaryNav == 'users'){ %>
+      <div class="px-3 py-2 border-bottom mb-3">
+        <div class="container d-flex flex-wrap justify-content-end">
+          <a href="/users/new" class="<% if(userRole !== 'admin') { %>disabled <% } %> btn btn-primary"><i class="bi-plus"></i>Create User</a>
+          <div class="text-end"></div>
+        </div>
+      </div>
+      <% } %>
+
+      <% if(typeof(secondaryNav) !== 'undefined' && secondaryNav == 'division'){ %>
+        <div class="py-2 border-bottom mb-3">
+            <div class="container d-flex flex-wrap justify-content-center">
+              <div class="d-flex justify-content-between w-100">
+                <button id="divisionBack" <% if(!backEnabled) { %>disabled<% } %>  class="btn btn-primary">
+                  <i class="bi-chevron-left"></i>
+                </button>
+                <div id="lineOpenerWrapper" class="btn-group">
+                  <button id="lineOpener" class="btn btn-light">
+                    <i class="bi-slash-square"></i>
+                  </button>
+                </div>
+                <div id="lineCloserWrapper" class="btn-group">
+                  <button id="lineCloser" class="btn btn-light active">
+                    <i class="bi-slash-square"></i>
+                  </button>
+                </div>
+                <button id="divisionDone" class="btn btn-primary">
+                  Done <i class="bi-chevron-right"></i>
+                </button>
+              </div>
+              <div class="text-end"></div>
+            </div>
+            <div class="col-6 container d-flex flex-wrap justify-content-center"></div>
+        </div>
+
+      <% } %>
+
+
+
+
+      <% } %>
+
+      <%- body %>
+
+
+
+    <!--SCRIPTS-->
+    <script src="/min/production.min.js"></script>
+    <!--SCRIPTS END-->
+
+    <% if(typeof(secondaryNav) != 'undefined' && (secondaryNav == 'annotation' || secondaryNav == 'gt')){ %>
+      <script type="text/javascript" src="/simple-boxes.js"></script>
+    <% } %>
+
+  </body>
+</html>
