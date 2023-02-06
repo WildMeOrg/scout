@@ -26,12 +26,12 @@
 #annotationInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 655px;
+  height: 695px;
   max-width: 100%;
 }
 
 #imageToAnnotate{
- height:655px;
+ height:695px;
 }
 
 
@@ -42,7 +42,14 @@
 .groundTruthInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 655px;
+  height: 695px;
+  max-width: 100%;
+}
+
+.groundTruthInnerWrapperCompare{
+  display: inline-block;
+  overflow: scroll;
+  height: 520px;
   max-width: 100%;
 }
 
@@ -50,7 +57,7 @@
 .groundTruthInnerWrapperReadOnly{
   display: inline-block;
   overflow: scroll;
-  height: 655px;
+  height: 520px;
   max-width: 100%;
   overflow: hidden !important;
 }
@@ -71,11 +78,15 @@
 
 
 #imageToGroundTruth, #imageComparison{
- height: 655px;
+ height: 695px;
+}
+
+#imageToGroundTruthCompare {
+ height: 520px;
 }
 
 .ldBoxInnerWrapper{
-  height: 470px;
+  height: 695px;
 }
 
 #ldBoxLeft{
