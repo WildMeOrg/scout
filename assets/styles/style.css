@@ -8,10 +8,10 @@
   display: none;
 }
 
-
+/* 
 #sidebar-closed{
 
-}
+} */
 
 .formError {display: none;}
 
@@ -26,12 +26,12 @@
 #annotationInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: 655px;
   max-width: 100%;
 }
 
 #imageToAnnotate{
- height: 455px;
+ height:655px;
 }
 
 
@@ -42,7 +42,7 @@
 .groundTruthInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: 655px;
   max-width: 100%;
 }
 
@@ -50,7 +50,7 @@
 .groundTruthInnerWrapperReadOnly{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: 655px;
   max-width: 100%;
   overflow: hidden !important;
 }
@@ -71,11 +71,11 @@
 
 
 #imageToGroundTruth, #imageComparison{
- height: 455px;
+ height: 655px;
 }
 
 .ldBoxInnerWrapper{
-  height: 455px;
+  height: 470px;
 }
 
 #ldBoxLeft{
@@ -85,12 +85,12 @@
 }
 
 #imageToLineDraw{
-  height: 455px;
+  height: 470px;
 
 }
 
 #lineDrawNextImage{
-  height: 455px;
+  height: 470px;
 }
 
 .form-range{
@@ -105,10 +105,10 @@
   height: 30px;
   width: 500px;
 }
-
+/* 
 #exportProgressBar{
 
-}
+} */
 
 .loginFormInput, .loginFormError{
   width: 300px;
