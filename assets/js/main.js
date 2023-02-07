@@ -46,7 +46,7 @@ window.tagsList = [
   'zebra'
 ];
 
-
+const minimumImageHeight = 650;
 window.imageHeight = 650;
 
 window.sleepTimeout = (ms) => {
@@ -659,8 +659,8 @@ $('#annotationZoomOut').on('click',(e) =>{
   e.preventDefault();
   let newHeight = window.imageHeight / 1.1;
 
-  if(newHeight < 650){
-    newHeight = 650;
+  if(newHeight < minimumImageHeight){
+    newHeight = minimumImageHeight;
 
     // Disable zoom out button
   }
@@ -825,8 +825,8 @@ setTimeout( async () => {
    e.preventDefault();
    let newHeight = window.imageHeight / 1.1;
 
-   if(newHeight < 650){
-     newHeight = 650;
+   if(newHeight < minimumImageHeight){
+     newHeight = minimumImageHeight;
 
    }
    window.imageHeight = newHeight;
@@ -1205,9 +1205,9 @@ window.drawShaded = (topX, bottomX) => {
     let point3 = maxWidth;
     let point4 = bottomX > topX ? 0 : topX - bottomX;
 
-
-    window.draw = SVG().addTo('#ldBoxLeft').size(maxWidth, 650);
-    let coords = `${point1},0 ${point2},0 ${point3},650 ${point4},650`;
+    const lineDivisionImageHeight = 455;
+    window.draw = SVG().addTo('#ldBoxLeft').size(maxWidth, lineDivisionImageHeight);
+    let coords = `${point1},0 ${point2},0 ${point3},${lineDivisionImageHeight} ${point4}, ${lineDivisionImageHeight}`;
 
     var polygon = draw.polygon(coords);
     polygon.fill('rgba(255, 0, 102,0.6)');
