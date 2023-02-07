@@ -18,6 +18,11 @@ module.exports = {
       description : 'either a user ID or an ml config name',
       required : true
     },
+    randomized : {
+      type : 'boolean',
+      description : 'shown in random order (vs sequential)',
+      required : true
+    },
     orientation : {
       type : 'string',
       description : 'left or right',
@@ -91,6 +96,7 @@ module.exports = {
         taskType : mlAssignees.hasOwnProperty(inputs.assignee) ? 'ml' : 'user',
         assignee : inputs.assignee,
         orientation : inputs.orientation,
+        randomized : inputs.randomized,
         createdByUserId : this.req.session.userId
       }
 
