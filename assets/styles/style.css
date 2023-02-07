@@ -13,6 +13,12 @@
 
 } */
 
+:root {
+  --singleImageHeight : 650px;
+  --doubleImageHeight : 520px;
+  --lineDivisionImageHeight : 455px; 
+}
+
 .formError {display: none;}
 
 .alert {text-align: center !important; }
@@ -26,14 +32,23 @@
 #annotationInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 695px;
+  height: var(--singleImageHeight);
   max-width: 100%;
 }
 
 #imageToAnnotate{
- height:695px;
+ height:var(--singleImageHeight);
 }
 
+#button {
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px 20 px;
+}
+
+#buttonContainer {
+  display: inline-block;
+}
 
 #groundTruthOuterWrapper{
   text-align: center;
@@ -42,14 +57,14 @@
 .groundTruthInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 695px;
+  height: var(--singleImageHeight);
   max-width: 100%;
 }
 
 .groundTruthInnerWrapperCompare{
   display: inline-block;
   overflow: scroll;
-  height: 520px;
+  height: var(--doubleImageHeight);
   max-width: 100%;
 }
 
@@ -57,7 +72,7 @@
 .groundTruthInnerWrapperReadOnly{
   display: inline-block;
   overflow: scroll;
-  height: 520px;
+  height: var(--doubleImageHeight);
   max-width: 100%;
   overflow: hidden !important;
 }
@@ -72,21 +87,21 @@
   position: absolute;
   top: 0;
   right: 0;
-  height: 455px;
+  height: var(--lineDivisionImageHeight);
   width: 100px;
 }
 
 
 #imageToGroundTruth, #imageComparison{
- height: 695px;
+ height: var(--singleImageHeight);
 }
 
 #imageToGroundTruthCompare {
- height: 520px;
+ height: var(--doubleImageHeight);;
 }
 
 .ldBoxInnerWrapper{
-  height: 695px;
+  height: var(--singleImageHeight);
 }
 
 #ldBoxLeft{
@@ -96,12 +111,12 @@
 }
 
 #imageToLineDraw{
-  height: 470px;
+  height: var(--lineDivisionImageHeight);
 
 }
 
 #lineDrawNextImage{
-  height: 470px;
+  height: var(--lineDivisionImageHeight);
 }
 
 .form-range{
