@@ -40,16 +40,6 @@
  height:var(--singleImageHeight);
 }
 
-#button {
-  background-color: #0d6efd;
-  color: white;
-  padding: 10px 20 px;
-}
-
-#buttonContainer {
-  display: inline-block;
-}
-
 #groundTruthOuterWrapper{
   text-align: center;
 }
@@ -101,7 +91,7 @@
 }
 
 .ldBoxInnerWrapper{
-  height: var(--singleImageHeight);
+  height: var(--lineDivisionImageHeight);
 }
 
 #ldBoxLeft{
