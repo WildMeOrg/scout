@@ -47,7 +47,7 @@ window.tagsList = [
 ];
 
 const minimumImageHeight = 650;
-window.imageHeight = 650;
+window.imageHeight = minimumImageHeight;
 
 window.sleepTimeout = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
