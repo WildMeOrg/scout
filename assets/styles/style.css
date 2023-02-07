@@ -8,9 +8,15 @@
   display: none;
 }
 
-
+/* 
 #sidebar-closed{
 
+} */
+
+:root {
+  --singleImageHeight : 650px;
+  --doubleImageHeight : 520px;
+  --lineDivisionImageHeight : 455px; 
 }
 
 .formError {display: none;}
@@ -26,14 +32,13 @@
 #annotationInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: var(--singleImageHeight);
   max-width: 100%;
 }
 
 #imageToAnnotate{
- height: 455px;
+ height:var(--singleImageHeight);
 }
-
 
 #groundTruthOuterWrapper{
   text-align: center;
@@ -42,7 +47,14 @@
 .groundTruthInnerWrapper{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: var(--singleImageHeight);
+  max-width: 100%;
+}
+
+.groundTruthInnerWrapperCompare{
+  display: inline-block;
+  overflow: scroll;
+  height: var(--doubleImageHeight);
   max-width: 100%;
 }
 
@@ -50,7 +62,7 @@
 .groundTruthInnerWrapperReadOnly{
   display: inline-block;
   overflow: scroll;
-  height: 455px;
+  height: var(--doubleImageHeight);
   max-width: 100%;
   overflow: hidden !important;
 }
@@ -65,17 +77,21 @@
   position: absolute;
   top: 0;
   right: 0;
-  height: 455px;
+  height: var(--lineDivisionImageHeight);
   width: 100px;
 }
 
 
 #imageToGroundTruth, #imageComparison{
- height: 455px;
+ height: var(--singleImageHeight);
+}
+
+#imageToGroundTruthCompare {
+ height: var(--doubleImageHeight);;
 }
 
 .ldBoxInnerWrapper{
-  height: 455px;
+  height: var(--lineDivisionImageHeight);
 }
 
 #ldBoxLeft{
@@ -85,12 +101,12 @@
 }
 
 #imageToLineDraw{
-  height: 455px;
+  height: var(--lineDivisionImageHeight);
 
 }
 
 #lineDrawNextImage{
-  height: 455px;
+  height: var(--lineDivisionImageHeight);
 }
 
 .form-range{
@@ -105,10 +121,10 @@
   height: 30px;
   width: 500px;
 }
-
+/* 
 #exportProgressBar{
 
-}
+} */
 
 .loginFormInput, .loginFormError{
   width: 300px;

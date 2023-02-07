@@ -1,21 +1,22 @@
-<div class="sbsWrapper">
+//Change the class from "sbsWrapper" to "container" to keep the image size the same as other pages
+<div class="container">
 
 
 
   <div class="sbsRow">
 
-    <div class=""  id="gtColumnLeft" style="width: 100%; float: clear; text-align: center;">
+    <div   id="gtColumnLeft" style="width: 100%; float: clear; text-align: center;">
       <div id="scrollBoxLeft" class="groundTruthInnerWrapper">
         <div class="simpleBoxesImageAndCanvasWrapper">
-        <img id="imageToGroundTruth" src="/uploads/<%=imageData.id %>"/>
+        <img class = "imageToGroundTruth" id="imageToGroundTruth" src="/uploads/<%=imageData.id %>"/>
         </div>
       </div>
     </div>
 
-    <div class="" id="gtColumnRight" style="width: 49.8%; float: right; text-align: left;">
+    <div  id="gtColumnRight" style="width: 49.8%; float: right; text-align: left;">
       <div id="scrollBoxRight" class="groundTruthInnerWrapperReadOnly">
         <div class="simpleBoxesImageAndCanvasWrapper">
-        <img id="imageComparison" src="/uploads/<%=imageData.id %>/?right=true">
+        <img class = "imageToGroundTruth" id="imageComparison" src="/uploads/<%=imageData.id %>/?right=true">
         </div>
       </div>
     </div>

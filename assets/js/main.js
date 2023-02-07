@@ -46,7 +46,8 @@ window.tagsList = [
   'zebra'
 ];
 
-window.imageHeight = 655;
+const minimumImageHeight = 650;
+window.imageHeight = minimumImageHeight;
 
 window.sleepTimeout = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -398,7 +399,6 @@ let getTaskRow = async (task) => {
   }
 
   let template = `
-
   <tr>
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
@@ -421,11 +421,9 @@ let getTaskRow = async (task) => {
         <button id="gt-${task.id}" data-link="/ground-truths/${task.id}/new" ${disabledAdditions.groundTruth}   class="task-list-button-outbound btn btn-sm btn-secondary">
           Ground Truth
         </button>
-
         <button id="division-${task.id}" data-link="/line-divisions/${task.id}/new" ${disabledAdditions.division} class="task-list-button-outbound btn btn-sm btn-secondary">
           Division Lines
         </button>
-
         <button id="del-${task.id}" data-task-displayName="${task.displayName}" ${disabledAdditions.deletion} data-task-id="${task.id}" class="btn btn-sm btn-secondary taskDeletionTrigger">
           Delete
         </button>
@@ -433,7 +431,6 @@ let getTaskRow = async (task) => {
     }
 
     template+=`
-
         </td>
       </tr>
       `;
@@ -661,8 +658,10 @@ $('#annotationZoomIn').on('click',(e) =>{
 $('#annotationZoomOut').on('click',(e) =>{
   e.preventDefault();
   let newHeight = window.imageHeight / 1.1;
-  if(newHeight < 655){
-    newHeight = 655;
+
+  if(newHeight < minimumImageHeight){
+    newHeight = minimumImageHeight;
+
     // Disable zoom out button
   }
   window.imageHeight = newHeight;
@@ -825,8 +824,10 @@ setTimeout( async () => {
  $('.gtZoomOut').on('click',(e) =>{
    e.preventDefault();
    let newHeight = window.imageHeight / 1.1;
-   if(newHeight < 655){
-     newHeight = 655;
+
+   if(newHeight < minimumImageHeight){
+     newHeight = minimumImageHeight;
+
    }
    window.imageHeight = newHeight;
    $('#imageToGroundTruth').css('height',newHeight+'px');
@@ -844,12 +845,13 @@ setTimeout( async () => {
    $('#sidebar-closed').hide();
    $('#gtColumnRight').show();
    $('#gtColumnLeft').css('width','49.8%').css('float','left').css('text-align','right');
-   
+
    //When clicking at the button, toggle the height of images
-    $('#imageToGroundTruth').removeClass("imageToGroundTruth");
-    $('#imageToGroundTruth').addClass("imageToGroundTruthCompare");    
-    $('#scrollBoxLeft').removeClass("groundTruthInnerWrapper");
-    $('#scrollBoxLeft').addClass("groundTruthInnerWrapperCompare");
+   $('#imageToGroundTruth').removeClass("imageToGroundTruth");
+   $('#imageToGroundTruth').addClass("imageToGroundTruthCompare");    
+   $('#scrollBoxLeft').removeClass("groundTruthInnerWrapper");
+   $('#scrollBoxLeft').addClass("groundTruthInnerWrapperCompare");
+
    window.syncPan();
    simpleBoxes.zoom(window.sbHandleLeft.id);
    if(typeof(window.sbHandleRight) !== 'undefined'){
@@ -863,13 +865,12 @@ setTimeout( async () => {
    $('#sidebar-closed').show();
    $('#gtColumnRight').hide();
     $('#gtColumnLeft').css('width','100%').css('float','clear').css('text-align','center');
-    
+
     //When clicking at the button, toggle the height of images
     $('#imageToGroundTruth').removeClass("imageToGroundTruthCompare");
     $('#imageToGroundTruth').addClass("imageToGroundTruth");
     $('#scrollBoxLeft').removeClass("groundTruthInnerWrapperCompare");
     $('#scrollBoxLeft').addClass("groundTruthInnerWrapper");
-    
 
     await window.wipeComparisonBoxes();
 
@@ -1204,8 +1205,10 @@ window.drawShaded = (topX, bottomX) => {
     let point3 = maxWidth;
     let point4 = bottomX > topX ? 0 : topX - bottomX;
 
-    window.draw = SVG().addTo('#ldBoxLeft').size(maxWidth, 655);
-    let coords = `${point1},0 ${point2},0 ${point3},655 ${point4},655`;
+    const lineDivisionImageHeight = 455;
+    window.draw = SVG().addTo('#ldBoxLeft').size(maxWidth, lineDivisionImageHeight);
+    let coords = `${point1},0 ${point2},0 ${point3},${lineDivisionImageHeight} ${point4}, ${lineDivisionImageHeight}`;
+
     var polygon = draw.polygon(coords);
     polygon.fill('rgba(255, 0, 102,0.6)');
     $('svg').css('width',maxWidth+'px');
