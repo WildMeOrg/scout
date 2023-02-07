@@ -402,6 +402,7 @@ let getTaskRow = async (task) => {
   <tr>
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
+    <td>${task.randomized ? 'rnd' : 'seq'}</td>
     <td>${task.assigneeDiplayName}</td>
     <td>${new Date(task.createdAt).toISOString().split('T')[0]}</td>
     <td>${Math.floor(task.progressAnnotation * 100)}</td>
