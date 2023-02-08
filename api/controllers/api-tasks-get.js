@@ -30,6 +30,9 @@ module.exports = {
     assignee : {
       type : 'string'
     },
+    randomized : {
+      type : 'boolean'
+    },
   },
 
 
@@ -53,6 +56,12 @@ module.exports = {
 
     let query = {};
     // @TODO consolidate with the logic in the app.js csvQueuer worker
+
+    // ordering (randomized)
+
+    if (inputs.randomized != undefined) {
+      query.randomized = inputs.randomized;
+    }
 
     // Name
 
