@@ -60,7 +60,12 @@ module.exports = {
     // ordering (randomized)
 
     if (inputs.randomized != undefined) {
-      query.randomized = inputs.randomized;
+      if (inputs.randomized) {
+        query.randomized = true;
+      } else {
+        // this will get pre-randomized undefined (null) values as false (sequential)
+        query.randomized = { '!=': true };
+      }
     }
 
     // Name

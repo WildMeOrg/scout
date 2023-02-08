@@ -296,6 +296,12 @@ const getTaskFilters = () => {
     filters.endDate = endDateValue.trim();
   }
 
+  // Randomized (order)
+  let randomizedValue = $('#randomized').val();
+  if(randomizedValue.length){
+    filters.randomized = randomizedValue;
+  }
+
   // Assignee
   let assigneeValue = $('#assigneeInput').val();
   if(assigneeValue.length){
@@ -447,6 +453,7 @@ $('button#taskResetButton').on('click', async (e) =>{
   $('#endDate').val(null);
   $('#assigneeInput').val(null);
   $('#phaseInput').val(null);
+  $('#randomized').val(null);
 
   // Reset pageNumber to 1
   $('#pageNumber').val(1);
