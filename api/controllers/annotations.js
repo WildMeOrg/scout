@@ -103,9 +103,20 @@ module.exports = {
         let successMessage = `Annotation of task "${taskData.displayName}" is complete.`;
         throw { congrats : '/success/'+successMessage};
       }
+
       let totalImages = queuedImages.length;
-      let randomIndex = Math.floor(Math.random() * (totalImages - 1));
-      queuedImageData = queuedImages[randomIndex];
+      if (taskData.randomized == false) {
+        let timestamps = {};
+        for (qid of queuedImages) {
+            let images = await Images.find({id : qid.imageId});
+            timestamps[qid.imageId] = images[0].exifTimestamp;
+        }
+        queuedImages.sort(function(a, b) { return timestamps[a.imageId] - timestamps[b.imageId]; });
+        queuedImageData = queuedImages[0];
+      } else {
+          let randomIndex = Math.floor(Math.random() * (totalImages - 1));
+          queuedImageData = queuedImages[randomIndex];
+      }
       this.req.session.annotationHistory[taskData.id].current = queuedImageData.id;
 
     } else {
