@@ -10,7 +10,7 @@ module.exports = {
     progressGroundTruth: { type: 'number', defaultsTo : 0},
     progressLineDivision: { type: 'number', defaultsTo : 0},
     sequencingComplete : {type: 'boolean', defaultsTo : false},
-    randomized : {type: 'boolean', defaultsTo : false},
+    randomized : {type: 'boolean', defaultsTo : true},
     imageCount: { type: 'number', defaultsTo : 0},
     createdByUserId: { type: 'string', required: true }
   }

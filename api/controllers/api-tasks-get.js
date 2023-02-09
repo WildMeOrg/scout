@@ -61,10 +61,10 @@ module.exports = {
 
     if (inputs.randomized != undefined) {
       if (inputs.randomized) {
-        query.randomized = true;
+        // this will get previously existing null values (which means randomized)
+        query.randomized = { '!=': false };
       } else {
-        // this will get pre-randomized undefined (null) values as false (sequential)
-        query.randomized = { '!=': true };
+        query.randomized = false;
       }
     }
 
