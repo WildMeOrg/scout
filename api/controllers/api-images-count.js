@@ -10,8 +10,8 @@ module.exports = {
 
   inputs: {
     originalFilenameLower : {
-      type : 'string',
-      description : 'Partial match for image name'
+      type : 'json',
+      description : 'Partial match or regex pattern for image name'
     },
     sourceTask : {
       type : 'string',
@@ -47,21 +47,48 @@ module.exports = {
   },
 
   fn: async function (inputs,exits) {
+    
 
     if(!this.req.session.userId){
       return exits.forbidden();
     }
 
     // @TODO consolidate this logic into a helper and have this controller share with with the taskQueuer worker
-    overrideToZero = false;
+    overrideToZero = false;    
+    
+    // let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
+    // let query = {};
+    // if(!originalFilenameLower.includes("*")) {
+      
+    //   query = {
+    //   originalFilenameLower : {
+    //     contains : "012"
+    //   }
+    // };
+      
+    // } else {
+      
+    //   query = {
+    //   originalFilenameLower : {
+    //     like : "%2019%017%"
+    //   }
+    // };
+    // }
 
     let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
-
-    let query = {
-      originalFilenameLower : {
-        startsWith : originalFilenameLower
-      }
-    };
+    let query = {};
+    if(!originalFilenameLower.includes("*")) {
+      
+      query.originalFilenameLower = {
+        contains: originalFilenameLower
+      };
+    }  
+    else {      
+      query.originalFilenameLower = {
+        // like: "%017%"
+        contains : "107"
+      };
+    }
 
     if(inputs.sourceTask){
       let matchingTasks = await Tasks.find({where : {displayName : inputs.sourceTask}, limit : 1})
