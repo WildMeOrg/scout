@@ -58,7 +58,7 @@ module.exports = {
 
     if(inputs.name && inputs.name.length && inputs.name.trim().length){
       let name = inputs.name.toLowerCase().trim();
-      query.name = { startsWith : name };
+      query.name = { contains : name };
     }
 
     // Date created - start
