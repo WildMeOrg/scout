@@ -58,7 +58,12 @@ module.exports = {
 
     if(inputs.name && inputs.name.length && inputs.name.trim().length){
       let name = inputs.name.toLowerCase().trim();
-      query.name = { contains : name };
+      if(!name.includes("*")) {
+        query.name = { contains : name };
+      }else {
+        query.name = {  like : name.replaceAll("*","%")}
+      }
+      
     }
 
     // Date created - start

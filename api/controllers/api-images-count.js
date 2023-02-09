@@ -10,7 +10,7 @@ module.exports = {
 
   inputs: {
     originalFilenameLower : {
-      type : 'json',
+      type : 'string',
       description : 'Partial match or regex pattern for image name'
     },
     sourceTask : {
@@ -57,25 +57,8 @@ module.exports = {
     overrideToZero = false;    
     
     // let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
-    // let query = {};
-    // if(!originalFilenameLower.includes("*")) {
-      
-    //   query = {
-    //   originalFilenameLower : {
-    //     contains : "012"
-    //   }
-    // };
-      
-    // } else {
-      
-    //   query = {
-    //   originalFilenameLower : {
-    //     like : "%2019%017%"
-    //   }
-    // };
-    // }
+    let originalFilenameLower = inputs.originalFilenameLower;
 
-    let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
     let query = {};
     if(!originalFilenameLower.includes("*")) {
       
@@ -84,9 +67,11 @@ module.exports = {
       };
     }  
     else {      
-      query.originalFilenameLower = {
-        // like: "%017%"
-        contains : "107"
+      originalFilenameLower = originalFilenameLower.replaceAll("*","%");
+      query.originalFilenameLower = {        
+         like: originalFilenameLower
+        // like: "%2019%06%12%"
+        // contains : "107"
       };
     }
 
