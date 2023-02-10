@@ -13,7 +13,7 @@ RUN set -ex \
  && rm -rf /var/cache/apt \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install scoutbot==0.1.16
+RUN pip3 install scoutbot==0.1.17
 RUN pip3 uninstall -y onnxruntime
 RUN pip3 install onnxruntime-gpu
 RUN scoutbot fetch --config phase1
