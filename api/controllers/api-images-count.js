@@ -56,8 +56,7 @@ module.exports = {
     // @TODO consolidate this logic into a helper and have this controller share with with the taskQueuer worker
     overrideToZero = false;    
     
-    // let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
-    let originalFilenameLower = inputs.originalFilenameLower;
+    let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
 
     let query = {};
     if(!originalFilenameLower.includes("*")) {
@@ -70,8 +69,6 @@ module.exports = {
       originalFilenameLower = originalFilenameLower.replaceAll("*","%");
       query.originalFilenameLower = {        
          like: originalFilenameLower
-        // like: "%2019%06%12%"
-        // contains : "107"
       };
     }
 
