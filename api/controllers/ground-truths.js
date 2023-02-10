@@ -104,8 +104,15 @@ module.exports = {
         throw { congrats : '/success/'+successMessage};
       }
       let totalImages = images.length;
-      let randomIndex = Math.floor(Math.random() * (totalImages - 1));
-      imageData = images[randomIndex];
+
+      // similar to annotations, we can do random or sequential now
+      if (taskData.randomized == false) {
+        images.sort(function(a, b) { return a.exifTimestamp - b.exifTimestamp; });
+        imageData = images[0];
+      } else {
+          let randomIndex = Math.floor(Math.random() * (totalImages - 1));
+          imageData = images[randomIndex];
+      }
       this.req.session.gtHistory[taskData.id].current = imageData.id;
 
     } else {
