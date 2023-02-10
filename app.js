@@ -1088,9 +1088,7 @@ const invokeMl = async (fullPath,configName) => {
    // @TODO consolidate this logic into a helper and have this worker share with with the api-images-count controller
     overrideToZero = false;
 
-    // let originalFilenameLower = taskData.filterName.toLowerCase().trim();
-    let originalFilenameLower = taskData.filterName;
-
+    let originalFilenameLower = taskData.filterName.toLowerCase().trim();
 
     let query = {};
     if(!originalFilenameLower.includes("*")) {
@@ -1100,12 +1098,8 @@ const invokeMl = async (fullPath,configName) => {
       };
     }  
     else {
-      originalFilenameLower = originalFilenameLower.replace("*","%");
       query.originalFilenameLower = {
-        // contains : "107"
-        // like: "%2019%06%1%"
-        like: originalFilenameLower
-
+        like: originalFilenameLower.replaceAll("*","%")
       };
     }
 

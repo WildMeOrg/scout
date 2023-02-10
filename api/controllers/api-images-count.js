@@ -66,9 +66,8 @@ module.exports = {
       };
     }  
     else {      
-      originalFilenameLower = originalFilenameLower.replaceAll("*","%");
       query.originalFilenameLower = {        
-         like: originalFilenameLower
+         like: originalFilenameLower.replaceAll("*","%")
       };
     }
 
