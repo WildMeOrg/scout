@@ -564,7 +564,6 @@ const imageSelectionFormChange = async () => {
 
   if (response.ok) {
     let res = await response.json();
-    console.log("response", response);
 
     let count = res.imageCount;
     window.imageSelectionFormUnsavedCount = count;
@@ -583,7 +582,6 @@ $('#imageSelectionModalTrigger').on('click',(e) =>{
   e.preventDefault();
   console.log("Triggering image selection");
   $("#imageSelectionModal").modal('show');
-  console.log("image spot 1, inputing image name");
   // Set the saved values in the modal
   $('#originalFilenameLower').val($('#filterName').val());
   $('#taskNamesDataList').val($('#filterSource').val());
@@ -602,7 +600,6 @@ $('#imageSelectionFormSubmit').on('click',(e) => {
   // Save the state of the form and filtered result
   window.imageSelectionFormSavedCount = window.imageSelectionFormUnsavedCount;
   window.imageSelectionFormSavedInputs = window.imageSelectionFormUnsavedInputs;
-  console.log("image spot 3, submitting", window.imageSelectionFormSavedCount);
   // Set hidden inputs
   $('#filterName').val(window.imageSelectionFormSavedInputs.originalFilenameLower || '');
   $('#filterSource').val(window.imageSelectionFormSavedInputs.sourceTask || '');
