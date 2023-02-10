@@ -11,7 +11,7 @@ module.exports = {
   inputs: {
     originalFilenameLower : {
       type : 'string',
-      description : 'Partial match or regex pattern for image name'
+      description : 'Partial match or use * as wildcard for image name'
     },
     sourceTask : {
       type : 'string',
