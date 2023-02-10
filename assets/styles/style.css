@@ -130,7 +130,11 @@
   width: 300px;
 }
 
-
+#imageSelectBoxNote {
+  font-size : 12px;
+  color : #B4B4B4;
+  margin-bottom: 20px;
+}
 
 
 /** New style for the annotation outlines **/
