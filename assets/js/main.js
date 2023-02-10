@@ -552,7 +552,6 @@ const imageSelectionFormChange = async () => {
       formValues[pair[0]] = pair[1];
   }
   
-  
   window.imageSelectionFormUnsavedInputs = formValues;
   let action = '/api/images?'+ new URLSearchParams(formValues);
   const response = await fetch(
@@ -564,7 +563,6 @@ const imageSelectionFormChange = async () => {
 
   if (response.ok) {
     let res = await response.json();
-
     let count = res.imageCount;
     window.imageSelectionFormUnsavedCount = count;
     $('#filteredImageCountModal').text(count);
@@ -581,6 +579,7 @@ $("#imageSelectionForm .bootstrap-datepicker").datepicker({
 $('#imageSelectionModalTrigger').on('click',(e) =>{
   e.preventDefault();
   $("#imageSelectionModal").modal('show');
+
   // Set the saved values in the modal
   $('#originalFilenameLower').val($('#filterName').val());
   $('#taskNamesDataList').val($('#filterSource').val());
@@ -595,10 +594,10 @@ $('#imageSelectionModalTrigger').on('click',(e) =>{
 $('#imageSelectionFormSubmit').on('click',(e) => {
   e.preventDefault();
   
-
   // Save the state of the form and filtered result
   window.imageSelectionFormSavedCount = window.imageSelectionFormUnsavedCount;
   window.imageSelectionFormSavedInputs = window.imageSelectionFormUnsavedInputs;
+  
   // Set hidden inputs
   $('#filterName').val(window.imageSelectionFormSavedInputs.originalFilenameLower || '');
   $('#filterSource').val(window.imageSelectionFormSavedInputs.sourceTask || '');

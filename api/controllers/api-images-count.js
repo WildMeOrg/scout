@@ -46,21 +46,18 @@ module.exports = {
     }
   },
 
-  fn: async function (inputs,exits) {
-    
+  fn: async function (inputs,exits) {    
 
     if(!this.req.session.userId){
       return exits.forbidden();
     }
 
     // @TODO consolidate this logic into a helper and have this controller share with with the taskQueuer worker
-    overrideToZero = false;    
-    
+    overrideToZero = false;
     let originalFilenameLower = inputs.originalFilenameLower.toLowerCase().trim();
 
     let query = {};
-    if(!originalFilenameLower.includes("*")) {
-      
+    if(!originalFilenameLower.includes("*")) {      
       query.originalFilenameLower = {
         contains: originalFilenameLower
       };
