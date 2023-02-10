@@ -62,8 +62,7 @@ module.exports = {
         query.name = { contains : name };
       }else {
         query.name = {  like : name.replaceAll("*","%")}
-      }
-      
+      }      
     }
 
     // Date created - start

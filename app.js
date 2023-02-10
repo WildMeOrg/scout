@@ -1091,8 +1091,7 @@ const invokeMl = async (fullPath,configName) => {
     let originalFilenameLower = taskData.filterName.toLowerCase().trim();
 
     let query = {};
-    if(!originalFilenameLower.includes("*")) {
-      
+    if(!originalFilenameLower.includes("*")) {      
       query.originalFilenameLower = {
         contains: originalFilenameLower
       };
@@ -1102,7 +1101,6 @@ const invokeMl = async (fullPath,configName) => {
         like: originalFilenameLower.replaceAll("*","%")
       };
     }
-
 
     if(taskData.filterSource){
       let matchingTasks = await Tasks.find({where : {displayName : taskData.filterSource}, limit : 1})
