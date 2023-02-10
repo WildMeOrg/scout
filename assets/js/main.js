@@ -580,7 +580,6 @@ $("#imageSelectionForm .bootstrap-datepicker").datepicker({
 
 $('#imageSelectionModalTrigger').on('click',(e) =>{
   e.preventDefault();
-  console.log("Triggering image selection");
   $("#imageSelectionModal").modal('show');
   // Set the saved values in the modal
   $('#originalFilenameLower').val($('#filterName').val());
