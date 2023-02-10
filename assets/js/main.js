@@ -581,6 +581,7 @@ $("#imageSelectionForm .bootstrap-datepicker").datepicker({
 
 $('#imageSelectionModalTrigger').on('click',(e) =>{
   e.preventDefault();
+  console.log("Triggering image selection");
   $("#imageSelectionModal").modal('show');
   console.log("image spot 1, inputing image name");
   // Set the saved values in the modal
