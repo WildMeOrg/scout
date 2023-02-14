@@ -13,6 +13,10 @@ module.exports = {
       type : 'string',
       description : 'Partial match or use * as wildcard for image name'
     },
+    tags: {
+      type: ['string'],
+      description: 'tags to match'
+    },
     sourceTask : {
       type : 'string',
       description : 'The source task to copy from'
@@ -68,6 +72,13 @@ module.exports = {
       };
     }
 
+    let tags = [];
+    if (inputs.tags) {
+        for (const tag of inputs.tags) {
+            if (tag.length) tags.push(tag);
+        }
+    }
+
     if(inputs.sourceTask){
       let matchingTasks = await Tasks.find({where : {displayName : inputs.sourceTask}, limit : 1})
 
@@ -115,6 +126,7 @@ module.exports = {
     imageCount = 0;
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);
+        //// TODO use tags to find subset of imagesFound
       imageCount = imagesFound.length;
     }
 
