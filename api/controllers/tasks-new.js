@@ -42,6 +42,8 @@ module.exports = {
     // Get users
     let users = await Users.find();
 
+    let allTags = await Annotations.allTags();
+
     // Get the status of the ingestion worker
     ingestionActive = false;
     let workers = await Workers.find({where : {name : 'imageIngestion'}, limit: 1})
@@ -55,6 +57,7 @@ module.exports = {
       users: users,
       imageCountTotal : imageCount,
       ingestionActive : ingestionActive,
+      allTags : allTags,
       tasks : tasks
     };
     let clientData = {
