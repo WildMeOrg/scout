@@ -133,31 +133,7 @@ module.exports = {
     imageCount = 0;
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);
-
-      //    FIXME
-      // 1. this should probably be a method elsewhere
-      // 2. definitely would be better done as part of the query (cmd) above  :(
-      if (labels && labels.length) {
-        let imagesFoundWithLabels = [];
-        for (const image of imagesFound) {
-          let annots = await Annotations.find({
-            imageId : image.id,
-          });
-          if (!annots || !annots.length) continue;
-          // bummer, label is within boundingBoxes
-          checkImage: for (const annot of annots) {
-            // finding just one is good enough, cuz this is an "or" search
-            for (const bbox of annot.boundingBoxes) {
-              if (labels.indexOf(bbox.label) > -1) {
-                imagesFoundWithLabels.push(image);
-                break checkImage;
-              }
-            }
-          }
-        }
-        imagesFound = imagesFoundWithLabels;
-      }
-
+      imagesFound = await Images.filterByLabels(imagesFound, labels);
       imageCount = imagesFound.length;
     }
 
