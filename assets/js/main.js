@@ -488,6 +488,9 @@ $('button#clearSearchInput').on('click',function(e){
 $("form#imageSelectionForm input").on("input", async (e) => {
   await imageSelectionFormChange();
 });
+$("form#imageSelectionForm select").on("input", async (e) => {
+  await imageSelectionFormChange();
+});
 
 $("form#imageSelectionForm input#taskNamesDataList").on("input", async (e) => {
   await populateTaskNamesDataList();
@@ -554,14 +557,22 @@ window.imageSelectionFormSavedInputs = {};
 window.imageSelectionFormUnsavedCount = 0;
 window.imageSelectionFormSavedCount = 0;
 const imageSelectionFormChange = async () => {
+  let labels = [];
   const formData = new FormData(document.getElementById('imageSelectionForm'));
   const formValues = {};
   for (const pair of formData.entries()) {
       formValues[pair[0]] = pair[1];
+      if (pair[0] == 'labels') labels.push(pair[1]);
   }
   
   window.imageSelectionFormUnsavedInputs = formValues;
-  let action = '/api/images?'+ new URLSearchParams(formValues);
+console.log('>>>>>>>> %o', formValues);
+  let sp = new URLSearchParams(formValues);
+  if (labels.length == 1) labels.push('');  // cuz horrors
+  while (labels.length) {
+    sp.append('labels', labels.shift());
+  }
+  let action = '/api/images?'+ sp;
   const response = await fetch(
     action,
     {
