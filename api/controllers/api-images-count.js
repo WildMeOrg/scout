@@ -13,9 +13,9 @@ module.exports = {
       type : 'string',
       description : 'Partial match or use * as wildcard for image name'
     },
-    tags: {
+    labels: {
       type: ['string'],
-      description: 'tags to match'
+      description: 'labels to match'
     },
     sourceTask : {
       type : 'string',
@@ -72,10 +72,10 @@ module.exports = {
       };
     }
 
-    let tags = [];
-    if (inputs.tags) {
-        for (const tag of inputs.tags) {
-            if (tag.length) tags.push(tag);
+    let labels = [];
+    if (inputs.labels) {
+        for (const label of inputs.labels) {
+            if (label.length) labels.push(label);
         }
     }
 
@@ -130,8 +130,8 @@ module.exports = {
       //    FIXME
       // 1. this should probably be a method elsewhere
       // 2. definitely would be better done as part of the query (cmd) above  :(
-      if (tags && tags.length) {
-        let imagesFoundWithTags = [];
+      if (labels && labels.length) {
+        let imagesFoundWithLabels = [];
         for (const image of imagesFound) {
           let annots = await Annotations.find({
             imageId : image.id,
@@ -141,14 +141,14 @@ module.exports = {
           checkImage: for (const annot of annots) {
             // finding just one is good enough, cuz this is an "or" search
             for (const bbox of annot.boundingBoxes) {
-              if (tags.indexOf(bbox.label) > -1) {
-                imagesFoundWithTags.push(image);
+              if (labels.indexOf(bbox.label) > -1) {
+                imagesFoundWithLabels.push(image);
                 break checkImage;
               }
             }
           }
         }
-        imagesFound = imagesFoundWithTags;
+        imagesFound = imagesFoundWithLabels;
       }
 
       imageCount = imagesFound.length;
