@@ -1153,6 +1153,7 @@ const invokeMl = async (fullPath,configName) => {
     if(imagesFound.length == 0){
       return await workers.taskQueuer();
     }
+    imagesFound = await Images.filterByLabels(imagesFound, taskData.filterLabels);
 
     // Update the task itself with imageCount
     let updatedTask = await Tasks.updateOne({ id: taskData.taskId })

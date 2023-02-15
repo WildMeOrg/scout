@@ -28,6 +28,10 @@ module.exports = {
       description : 'left or right',
       required : true
     },
+    filterLabels : {
+      type : ['string'],
+      description : ''
+    },
     filterName : {
       type : 'string',
       description : ''
@@ -117,6 +121,7 @@ module.exports = {
 
       let imageFilters = {
         filterName : inputs.filterName,
+        filterLabels : inputs.filterLabels,
         filterSource: inputs.filterSource,
         filterDateStart: inputs.filterDateStart,
         filterDateEnd: inputs.filterDateEnd,
