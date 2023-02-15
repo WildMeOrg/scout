@@ -14,7 +14,7 @@ module.exports = {
       description : 'Partial match or use * as wildcard for image name'
     },
     labels: {
-      type: ['string'],
+      type: 'ref',
       description: 'labels to match'
     },
     sourceTask : {
@@ -73,8 +73,15 @@ module.exports = {
     }
 
     let labels = [];
+    // what a hassle
     if (inputs.labels) {
-        for (const label of inputs.labels) {
+        let arr = [];
+        if (Array.isArray(inputs.labels)) {
+            arr = inputs.labels;
+        } else {  // assuming string, sorrynotsorry
+            arr.push(inputs.labels);
+        }
+        for (const label of arr) {
             if (label.length) labels.push(label);
         }
     }
