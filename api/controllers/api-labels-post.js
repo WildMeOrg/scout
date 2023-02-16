@@ -12,6 +12,10 @@ module.exports = {
       statusCode: 200,
       description: 'The session was created.'
     },
+    validationFailed: {
+      statusCode: 400,
+      description: 'There was an error processing the request, see JSON attached.'
+    },
     forbidden: {
       statusCode: 403,
       description: 'The user is not allowed to make that request.'
@@ -20,19 +24,29 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if (!this.req.session.userId) {
-      return exits.forbidden();
+    let errorsObject = {};
+
+    // if (!this.req.session.userId) {
+    //   return exits.forbidden();
+    // }
+
+    let matchingName = await Labels.find({where: { name: inputs.name.trim().toLowerCase() }, });
+    if(matchingName.length){
+      errorsObject.name = "That label is already taken.";
     }
 
-    // Create a new label with the provided name    
-    let newLabel = null;
-    try {
-      newLabel = await Labels.create({ name: inputs.name }).fetch();
-      console.log(newLabel); // Check the output in your console
-    } catch (err) {
-      newLabel = "wrong";
-      console.log(err); // Log any errors to the console
+    if(Object.keys(errorsObject).length){
+      return exits.validationFailed({errorsObject : errorsObject});
     }
+
+    if(!inputs.name.trim().toLowerCase().length) {
+      errorsObject.name = "Label name cannot be empty."
+      return exits.validationFailed({errorsObject : errorsObject});
+    }
+    // Create a new label with the provided name    
+    let  newLabel = await Labels.create({ name: inputs.name.trim().toLowerCase() }).fetch();    
+
+    // If successful, return created label
 
     return exits.success(newLabel);
   }
