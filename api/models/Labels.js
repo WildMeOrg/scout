@@ -94,19 +94,23 @@ module.exports = {
   //   })
   // },
 
-  getCustomLabels: async function() {
-    let labels = [];
-    let allLabels = await Labels.find({});
-    for (let label of allLabels) {
-        labels.push(label);
+//ycle', 'oribi', 'oryx', 'ostrich', 'roof_grass', 'roof_mabati', 'sheep', 'topi', 'vehicle', 'warthog', 'waterbuck', 'white_bones', 'wildebeest', 'zebra'];
+//  },
+
+  getCustomLabelNames: async function() {
+    let names = [];
+    let labels = await Labels.find({});
+    for (let label of labels) {
+        names.push(label.name);
     }
-    return labels;
+    return names;
   },
 
-  getAllLabels: async function() {
-    let label1 = await Labels.getMLLabels();
-    let label2 = await Labels.getCustomLabels();
-    return label1.concat(label2);
+  getAllLabelNames: async function() {
+    let names1 = await Labels.getMLLabelNames();
+    let names2 = await Labels.getCustomLabelNames();
+    return names1.concat(names2);
   }
 
 };
+
