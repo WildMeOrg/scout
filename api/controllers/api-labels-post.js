@@ -23,9 +23,18 @@ module.exports = {
     if (!this.req.session.userId) {
       return exits.forbidden();
     }
+
     // Create a new label with the provided name    
-    let newLabel = Labels.create({ name: inputs.name }).fetch();
+    let newLabel = null;
+    try {
+      newLabel = await Labels.create({ name: inputs.name }).fetch();
+      console.log(newLabel); // Check the output in your console
+    } catch (err) {
+      newLabel = "wrong";
+      console.log(err); // Log any errors to the console
+    }
 
     return exits.success(newLabel);
   }
+
 };

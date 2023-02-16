@@ -1,14 +1,13 @@
-
 module.exports = {
 
   friendlyName: 'Labels GET',
 
-  description: '',
+  description: 'Get all labels',
 
   inputs: {
     name : {
       type : 'string',
-      description : ''
+      description : 'label name'
     },    
   },
 
@@ -18,27 +17,27 @@ module.exports = {
       statusCode: 200,
       description: 'Labels were found. Details attached.'
     },
-    // forbidden: {
-    //   statusCode: 403,
-    //   description: 'The user is not allowed to make that request.'
-    // },
+
+    forbidden: {
+      statusCode: 403,
+      description: 'The user is not allowed to make that request.'
+    },
   },
 
 
-  fn: async function (exits) {
+  fn: async function (inputs,exits) {
 
-    // if(!this.req.session.userId){
-    //   return exits.forbidden();
-    // }
-
+    if(!this.req.session.userId){
+      return exits.forbidden();
+    }
+    // let query = {};
     // let name = inputs.name.toLowerCase().trim();      
-    // query.name = { contains : name };          
-
-    let Labels = await Labels.find();
-
+    // query.name = { contains : name };   
     // let Labels = await Labels.find({where : query});
+
+    let result = await Labels.find();    
     
-    return exits.success(Labels);
+    return exits.success(result);
   }
 
 
