@@ -31,8 +31,8 @@ module.exports = {
     //   return exits.forbidden();
     // }
 
-    let name = inputs.name.toLowerCase().trim();      
-    query.name = { contains : name };          
+    // let name = inputs.name.toLowerCase().trim();      
+    // query.name = { contains : name };          
 
     let Labels = await Labels.find();
 
