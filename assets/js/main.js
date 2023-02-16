@@ -970,10 +970,12 @@ setTimeout( async () => {
    e.preventDefault();
 
    // Get all the annotations
-   const annotationsObject = await simpleBoxes.getAllBoxes(window.sbHandleLeft.id);
    let annotationsArray = [];
-   for(index in annotationsObject){
-     annotationsArray.push(annotationsObject[index]);
+   if (window.sbHandleLeft) {
+     const annotationsObject = await simpleBoxes.getAllBoxes(window.sbHandleLeft.id);
+     for(index in annotationsObject){
+       annotationsArray.push(annotationsObject[index]);
+     }
    }
 
    // Parse them
