@@ -43,70 +43,26 @@ module.exports = {
       {name: 'zebra'}
     ];
   },
+ 
 
-  // initializeLabels: async () => {
-  //   const machineLearningLabels = 
-  //   [ 'buffalo',
-  //     'camel',
-  //     'canoe',
-  //     'car',
-  //     'cow',
-  //     'crocodile',
-  //     'eland',
-  //     'elephant',
-  //     'gazelle_grants',
-  //     'gazelle_thomsons',
-  //     'gerenuk',
-  //     'giant_forest_hog',
-  //     'giraffe',
-  //     'goat',
-  //     'hartebeest',
-  //     'hippo',
-  //     'impala',
-  //     'kob',
-  //     'kudu',
-  //     'motorcycle',
-  //     'oribi',
-  //     'oryx',
-  //     'ostrich',
-  //     'roof_grass',
-  //     'roof_mabati',
-  //     'sheep',
-  //     'topi',
-  //     'vehicle',
-  //     'warthog',
-  //     'waterbuck',
-  //     'white_bones',
-  //     'wildebeest',
-  //     'zebra'
-  //   ];
-
-  //   machineLearningLabels.forEach(async (item) => {
-  //     let label = {};
-  //     label.name = item;
-  //     let action = '/api/labels?'+ new URLSearchParams(label);
-  //     const response = await fetch(
-  //     action,
-  //     {
-  //       method: 'POST'
-  //     },
-  //   );
-  //   })
-  // },
-
-  getCustomLabels: async function() {
-    let labels = [];
-    let allLabels = await Labels.find({});
-    for (let label of allLabels) {
-        labels.push(label);
-    }
-    return labels;
+  // hard-coded (for now?)
+  getMLLabelNames: async function() {
+    return ['buffalo', 'camel', 'canoe', 'car', 'cow', 'crocodile', 'eland', 'elephant', 'gazelle_grants', 'gazelle_thomsons', 'gerenuk', 'giant_forest_hog', 'giraffe', 'goat', 'hartebeest', 'hippo', 'impala', 'kob', 'kudu', 'motorcycle', 'oribi', 'oryx', 'ostrich', 'roof_grass', 'roof_mabati', 'sheep', 'topi', 'vehicle', 'warthog', 'waterbuck', 'white_bones', 'wildebeest', 'zebra'];
   },
 
-  getAllLabels: async function() {
-    let label1 = await Labels.getMLLabels();
-    let label2 = await Labels.getCustomLabels();
-    return label1.concat(label2);
+  getCustomLabelNames: async function() {
+    let names = [];
+    let labels = await Labels.find({});
+    for (let label of labels) {
+        names.push(label.name);
+    }
+    return names;
+  },
+
+  getAllLabelNames: async function() {
+    let names1 = await Labels.getMLLabelNames();
+    let names2 = await Labels.getCustomLabelNames();
+    return names1.concat(names2);
   }
 
 };
