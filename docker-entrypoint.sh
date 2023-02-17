@@ -3,4 +3,5 @@ set -eo pipefail
 
 mkdir ~/log
 mongod --fork --logpath ~/log/mongod.log  &&
-npm start
+#npm start
+sails lift

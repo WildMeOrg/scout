@@ -8,7 +8,11 @@ module.exports = {
     name : {
       type : 'string',
       description : 'label name'
-    },    
+    },  
+    source: {
+      type : 'string',
+      description : 'machine learning or lab lead'
+    }  
   },
 
 
@@ -33,12 +37,22 @@ module.exports = {
     // let query = {};
     // let name = inputs.name.toLowerCase().trim();      
     // query.name = { contains : name };   
-    // let Labels = await Labels.find({where : query});
+    // let Labels = await Labels.find({where : query});   
 
-    let result = await Labels.find();    
-    
+    let result = {};
+    result = Labels.find();
+
+    if(inputs.source == "ml") {
+      result = await Labels.getMLLabels();
+    } else 
+     if (inputs.source == "ll") {
+       result = await Labels.getCustomLabels();
+     } 
+     else {
+      result = await Labels.getAllLabels()
+    }
+
     return exits.success(result);
   }
-
 
 };
