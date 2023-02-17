@@ -1,174 +1,202 @@
 <main id="tasksPage" class="container">
 
   <% if(ingestionActive) { %>
-  <div class="alert alert-warning text-center">
-    <i class="bi-exclamation-triangle"></i> Image ingestion in
-    progress. Some images may not be available for task creation.
-  </div>
- <% } %>
-
-  <div class="alert alert-success pageSuccessAlert" data-successType="new" id="newTaskAlert" role="alert">
-    <i class="bi-check-circle"></i> Successfully created task <% if(lastTaskName) { %>"<%=lastTaskName%>"<% } %>
-
-  </div>
-
-  <div class="alert alert-success pageSuccessAlert" data-successType="delete" id="deletedTaskAlert" role="alert">
-    <i class="bi-x-circle"></i> Task deleted successfully
-  </div>
-
-<div class="container border p-3 mb-3">
-<div class="row mb-2">
-  <div class="col-10">
-    <h4>Filters</h4>
-  </div>
-  <div class="col-1">
-    <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
-  </div>
-  <div class="col-1">
-    <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
-  </div>
-</div>
-<div class="row mb-4">
-  <div class="col-6">
-    <div class="input-group">
-      <input class="form-control border" type="text" placeholder="Task Name" id="searchInput">
-      <span class="input-group-append">
-        <button id="clearSearchInput" class="btn xbtn-outline-secondary bg-white border" type="button">
-            ✖️
-        </button>
-      </span>
+    <div class="alert alert-warning text-center">
+      <i class="bi-exclamation-triangle"></i> Image ingestion in
+      progress. Some images may not be available for task creation.
     </div>
-  </div>
-  <div class="col-3">
-      <div class="input-group date xform-floating datepicker">
-    <input type="text" id="startDate" placeholder="Date Created Start" class="form-control">
-    <span class="input-group-append">
-      <span class="input-group-text bg-white d-block">
-        <i class="bi-calendar"></i>
-      </span>
-    </span>
+    <% } %>
+
+      <div class="alert alert-success pageSuccessAlert" data-successType="new" id="newTaskAlert" role="alert">
+        <i class="bi-check-circle"></i> Successfully created task <% if(lastTaskName) { %>"<%=lastTaskName%>"<% } %>
+
       </div>
-  </div>
-  <div class="col-3">
-      <div class="input-group date xform-floating datepicker">
-    <input type="text" id="endDate" placeholder="Date Created End" class="form-control">
-    <span class="input-group-append">
-      <span class="input-group-text bg-white d-block">
-        <i class="bi-calendar"></i>
-      </span>
-    </span>
+
+      <div class="alert alert-success pageSuccessAlert" data-successType="delete" id="deletedTaskAlert" role="alert">
+        <i class="bi-x-circle"></i> Task deleted successfully
       </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-4">
-    Assignee
-    <select class="form-select" size="4" id="assigneeInput" name="assignee" multiple aria-label="multiple select">
 
+      <div class="container border p-3 mb-3">
+        <div class="row mb-2">
+          <div class="col-9">
+            <h4>Filters</h4>
+          </div>
+          <div class="col-1">
+            <button id="editLabelButton" type="button" class="btn btn-primary">Labels</button>
+          </div>
 
+          <div class="col-1">
+            <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
+          </div>
+          <div class="col-1">
+            <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
+          </div>
 
-      <option disabled>--- USERS ---</option>
-      <% for (const user of users) { %>
+        </div>
 
-        <option value="<%=user.id%>"><%=user.username%></option>
-
-      <% } %>
-
-      <option disabled>--- MACHINE LEARNING ---</option>
-      <option value="ml-v1">ML Config: V1 Classifier</option>
-      <option value="ml-v2">ML Config: V2 Classifier</option>
-      <option value="ml-dummy">ML Config: Random Nonsense</option>
-
-
-
-
-    </select>
-  </div>
-  <div class="col-4">
-    Stage
-    <select id="phaseInput" class="form-select" size="4" multiple aria-label="multiple select">
-      <option value="ns">Not started</option>
-      <option value="as">Annotation: in-progress</option>
-      <option value="af">Annotation: complete</option>
-      <option value="gs">Ground truth: in-progress</option>
-      <option value="gf">Ground truth: complete</option>
-      <option value="ds">Division: in-progress</option>
-      <option value="df">Division: complete</option>
-    </select>
-  </div>
-  <div class="col-4">
-    Ordering type
-    <select id="randomized" class="form-select" aria-label="select">
-      <option value="">Any</option>
-      <option value="false">Sequential</option>
-      <option value="true">Random</option>
-    </select>
-  </div>
-</div>
-</div>
-
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Task Name</th>
-        <th scope="col">Side</th>
-        <th scope="col">Order</th>
-        <th scope="col">Assignee</th>
-        <th scope="col">Date Created</th>
-        <th scope="col">A%</th>
-        <th scope="col">G%</th>
-        <th scope="col">D%</th>
-        <th class="text-end" scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody id="taskTableBody">
-
-    </tbody>
-  </table>
-
-
-  <nav class="d-flex flex-wrap align-items-center justify-content-center">
-    <ul class="pagination">
-        <li class="page-item"><button class="btn btn-secondary page-link" id="previousTaskPage">Previous</button></li>
-        <p class="mx-3"><span id="taskList-start">0</span> - <span id="taskList-end">0</span> of <span id="taskList-total">0</span></p>
-        <li class="page-item"><button class="btn btn-secondary page-link" id="nextTaskPage">Next</button></li>
-    </ul>
-    <input type="hidden" id="pageNumber" name="pageNumber" value="1">
-  </nav>
-
-
-
-  <div class="modal fade bg-secondary" id="taskDeletionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 id="modalQuestion" data-modal-taskId="" data-modal-taskDisplayName="" class="modal-title">Confirm deletion of task "<span id="taskDisplayNameBlurb"></span>"?</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
       </div>
-      <div class="modal-body">
-        <div class="form-floating">
-          <input
-            type="text"
-            id="retypeTaskName"
-            class="form-control"
-          />
-          <label for="taskName">Retype Task Name</label>
+      <div class="row mb-4">
+        <div class="col-6">
+          <div class="input-group">
+            <input class="form-control border" type="text" placeholder="Task Name" id="searchInput">
+            <span class="input-group-append">
+              <button id="clearSearchInput" class="btn xbtn-outline-secondary bg-white border" type="button">
+                ✖️
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="input-group date xform-floating datepicker">
+            <input type="text" id="startDate" placeholder="Date Created Start" class="form-control">
+            <span class="input-group-append">
+              <span class="input-group-text bg-white d-block">
+                <i class="bi-calendar"></i>
+              </span>
+            </span>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="input-group date xform-floating datepicker">
+            <input type="text" id="endDate" placeholder="Date Created End" class="form-control">
+            <span class="input-group-append">
+              <span class="input-group-text bg-white d-block">
+                <i class="bi-calendar"></i>
+              </span>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button id="deletionCancelButton" type="button" data-bs-dismiss="modal" class=" btn btn-primary">Cancel</button>
+      <div class="row">
+        <div class="col-4">
+          Assignee
+          <select class="form-select" size="4" id="assigneeInput" name="assignee" multiple aria-label="multiple select">
 
-        <button id="deletionConfirmButton" type="button" disabled class="btn btn-danger">Apply</button>
+            <option disabled>--- USERS ---</option>
+            <% for (const user of users) { %>
+
+              <option value="<%=user.id%>">
+                <%=user.username%>
+              </option>
+
+              <% } %>
+
+                <option disabled>--- MACHINE LEARNING ---</option>
+                <option value="ml-v1">ML Config: V1 Classifier</option>
+                <option value="ml-v2">ML Config: V2 Classifier</option>
+                <option value="ml-dummy">ML Config: Random Nonsense</option>
+
+          </select>
+        </div>
+        <div class="col-4">
+          Stage
+          <select id="phaseInput" class="form-select" size="4" multiple aria-label="multiple select">
+            <option value="ns">Not started</option>
+            <option value="as">Annotation: in-progress</option>
+            <option value="af">Annotation: complete</option>
+            <option value="gs">Ground truth: in-progress</option>
+            <option value="gf">Ground truth: complete</option>
+            <option value="ds">Division: in-progress</option>
+            <option value="df">Division: complete</option>
+          </select>
+        </div>
+        <div class="col-4">
+          Ordering type
+          <select id="randomized" class="form-select" aria-label="select">
+            <option value="">Any</option>
+            <option value="false">Sequential</option>
+            <option value="true">Random</option>
+          </select>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+      </div>
 
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Task Name</th>
+            <th scope="col">Side</th>
+            <th scope="col">Order</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Date Created</th>
+            <th scope="col">A%</th>
+            <th scope="col">G%</th>
+            <th scope="col">D%</th>
+            <th class="text-end" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="taskTableBody">
+
+        </tbody>
+      </table>
+
+
+      <nav class="d-flex flex-wrap align-items-center justify-content-center">
+        <ul class="pagination">
+          <li class="page-item"><button class="btn btn-secondary page-link" id="previousTaskPage">Previous</button></li>
+          <p class="mx-3"><span id="taskList-start">0</span> - <span id="taskList-end">0</span> of <span
+              id="taskList-total">0</span></p>
+          <li class="page-item"><button class="btn btn-secondary page-link" id="nextTaskPage">Next</button></li>
+        </ul>
+        <input type="hidden" id="pageNumber" name="pageNumber" value="1">
+      </nav>
+
+
+
+      <div class="modal fade bg-secondary" id="taskDeletionModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 id="modalQuestion" data-modal-taskId="" data-modal-taskDisplayName="" class="modal-title">Confirm
+                deletion of task "<span id="taskDisplayNameBlurb"></span>"?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating">
+                <input type="text" id="retypeTaskName" class="form-control" />
+                <label for="taskName">Retype Task Name</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="deletionCancelButton" type="button" data-bs-dismiss="modal"
+                class=" btn btn-primary">Cancel</button>
+
+              <button id="deletionConfirmButton" type="button" disabled class="btn btn-danger">Apply</button>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+
+      <div class="modal fade" id="labelEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="labelsWrapper">
+              <div class="labelsContainerHeader">
+                <button id="backToTasks" class="btn btn-primary" data-bs-dismiss="modal">
+                  <span class="bi bi-arrow-return-left"></span>
+                  Task Table
+                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+              </div>
+              <div class="labelsList" id="labelsList">                
+              </div>
+              <div class="addNewLabel">
+                <button id="submitEditLabel" class="btn btn-primary"> + ADD NEW LABELS</button>
+              </div>
+            </div>
+
+
+
+
+          </div>
+        </div>
+      </div>
 
 </main>

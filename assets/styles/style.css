@@ -136,6 +136,48 @@
   margin-bottom: 20px;
 }
 
+.labelsWrapper {  
+  padding: 30px;
+  align-items: center;
+}
+
+.labelsList {
+  height: 350px;
+  overflow: auto;
+  margin-bottom: 50px;
+  
+}
+
+.individualLabel {
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-end; */
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.labelDisplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.labelsContainerHeader {
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-end; */
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+
 
 /** New style for the annotation outlines **/
 svg.a9s-annotationlayer .a9s-selection .a9s-inner,

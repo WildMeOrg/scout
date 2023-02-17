@@ -33,6 +33,8 @@ module.exports = {
       // Check if there are users in the system
       let userCount = await Users.count();
 
+      // Labels.initializeLabels();
+
       // If there are no users, redirect to /signup page
       if(!userCount){
         throw { noUsers: '/signup'};
