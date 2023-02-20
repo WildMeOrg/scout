@@ -39,18 +39,18 @@ module.exports = {
     // query.name = { contains : name };   
     // let Labels = await Labels.find({where : query});   
 
-    let result = {};
-    result = Labels.find();
+    // let result = {};
+    // result = Labels.find();
 
-    if(inputs.source == "ml") {
-      result = await Labels.getMLLabels();
-    } else 
-     if (inputs.source == "ll") {
-       result = await Labels.getCustomLabels();
-     } 
-     else {
+    // if(inputs.source == "ml") {
+    //   result = await Labels.getMLLabels();
+    // } else 
+    //  if (inputs.source == "ll") {
+    //    result = await Labels.getCustomLabels();
+    //  } 
+    //  else {
       result = await Labels.getAllLabels()
-    }
+    // }
 
     return exits.success(result);
   }

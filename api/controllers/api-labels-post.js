@@ -44,7 +44,7 @@ module.exports = {
       return exits.validationFailed({errorsObject : errorsObject});
     }
     // Create a new label with the provided name    
-    let  newLabel = await Labels.create({ name: inputs.name.trim().toLowerCase() }).fetch();    
+    let  newLabel = await Labels.create({ name: inputs.name }).fetch();    
 
     // If successful, return created label
 
