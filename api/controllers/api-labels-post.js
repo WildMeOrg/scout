@@ -2,9 +2,18 @@ module.exports = {
   friendlyName: 'Add Label',
   description: 'Add a new label to the database',
   inputs: {
+    id : {
+      type: "string"
+    },
     name: {
       type: 'string',
       required: true
+    },
+    hotKey: {
+      type: 'string',
+    },
+    source: {
+      type: 'string',
     }
   },
   exits: {
@@ -31,21 +40,18 @@ module.exports = {
     // }
 
     let matchingName = await Labels.find({where: { name: inputs.name.trim().toLowerCase() }, });
+    let newLabel = {};
     if(matchingName.length){
-      errorsObject.name = "That label is already taken.";
-    }
-
-    if(Object.keys(errorsObject).length){
-      return exits.validationFailed({errorsObject : errorsObject});
-    }
+      newLabel = await Labels.update({ name: inputs.name }).set({ name: inputs.name.trim().toLowerCase(), hotKey: inputs.hotKey, source: inputs.source }).fetch();
+    } else {
+      newLabel = await Labels.create({ name: inputs.name.trim().toLowerCase(), hotKey: inputs.hotKey, source: inputs.source }).fetch(); 
+    } 
 
     if(!inputs.name.trim().toLowerCase().length) {
       errorsObject.name = "Label name cannot be empty."
       return exits.validationFailed({errorsObject : errorsObject});
     }
-    // Create a new label with the provided name    
-    let  newLabel = await Labels.create({ name: inputs.name }).fetch();    
-
+       
     // If successful, return created label
 
     return exits.success(newLabel);

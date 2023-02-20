@@ -44,6 +44,7 @@ module.exports.routes = {
   'POST /api/line-divisions' : { action: 'api-line-divisions-post' },
   'POST /api/labels' : { action: 'api-labels-post' },
   'GET /api/labels' : { action: 'api-labels-get' },
+  'DELETE /api/labels' : { action: 'api-labels-delete' },
   'PUT /api/queuedimages/:queuedimageid' : { action: 'api-queuedimages-put' },
   'PUT /api/sequenced-pairs/:sequencedpairid' : { action: 'api-sequencedpairs-put' },
   'GET /uploads/:imageid' : { action: 'static-uploads' },

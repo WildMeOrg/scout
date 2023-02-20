@@ -158,8 +158,10 @@
 }
 
 .labelDisplay {
+  width: 50%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .label {
@@ -175,6 +177,10 @@
   /* align-items: flex-end; */
   justify-content: space-between;
   margin-bottom: 20px;
+}
+
+#selectHotKey{
+  width: 80px; /* set the width to 200 pixels */
 }
 
 

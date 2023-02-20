@@ -273,247 +273,6 @@ $(document).ready(async () => {
     window.location.href = "/exports/" + exportId;
   };
 
-  //Get all labels from database
-  const getAllLabels = async () => {
-    console.log("getting all labels")
-    let actionLL = '/api/labels?';
-    const responseLL = await fetch(
-      actionLL,
-      {
-        method: 'GET'
-      },
-    );
-    if (!responseLL.ok) {
-      console.log("Error applying filters");
-      return;
-    }
-    let resLL = await responseLL.json();
-    console.log("before returning",resLL);
-    window.tagsList = resLL;
-    return resLL;
-  }
-  //Insert new label to database
-  const createLabel = async (data) => {
-      let label = {};
-      label.name = data.name;    
-      label.source = "ll"
-      let action = '/api/labels?'+ new URLSearchParams(label);    
-      const response = await fetch(
-        action,
-        {
-          method: 'POST'
-        },
-      );
-       return response; 
-    }
-  //Delete label row from page
-  const deleteRow = (row) => {
-    console.log(row);
-    row.parent().parent().remove();
-  }
-  //Delete label from database
-  const deleteLabel = async (id) => {
-        console.log("deleting db");          
-            let action = '/api/labels/'+ id;
-            console.log("Action is ", action)
-            const response = await fetch(
-              action,
-              {
-                method: 'DELETE'
-              },
-            );            
-  }
-  //Display label row on page
-  const displayLabel = (label) => {     
-    const labels = `<div class="individualLabel">
-                      <div class="labelDisplay">
-                          <span style="font-size: 16px; font-weight: 600" >${label.name}</span> 
-                          <span style="font-size: 16px">${label.hotKey}</span>
-                      </div>
-                      <div class="buttons">
-                        <button class="btn btn-primary editButton">Edit</button>
-                       <button class="btn btn-primary deleteButton">Delete</button>                        
-                      </div>
-                  </div>`;
-        $('#labelsList').append(labels);
-    return;
-  };  
-
-  const createLabelRow = async () => {
-
-      //Create a new row and append it to labelsList
-      const labels = `<div class="individualLabel">
-                          <div class="label">
-                          <input type="text" id = "labelInput">
-                              <select class ="selectHotKey" id="selectHotKey">
-                                <option value="null">No hot key</option>                            
-                              </select>
-                          </div>
-                          <div class="buttons">
-                            <button class="btn btn-primary saveButton">Save</button>
-                            <button class="btn btn-primary deleteButton">Delete</button>
-                          </div>
-                      </div>`;
-      $('#labelsList').append(labels);      
-
-      //Generate hot key options
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(item => {
-        const option = document.createElement('option');
-        option.text = "Ctrl + " + item;
-        const dropdownList = document.getElementsByClassName('selectHotKey');
-        const lastList = dropdownList[dropdownList.length - 1];
-        lastList.add(option);
-      });     
-      
-  }
-
-  const getAllAndDisplay = async () => {
-    labelsList.innerHTML = "";
-    const data = await getAllLabels();
-    data.forEach(item => {
-      console.log(item.id);
-      const labels = `<div class="individualLabel">
-                    <div class="labelDisplay">
-                        <span style="font-size: 16px; font-weight: 600" data-label-id = ${item.id}>${item.name}</span> 
-                        <span style="font-size: 16px">${item.hotKey ? item.hotKey : "no hot key"}</span>
-                    </div>
-                    <div class="buttons">
-                      <button class="btn btn-primary editButton">Edit</button>
-                      ${item.source == "ml" ? "" : '<button class="btn btn-primary deleteButton">Delete</button>'}
-                      
-                    </div>
-                </div>`;
-
-      $('#labelsList').append(labels);
-    });
-  }
-
-  const getOptions = async () => {
-    const allOptions = [];
-    [0,1,2,3,4,5,6,7,8,9].forEach(data => {
-      allOptions.push("ctrl + " + data);
-      allOptions.push("shft + " + data)
-  });
-    
-    const allLabels = await getAllLabels();
-    const used = allLabels.filter(data => data.hotKey.length !== 0);
-    const usedOptions = [];
-    used.forEach(data => usedOptions.push(data.hotKey));
-    const result = allOptions.filter(data => !usedOptions.includes(data.hotKey));
-    console.log(allOptions, result);
-    return result;
-  }
-
-  $('#editLabelButton').on('click', async (e) => {
-    e.preventDefault();    
-    $("#labelEditModal").modal('show');
-    // get data from db
-    await getAllAndDisplay();       
-
-    //event listener for delegation save button
-    const labelsList = document.getElementById('labelsList'); // replace with the ID of your div
-    labelsList.addEventListener('click', async event => {
-      
-    if (event.target.matches('.saveButton')) { 
-      console.log("clicking at save")
-      // replace with the class of your buttons
-            const parent = event.target.parentNode.parentNode;
-            const label = parent.children[0].children[0];
-            let labelName = "";
-            if(label.tagName.toLowerCase() === 'span') {
-              labelName = label.innerText;
-            }else {
-              labelName = label.value;
-            }
-
-            console.log(labelName);
-            const id = label.getAttribute("data-label-id")
-            console.log(event.target);
-                const mySelect = document.getElementById("selectHotKey");
-                const selectedOption = mySelect.options[mySelect.selectedIndex].textContent;
-                console.log(selectedOption)
-                const all = await getAllLabels();
-                let allNames = [];
-                all.forEach(data => allNames.push(data.name));                  
-                  displayLabel({name: labelName, hotKey : selectedOption});  
-                                
-                  deleteRow($(event.target));   
-                  console.log(id)
-                  if(id) {
-                    deleteLabel(id);
-                  }
-                  console.log({name: labelName, hotKey : selectedOption});
-                  createLabel({name: labelName, hotKey : selectedOption});   
-                  
-                  // await getAllAndDisplay(); 
-    }
-});
-   
-    //event listener for delegation edit button    
-    labelsList.addEventListener('click', async e => {
-    if (e.target.matches('.editButton')) {
-      console.log("clicking at edit")
-        const newSelect = document.createElement('select');
-        newSelect.setAttribute('id', "selectHotKey");
-        // newSelect.addClass("select");    
-          
-        const newSave = document.createElement('button');
-        newSave.textContent = "Save"
-        newSave.className = 'btn btn-primary saveButton';
-        const parent = e.target.parentNode.parentNode;
-        const leftDiv = parent.children[0];
-        const rightDiv = parent.children[1];
-        leftDiv.children[1].replaceWith(newSelect);
-        const customDelete = rightDiv.children[1];
-        if(customDelete){
-        e.target.replaceWith(newSave);
-      } else {
-        rightDiv.appendChild(newSave);
-      };      
-
-       
-    }
-
-    if (e.target.matches('#selectHotKey')) {    
-          
-      const unUsedOptions = await getOptions();
-        console.log(unUsedOptions);
-        unUsedOptions.forEach(option => {
-          const option1 = document.createElement('option');
-          option1.textContent = option;
-          e.target.appendChild(option1);
-        })             
-       
-    }
-});
-
-    //event listener for delegation delete button
-    labelsList.addEventListener('click', async e => {
-      if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
-        console.log("clicking at delete")
-        deleteRow($(e.target));
-        const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
-        if(id) {
-          console.log(id);
-          deleteLabel(id);
-          deleteRow($(e.target));
-        } else {
-          deleteRow($(e.target));
-        }
-    }
-
-})        
-    //event listener for create new label button
-    $('button#addNewLabel').on('click', async (e) => {
-      e.preventDefault();
-      console.log('click add new label button');
-      await createLabelRow();
-      return;
-    });   
-
-   })
-
-
 
   // Get task filters
   const getTaskFilters = () => {
@@ -768,6 +527,270 @@ $(document).ready(async () => {
       window.location.href = "/tasks/?success=delete"
     }
   });
+
+
+
+  //Get all labels from database
+  const getAllLabels = async () => {
+    let actionLL = '/api/labels?';
+    const responseLL = await fetch(
+      actionLL,
+      {
+        method: 'GET'
+      },
+    );
+    if (!responseLL.ok) {
+      console.log("Error applying filters");
+      return;
+    }
+    let resLL = await responseLL.json();
+    window.tagsList = resLL;
+    return resLL;
+  }
+  //Insert new label to database
+  const createLabel = async (data) => {
+      let label = {};
+      label.name = data.name;  
+      label.hotKey = data.hotKey;  
+      label.source = data.source == "ml" ? "ml" : "ll";
+      console.log(label);
+      let action = '/api/labels?'+ new URLSearchParams(label);    
+      console.log(action);
+      const response = await fetch(
+        action,
+        {
+          method: 'POST'
+        },
+      );
+       return response; 
+    }
+  //Delete label row from page
+  const deleteRow = (row) => {
+    console.log(row);
+    row.parent().parent().remove();
+  }
+  //Delete label from database
+  const deleteLabel = async (id) => {
+        console.log("deleting db");          
+            let action = '/api/labels/'+ id;
+            console.log("Action is ", action)
+            const response = await fetch(
+              action,
+              {
+                method: 'DELETE'
+              },
+            );            
+  }
+  //Display label row on page
+  const displayLabel = (label) => {     
+    const labels = `<div class="individualLabel">
+                      <div class="labelDisplay">
+                          <span style="font-size: 16px; font-weight: 600" >${label.name}</span> 
+                          <span style="font-size: 16px">${label.hotKey}</span>
+                      </div>
+                      <div class="buttons">
+                        <button class="btn btn-primary editButton">Edit</button>
+                        ${label.source == "ml" ? "" : "<button class='btn btn-primary deleteButton'>Delete</button> "}
+                                              
+                      </div>
+                  </div>`;
+        $('#labelsList').append(labels);
+    return;
+  };  
+
+  const createLabelRow = async () => {
+
+      //Create a new row and append it to labelsList
+      const labels = `<div class="individualLabel">
+                          <div class="label">
+                          <input type="text" id = "labelInput">
+                              <select class ="selectHotKey" id="selectHotKey">
+                                <option value="null">No hot key</option>                            
+                              </select>
+                          </div>
+                          <div class="buttons">
+                            <button class="btn btn-primary saveButton">Save</button>
+                            <button class="btn btn-primary deleteButton">Delete</button>
+                          </div>
+                      </div>`;
+      $('#labelsList').append(labels);    
+  }
+
+  const getAllAndDisplay = async () => {
+    labelsList.innerHTML = "";
+    const data = await getAllLabels();
+    data.forEach(item => {
+      const labels = `<div class="individualLabel">
+                    <div class="labelDisplay">
+                        <span style="font-size: 16px; font-weight: 600" data-label-id = ${item.id}>${item.name}</span> 
+                        <span style="font-size: 16px">${item.hotKey ? item.hotKey : "no hot key"}</span>
+                    </div>
+                    <div class="buttons">
+                      <button class="btn btn-primary editButton">Edit</button>
+                      ${item.source == "ml" ? "" : '<button class="btn btn-primary deleteButton">Delete</button>'}
+                      
+                    </div>
+                </div>`;
+
+      $('#labelsList').append(labels);
+    });
+  }
+
+    const getOptions = async () => {
+    const allOptions = [];
+    let count = 0;
+
+    [0,1,2,3,4,5,6,7,8,9].forEach(data => {      
+      allOptions.push("ctrl + "+data);
+      allOptions.push("shft + "+data);
+  });    
+    const allLabels = await getAllLabels();
+    const used = allLabels.filter(data => data.hotKey.length !== 0);
+    const usedOptions = [];
+    used.forEach(data => usedOptions.push(data.hotKey));
+    const result = allOptions.filter(data => !usedOptions.includes(data));
+    console.log(allOptions, used, usedOptions, result);
+    return result;
+  }
+
+    const updateLabel = async (data) => {
+      console.log("updating", data);
+      let label = {};
+      label.name = data.name;  
+      label.hotKey = data.hotKey;  
+      label.source = data.source == "ml" ? "ml" : "ll";
+      console.log(label);
+      let action = '/api/labels?'+ new URLSearchParams(label);    
+      console.log(action);
+      const response = await fetch(
+        action,
+        {
+          method: 'POST'
+        },
+      );
+
+
+       return response; 
+    }
+  
+  $('#editLabelButton').on('click', async (e) => {
+    e.preventDefault();    
+    $("#labelEditModal").modal('show');
+    // get data from db
+    await getAllAndDisplay();       
+
+    //event listener for delegation save button
+    const labelsList = document.getElementById('labelsList'); // replace with the ID of your div
+    labelsList.addEventListener('click', async event => {
+      
+    if (event.target.matches('.saveButton')) { 
+
+            const parent = event.target.parentNode.parentNode;
+            const label = parent.children[0].children[0];
+            
+            let labelName = "";
+            let source = "";
+
+            const mySelect = document.getElementById("selectHotKey");
+            const selectedOption = mySelect.options[mySelect.selectedIndex] ? mySelect.options[mySelect.selectedIndex].textContent : "";            
+
+            const id = label.getAttribute("data-label-id");
+            
+            const option = selectedOption ? selectedOption : ""
+
+            if(id) {
+              labelName = label.innerText; 
+              const all = await getAllLabels();
+              all.forEach( data => {
+                if(data.name == labelName) {
+                  source = data.source;
+                }
+              })             
+              
+              console.log("need to update,", {id: id, name: labelName, hotKey: option, source: source});
+              await updateLabel({name: labelName, hotKey: option, source: source})
+
+            }else {
+              labelName = label.value; 
+              if(labelName) {
+                await createLabel({name: labelName, hotKey: option, source: "ll"})
+              }else {
+                alert("Label name invalid");
+              }               
+              
+            }            
+
+            await getAllAndDisplay();
+            // deleteRow($(event.target)); 
+            // displayLabel({id: id, name: labelName, hotKey : option, source: source});  
+    }
+});
+   
+    //event listener for delegation edit button    
+    labelsList.addEventListener('click', async e => {
+    if (e.target.matches('.editButton')) {
+      console.log("clicking at edit")
+        const newSelect = document.createElement('select');
+        newSelect.setAttribute('id', "selectHotKey");
+        newSelect.setAttribute('required', '')
+        // newSelect.addClass("select");    
+          
+        const newSave = document.createElement('button');
+        newSave.textContent = "Save"
+        newSave.className = 'btn btn-primary saveButton';
+        const parent = e.target.parentNode.parentNode;
+        const leftDiv = parent.children[0];
+        const rightDiv = parent.children[1];
+        leftDiv.children[1].replaceWith(newSelect);
+        // const customDelete = rightDiv.children[1];
+        // if(customDelete){
+        e.target.replaceWith(newSave);
+      // } else {
+      //   rightDiv.appendChild(newSave);
+      // };      
+
+       
+    }
+
+    if (e.target.matches('#selectHotKey')) {    
+          
+      const unUsedOptions = await getOptions();
+        console.log(unUsedOptions);
+        unUsedOptions.forEach(option => {
+          const option1 = document.createElement('option');
+          option1.textContent = option;
+          e.target.appendChild(option1);
+        })             
+       
+    }
+});
+
+    //event listener for delegation delete button
+    labelsList.addEventListener('click', async e => {
+      if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
+        console.log("clicking at delete")
+        deleteRow($(e.target));
+        const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
+        if(id) {
+          console.log(id);
+          deleteLabel(id);
+          deleteRow($(e.target));
+        } else {
+          deleteRow($(e.target));
+        }
+    }
+
+})        
+    //event listener for create new label button
+    $('button#addNewLabel').on('click', async (e) => {
+      e.preventDefault();
+      console.log('click add new label button');
+      await createLabelRow();
+      return;
+    });   
+
+   })
+
 
 
   const populateTaskNamesDataList = async () => {
