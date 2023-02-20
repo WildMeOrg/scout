@@ -10,41 +10,42 @@
  *
 */
 
-window.tagsList = [
-  'buffalo',
-  'camel',
-  'canoe',
-  'car',
-  'cow',
-  'crocodile',
-  'eland',
-  'elephant',
-  'gazelle_grants',
-  'gazelle_thomsons',
-  'gerenuk',
-  'giant_forest_hog',
-  'giraffe',
-  'goat',
-  'hartebeest',
-  'hippo',
-  'impala',
-  'kob',
-  'kudu',
-  'motorcycle',
-  'oribi',
-  'oryx',
-  'ostrich',
-  'roof_grass',
-  'roof_mabati',
-  'sheep',
-  'topi',
-  'vehicle',
-  'warthog',
-  'waterbuck',
-  'white_bones',
-  'wildebeest',
-  'zebra'
-];
+window.tagsList = [];
+// [
+//   'buffalo',
+//   'camel',
+//   'canoe',
+//   'car',
+//   'cow',
+//   'crocodile',
+//   'eland',
+//   'elephant',
+//   'gazelle_grants',
+//   'gazelle_thomsons',
+//   'gerenuk',
+//   'giant_forest_hog',
+//   'giraffe',
+//   'goat',
+//   'hartebeest',
+//   'hippo',
+//   'impala',
+//   'kob',
+//   'kudu',
+//   'motorcycle',
+//   'oribi',
+//   'oryx',
+//   'ostrich',
+//   'roof_grass',
+//   'roof_mabati',
+//   'sheep',
+//   'topi',
+//   'vehicle',
+//   'warthog',
+//   'waterbuck',
+//   'white_bones',
+//   'wildebeest',
+//   'zebra'
+// ];
 
 const minimumImageHeight = 650;
 window.imageHeight = minimumImageHeight;
@@ -529,7 +530,7 @@ $(document).ready(async () => {
   });
 
 
-
+  
   //Get all labels from database
   const getAllLabels = async () => {
     let actionLL = '/api/labels?';
@@ -547,6 +548,8 @@ $(document).ready(async () => {
     window.tagsList = resLL;
     return resLL;
   }
+
+  window.tagsList = await getAllLabels();
   //Insert new label to database
   const createLabel = async (data) => {
       let label = {};
@@ -605,7 +608,7 @@ $(document).ready(async () => {
                           <div class="label">
                           <input type="text" id = "labelInput">
                               <select class ="selectHotKey" id="selectHotKey">
-                                <option value="null">No hot key</option>                            
+                                <option value="null">no hot key</option>                            
                               </select>
                           </div>
                           <div class="buttons">
@@ -712,7 +715,7 @@ $(document).ready(async () => {
 
             }else {
               labelName = label.value; 
-              if(labelName) {
+              if(labelName.trim()) {
                 await createLabel({name: labelName, hotKey: option, source: "ll"})
               }else {
                 alert("Label name invalid");
@@ -752,10 +755,16 @@ $(document).ready(async () => {
        
     }
 
-    if (e.target.matches('#selectHotKey')) {    
+    if (e.target.matches('#selectHotKey')) {   
+
+      console.log("deleting options", e.target);      
+      while (e.target.options.length > 0) {
+        e.target.remove(0);
+      }
           
       const unUsedOptions = await getOptions();
         console.log(unUsedOptions);
+
         unUsedOptions.forEach(option => {
           const option1 = document.createElement('option');
           option1.textContent = option;
@@ -973,9 +982,9 @@ $(document).ready(async () => {
             errorMessage = 'Please select a label for all of your boxes.';
           } else {
             let label = annotation.label;
-            if (window.tagsList.indexOf(label) < 0) {
-              errorMessage = 'One of your tags, (' + label + '), is not recognized. Please choose your tags from the available drop-down.';
-            }
+            // if (window.tagsList.indexOf(label) < 0) {
+            //   errorMessage = 'One of your tags, (' + label + '), is not recognized. Please choose your tags from the available drop-down.';
+            // }
           }
         }
       }
@@ -1253,9 +1262,9 @@ $(document).ready(async () => {
             errorMessage = 'Please select a label for all of your boxes.';
           } else {
             let label = annotation.label;
-            if (window.tagsList.indexOf(label) < 0) {
-              errorMessage = 'One of your tags, (' + label + '), is not recognized. Please choose your tags from the available drop-down.';
-            }
+            // if (window.tagsList.indexOf(label) < 0) {
+            //   errorMessage = 'One of your tags, (' + label + '), is not recognized. Please choose your tags from the available drop-down.';
+            // }
           }
         }
       }
