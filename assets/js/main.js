@@ -234,13 +234,7 @@ $(document).ready(async () => {
     return;
   });
 
-  $('button#submitEditLabel').on('click', async (e) => {
-    e.preventDefault();
-    console.log('click add new label button');
-    await createNewLabel();
-    return;
-  });
-
+ 
   // Export buttons
   $('#exportAnnotations').on('click', async (e) => {
     await initExport('annotations');
@@ -279,264 +273,245 @@ $(document).ready(async () => {
     window.location.href = "/exports/" + exportId;
   };
 
-
-  const submitEditLabels = async () => {
-
-    let label = {};
-    const labelName = $("#editLabelInput").val();
-
-    console.log("You entered ", labelName);
-    if (labelName.length) {
-      label.name = labelName;
-    }
-
-    // Send the request
-
-    //POST
-    // let action = '/api/labels?'+ new URLSearchParams(label);
-    // console.log("Action is ", action)
-    // const response = await fetch(
-    //   action,
-    //   {
-    //     method: 'POST'
-    //   },
-    // );
-
-    //GET  
-
-    // Send the request
-    let action = '/api/labels?' + new URLSearchParams(label);
-
-    console.log("Action is ", action)
-    const response = await fetch(
-      action,
-      {
-        method: 'GET'
-      },
-    );
-
-    console.log("response is", response);
-    if (!response.ok) {
-      console.log("Error applying filters");
-      return;
-    }
-
-    let res = await response.json();
-    console.log(res);
-
-    const labels = document.createElement('p');
-    labels.textContent = res.name;
-    return;
-  };
-
-  const createNewLabel = async () => {
-
-    console.log("adding new")
-
-    const labels = `<div class="individualLabel">
-                        <div class="label">
-                            <select class = "selectLabel">                            
-                            </select>
-                            <select class ="selectHotKey">
-                              <option value="null">No hot key</option>                            
-                            </select>
-                        </div>
-                        <div class="buttons">
-                          <button class="btn btn-primary createButton">Save</button>
-                          <button class="btn btn-primary deleteButton">Delete</button>
-                        </div>
-                    </div>`;
-    $('#labelsList').append(labels);
-
-    let action = '/api/labels?';
-
-    const response = await fetch(
-      action,
-      {
-        method: 'GET'
-      },
-    );
-
-    if (!response.ok) {
-      console.log("Error applying filters");
-      return;
-    }
-
-    let resAll = await response.json();
-
-    setTimeout(() => {
-      resAll.forEach(item => {
-        const option = document.createElement('option');
-        option.text = item.name;
-        option.value = Math.random();
-        const dropdownList = document.getElementsByClassName('selectLabel');
-        const lastList = dropdownList[dropdownList.length - 1];
-        lastList.add(option);
-      });
-    }, 100)
-
-    setTimeout(() => {
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(item => {
-        const option = document.createElement('option');
-        option.text = "Ctrl + " + item;
-        // option.value = Math.random();
-        const dropdownList = document.getElementsByClassName('selectHotKey');
-        const lastList = dropdownList[dropdownList.length - 1];
-        lastList.add(option);
-      });
-    }, 100)
-
-    setTimeout(() => {
-
-      const deleteButton = Array.from(document.getElementsByClassName("deleteButton"));
-      console.log(123, deleteButton);
-      deleteButton.forEach(button => {
-        console.log(button);
-        button.addEventListener("click", (e) => {
-          console.log("deleting records")
-          $(e.target).parent().parent().remove();
-        });
-      })
-    }, 1000)
-  }
-
-
-  $('#editLabelButton').on('click', async (e) => {
-    e.preventDefault();
-    console.log("get ml and custom labels from db");
-    $("#labelEditModal").modal('show');
-    const labelsList = document.getElementById("labelsList");
-    console.log(labelsList);
-    labelsList.innerHTML = "";
-
-    //get data from ML created labels
-    let actionML = '/api/labels?' + new URLSearchParams({ 'source': "ml" });;
-    console.log("Action is ", actionML)
-    const responseML = await fetch(
-      actionML,
-      {
-        method: 'GET'
-      },
-    );
-
-    if (!responseML.ok) {
-      console.log("Error applying filters");
-      return;
-    }
-
-    let resML = await responseML.json();
-    setTimeout(() => {
-      resML.forEach(item => {
-        const labels = `<div class="individualLabel">
-                        <div class="labelDisplay">
-                            <span style="font-size: 16px; font-weight: 600">${item.name}</span> 
-                            <span style="font-size: 10px">${item.hotKey ? item.hotKey : "No Hot Key"}</span>
-                        </div>
-                        <div class="buttons">
-                          <button class="btn btn-primary editButton">Edit</button>
-                        </div>
-                    </div>`;
-
-        $('#labelsList').append(labels);
-      });
-    }, 100)
-
-
-
-    // get data from LL created labels
-    let actionLL = '/api/labels?' + new URLSearchParams({ 'source': "ll" });;
-    console.log("Action is ", actionLL)
+  //Get all labels from database
+  const getAllLabels = async () => {
+    console.log("getting all labels")
+    let actionLL = '/api/labels?';
     const responseLL = await fetch(
       actionLL,
       {
         method: 'GET'
       },
     );
-
     if (!responseLL.ok) {
       console.log("Error applying filters");
       return;
     }
-
     let resLL = await responseLL.json();
-    setTimeout(() => {
-      resLL.forEach(item => {
-        const labels = `<div class="individualLabel">
+    console.log("before returning",resLL);
+    window.tagsList = resLL;
+    return resLL;
+  }
+  //Insert new label to database
+  const createLabel = async (data) => {
+      let label = {};
+      label.name = data.name;    
+      label.source = "ll"
+      let action = '/api/labels?'+ new URLSearchParams(label);    
+      const response = await fetch(
+        action,
+        {
+          method: 'POST'
+        },
+      );
+       return response; 
+    }
+  //Delete label row from page
+  const deleteRow = (row) => {
+    console.log(row);
+    row.parent().parent().remove();
+  }
+  //Delete label from database
+  const deleteLabel = async (id) => {
+        console.log("deleting db");          
+            let action = '/api/labels/'+ id;
+            console.log("Action is ", action)
+            const response = await fetch(
+              action,
+              {
+                method: 'DELETE'
+              },
+            );            
+  }
+  //Display label row on page
+  const displayLabel = (label) => {     
+    const labels = `<div class="individualLabel">
                       <div class="labelDisplay">
-                          <span style="font-size: 16px; font-weight: 600">${item.name}</span> 
-                          <span style="font-size: 10px">${item.hotKey}</span>
+                          <span style="font-size: 16px; font-weight: 600" >${label.name}</span> 
+                          <span style="font-size: 16px">${label.hotKey}</span>
                       </div>
                       <div class="buttons">
                         <button class="btn btn-primary editButton">Edit</button>
-                        <button class="btn btn-primary deleteButton">Delete</button>
+                       <button class="btn btn-primary deleteButton">Delete</button>                        
                       </div>
                   </div>`;
-
         $('#labelsList').append(labels);
-      });
-    }, 100)
+    return;
+  };  
 
-    //listener for edit button
-    setTimeout(() => {
-      const editLabelButton = Array.from(document.getElementsByClassName("editButton"));
-      editLabelButton.forEach(button => {
-        button.addEventListener("click", (e) => {
-          const parent = e.target.parentElement.parentElement;
-          const firstChildDiv = parent.querySelector('div:first-child')
-          const p = firstChildDiv.querySelector('span:first-child');
-          const parent1 = $(e.target).parent().parent();
-          parent.innerHTML = '';
-          const leftDiv = document.createElement('div');
-          leftDiv.classList.add("label");
-          const selectElement = document.createElement('select');
-          const option1 = document.createElement('option');
-          option1.value = 'option1';
-          option1.text = 'no hot key';
-          selectElement.add(option1);
-          const rightDiv = `                       
-        <div class="buttons">
-          <button class="btn btn-primary saveButton">Save</button>
-        </div>
-   `
-          leftDiv.appendChild(p);
-          leftDiv.appendChild(selectElement);
-          parent.appendChild(leftDiv);
-          parent1.append(rightDiv);
-        })
-      });
-    }, 1000)
+  const createLabelRow = async () => {
 
-    setTimeout(() => {
-      const saveButton = Array.from(document.getElementsByClassName("saveButton"));
-      saveButton.forEach(button => {
-        button.addEventListener("click", (e) => {
-          const parent = e.target.parentElement.parentElement;
-          //Get the leftDiv
-          const firstChildDiv = parent.firstElementChild
-          //Get the label name
-          const label = firstChildDiv.firstElementChild.textContent;
-          //Get the hot key user selected 
-          const select = firstChildDiv.children[1];
-          const hotkeySelected = select.options[select.selectedIndex].text;
-          console.log("selected: ", hotkeySelected);
-          // const labelAndHotKey = {};
-          // labelAndHotKey.name = label;
-          // labelAndHotKey.hotKey = hotkeySelected;          
+      //Create a new row and append it to labelsList
+      const labels = `<div class="individualLabel">
+                          <div class="label">
+                          <input type="text" id = "labelInput">
+                              <select class ="selectHotKey" id="selectHotKey">
+                                <option value="null">No hot key</option>                            
+                              </select>
+                          </div>
+                          <div class="buttons">
+                            <button class="btn btn-primary saveButton">Save</button>
+                            <button class="btn btn-primary deleteButton">Delete</button>
+                          </div>
+                      </div>`;
+      $('#labelsList').append(labels);      
+
+      //Generate hot key options
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(item => {
+        const option = document.createElement('option');
+        option.text = "Ctrl + " + item;
+        const dropdownList = document.getElementsByClassName('selectHotKey');
+        const lastList = dropdownList[dropdownList.length - 1];
+        lastList.add(option);
+      });     
+      
+  }
+
+  const getAllAndDisplay = async () => {
+    labelsList.innerHTML = "";
+    const data = await getAllLabels();
+    data.forEach(item => {
+      console.log(item.id);
+      const labels = `<div class="individualLabel">
+                    <div class="labelDisplay">
+                        <span style="font-size: 16px; font-weight: 600" data-label-id = ${item.id}>${item.name}</span> 
+                        <span style="font-size: 16px">${item.hotKey ? item.hotKey : "no hot key"}</span>
+                    </div>
+                    <div class="buttons">
+                      <button class="btn btn-primary editButton">Edit</button>
+                      ${item.source == "ml" ? "" : '<button class="btn btn-primary deleteButton">Delete</button>'}
+                      
+                    </div>
+                </div>`;
+
+      $('#labelsList').append(labels);
+    });
+  }
+
+  const getOptions = async () => {
+    const allOptions = [];
+    [0,1,2,3,4,5,6,7,8,9].forEach(data => {
+      allOptions.push("ctrl + " + data);
+      allOptions.push("shft + " + data)
+  });
     
-    //       const response = await fetch(
-    //         '/api/labels/' + {name:label},
-    //         {
-    //           method: 'DELETE',
-    //           headers: { 'Content-Type': 'application/json' },
-    //         }
-    // );
-            // console.log("response");
-          
-        })
-      });
-    }, 2000)
+    const allLabels = await getAllLabels();
+    const used = allLabels.filter(data => data.hotKey.length !== 0);
+    const usedOptions = [];
+    used.forEach(data => usedOptions.push(data.hotKey));
+    const result = allOptions.filter(data => !usedOptions.includes(data.hotKey));
+    console.log(allOptions, result);
+    return result;
+  }
 
-  })
+  $('#editLabelButton').on('click', async (e) => {
+    e.preventDefault();    
+    $("#labelEditModal").modal('show');
+    // get data from db
+    await getAllAndDisplay();       
+
+    //event listener for delegation save button
+    const labelsList = document.getElementById('labelsList'); // replace with the ID of your div
+    labelsList.addEventListener('click', async event => {
+      
+    if (event.target.matches('.saveButton')) { 
+      console.log("clicking at save")
+      // replace with the class of your buttons
+            const parent = event.target.parentNode.parentNode;
+            const label = parent.children[0].children[0];
+            let labelName = "";
+            if(label.tagName.toLowerCase() === 'span') {
+              labelName = label.innerText;
+            }else {
+              labelName = label.value;
+            }
+
+            console.log(labelName);
+            const id = label.getAttribute("data-label-id")
+            console.log(event.target);
+                const mySelect = document.getElementById("selectHotKey");
+                const selectedOption = mySelect.options[mySelect.selectedIndex].textContent;
+                console.log(selectedOption)
+                const all = await getAllLabels();
+                let allNames = [];
+                all.forEach(data => allNames.push(data.name));                  
+                  displayLabel({name: labelName, hotKey : selectedOption});  
+                                
+                  deleteRow($(event.target));   
+                  console.log(id)
+                  if(id) {
+                    deleteLabel(id);
+                  }
+                  console.log({name: labelName, hotKey : selectedOption});
+                  createLabel({name: labelName, hotKey : selectedOption});   
+                  
+                  // await getAllAndDisplay(); 
+    }
+});
+   
+    //event listener for delegation edit button    
+    labelsList.addEventListener('click', async e => {
+    if (e.target.matches('.editButton')) {
+      console.log("clicking at edit")
+        const newSelect = document.createElement('select');
+        newSelect.setAttribute('id', "selectHotKey");
+        // newSelect.addClass("select");    
+          
+        const newSave = document.createElement('button');
+        newSave.textContent = "Save"
+        newSave.className = 'btn btn-primary saveButton';
+        const parent = e.target.parentNode.parentNode;
+        const leftDiv = parent.children[0];
+        const rightDiv = parent.children[1];
+        leftDiv.children[1].replaceWith(newSelect);
+        const customDelete = rightDiv.children[1];
+        if(customDelete){
+        e.target.replaceWith(newSave);
+      } else {
+        rightDiv.appendChild(newSave);
+      };      
+
+       
+    }
+
+    if (e.target.matches('#selectHotKey')) {    
+          
+      const unUsedOptions = await getOptions();
+        console.log(unUsedOptions);
+        unUsedOptions.forEach(option => {
+          const option1 = document.createElement('option');
+          option1.textContent = option;
+          e.target.appendChild(option1);
+        })             
+       
+    }
+});
+
+    //event listener for delegation delete button
+    labelsList.addEventListener('click', async e => {
+      if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
+        console.log("clicking at delete")
+        deleteRow($(e.target));
+        const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
+        if(id) {
+          console.log(id);
+          deleteLabel(id);
+          deleteRow($(e.target));
+        } else {
+          deleteRow($(e.target));
+        }
+    }
+
+})        
+    //event listener for create new label button
+    $('button#addNewLabel').on('click', async (e) => {
+      e.preventDefault();
+      console.log('click add new label button');
+      await createLabelRow();
+      return;
+    });   
+
+   })
 
 
 
@@ -774,6 +749,7 @@ $(document).ready(async () => {
   // Do the deletion
   $('#deletionConfirmButton').on('click', async (e) => {
     const taskId = $('#modalQuestion').attr('data-modal-taskId');
+    console.log(taskId);
     if (taskId.length > 0) {
       console.log('Deleting', taskId)
     }
@@ -854,8 +830,8 @@ $(document).ready(async () => {
   $('#imageSelectionModalTrigger').on('click', (e) => {
     e.preventDefault();
     $("#imageSelectionModal").modal('show');
-    const MLLabels = await
-    $("#labelList").append()
+    // const MLLabels = await
+    // $("#labelList").append()
 
     // Set the saved values in the modal
     $('#originalFilenameLower').val($('#filterName').val());
