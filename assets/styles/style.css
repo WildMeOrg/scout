@@ -134,6 +134,12 @@
 
 } */
 
+#imageSelectBoxNote {
+  font-size : 12px;
+  color : #B4B4B4;
+  margin-bottom: 20px;
+}
+
 .loginFormInput, .loginFormError{
   width: 300px;
 }
