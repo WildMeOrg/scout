@@ -1,12 +1,32 @@
-<main class="container">
-
-  <div id="annotationOuterWrapper">
-    <div id="annotationInnerWrapper">
-      <div class="simpleBoxesImageAndCanvasWrapper">
-      <img id="imageToAnnotate" src="/uploads/<%=imageData.id %>" />
+<!-- <main class="container d-flex justify-content-center"> -->
+  <main class="container d-flex">
+    <div>
+      
+      <div class = "labelBanner">
+        <p>Hot key Use keyboard shortcuts to switch to the desired label.</p>
+      </div>
+      <div class = "hotKeyBox" id = "hotKeyBox">
+        <p>Shortcut Keys</p>
+        <p>Label1 <i>ctrl + 1</i></p>
+        <p>Label1 <i>ctrl + 1</i></p>
+        <p>Label1 <i>ctrl + 1</i></p>
+        <p>Label1 <i>ctrl + 1</i></p>
+        <p>Label1 <i>ctrl + 1</i></p>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="toggle-switch" checked>
+        <label for="toggle-switch">Show Labels</label>
+      </div>
+   
+  </div>
+    <div id="annotationOuterWrapper">    
+      <div id="annotationInnerWrapper">
+        <div class="simpleBoxesImageAndCanvasWrapper">
+        <img id="imageToAnnotate" src="/uploads/<%=imageData.id %>" />
+        </div>
       </div>
     </div>
-  </div>
-
-
-</main>
+  
+  
+  </main>
+  

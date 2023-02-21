@@ -48,7 +48,7 @@
   * API
   *
   */
-window.simpleBoxes = {
+ window.simpleBoxes = {
   _ : {
     methods : {},
     eventHandlers : {},
@@ -99,7 +99,7 @@ window.simpleBoxes.initHandle = async (imageId,allowedLabels = [],readOnly = fal
     return;
   }
 
-
+  
   // Get the current width and height
   const currentDimensions = await sb.methods.getCurrentImageDimensions(targetedImage);
   if(!currentDimensions){
@@ -200,6 +200,7 @@ window.simpleBoxes.getAllBoxes = async (handleId) => {
   return boxes;
 }
 
+
 window.simpleBoxes.loadBoxes = async (handleId,boxes) => {
   await window.simpleBoxes._.methods.loadBoxes(handleId,boxes);
   return;
@@ -226,7 +227,7 @@ window.simpleBoxes._.methods = {
 
   handleMouseDown : async (e) => {
 
-    //console.log("mousedown",e.target.id,e.clientX,e.clientY);
+    // console.log("mousedown",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const el = handle.canvas.element;
@@ -271,7 +272,7 @@ window.simpleBoxes._.methods = {
 
   },
   handleMouseUp : async (e) => {
-    //console.log("mouseup",e.target.id,e.clientX,e.clientY);
+    // console.log("mouseup",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const ctx = handle.canvas.ctx;
@@ -295,7 +296,7 @@ window.simpleBoxes._.methods = {
     await window.simpleBoxes._.methods.redrawBoxes(handle);
   },
   handleMouseMove : async (e) => {
-    //console.log("mousemove",e.target.id,e.clientX,e.clientY);
+    // console.log("mousemove",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const el = handle.canvas.element;
@@ -307,7 +308,7 @@ window.simpleBoxes._.methods = {
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
-      // Dragging
+      console.log("Dragging");
       state.drag = true;
       if(overWhichBox.box){
         state.dragType = overWhichBox.dragType;
@@ -379,7 +380,7 @@ window.simpleBoxes._.methods = {
         await window.simpleBoxes._.methods.saveActiveBox(handle,copy);
 
         } else {
-          // I am dragging on nothing, so now we create a box so I can drag it's corner
+          console.log("I am dragging on nothing, so now we create a box so I can drag it's corner")
           let newBoxId = 'box-'+Date.now();
           state.activeBox = {
             id : newBoxId,
@@ -563,7 +564,6 @@ window.simpleBoxes._.methods = {
     return;
   },
   redrawBoxes : async(handle) => {
-    console.log("REDRAW",handle.id);
     // Wipe the canvas
     await window.simpleBoxes._.methods.wipeCanvas(handle);
 
@@ -583,6 +583,11 @@ window.simpleBoxes._.methods = {
     }
     let labels = $('i.labelBoxTrigger');
     for(const label of labels){
+      label.remove();
+    }
+    let labelContent = $('i.labelContent');
+    console.log(labelContent)
+    for(const label of labelContent) {
       label.remove();
     }
     return;
@@ -633,6 +638,18 @@ window.simpleBoxes._.methods = {
 
 `;
     $(labelString).insertAfter('#'+handle.canvas.id);
+
+    //Draw the label
+    let labelContentX = labelX;
+    let labelContentY = labelY - 50;
+    let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
+    console.log("Drawing label", handle.id, copy.id, labelTest);
+    let labelContentString = `
+    <i class="bi labelContent tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelContentY}px; left: ${labelContentX}px">${labelTest == null ? "" :labelTest }</i>    
+    `;
+
+    //${labelTest == null ? "" :labelTest }
+    $(labelContentString).insertAfter('#'+handle.canvas.id);
 
     return;
   },
@@ -703,16 +720,19 @@ $( document ).ready(function() {
 
   // Trash cans
   $('body').on('click','i.deleteBoxTrigger', async (e) => {
+    console.log("deleting")
     e.preventDefault();
     let handleId = $(e.target).attr('data-handle-id');
     let boxId = $(e.target).attr('data-box-id');
     await window.simpleBoxes._.methods.removeBox(handleId,boxId);
+    console.log("trash can's handleID", handleId, boxId);
     await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
   });
 
   // Labeler
   $('body').on('click','i.labelBoxTrigger', async (e) => {
     e.preventDefault();
+    console.log("show label options")
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     $('.labelSelectorWrapper[data-box-id="'+boxId+'"]').removeClass('closed');
@@ -726,6 +746,9 @@ $( document ).ready(function() {
       <select class="labelSelector" data-handle-id="${handleId}" data-box-id="${boxId}">
         <option value="">Select a Label</option>
 `;
+    
+
+
 
 for(const allowedLabel of window.tagsList){
   let selectedStr = allowedLabel == selectedLabel ? 'selected' : '';
@@ -746,17 +769,43 @@ labelStr+=`
 
   $('body').on('input','select.labelSelector',async (e) =>{
     e.preventDefault();
+    console.log("selecting label, handle id is", $(e.target).attr('data-handle-id'));
     let val = $(e.target).val();
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
+    console.log("======================>");
+    console.log("Handle-id: ",handleId);
     // Save that selection
     window.simpleBoxes._.handles[handleId].boxes[boxId].label = val;
+    console.log("window.simpleBoxes._.handles[handleId].boxes[boxId].label", window.simpleBoxes._.handles[handleId].boxes[boxId].label);
+    console.log("======================>");
+    let allBoxes = await window.simpleBoxes.getAllBoxes(handleId);
+    console.log(allBoxes);
+    console.log("======================>");
+
 
 
     // Close it
     $(e.target).parent().remove();
     window.simpleBoxes._.handles[handleId].canvas.state.selectOpen = false;
 
+  });
+
+
+  $("body").on("change", "#toggle-switch", async (e) => {
+    if ($("#toggle-switch").is(":checked")) {
+      console.log("123");
+      $('i.labelContent').css("display", "block");
+    } else {
+      console.log(456);
+      $('i.labelContent').css("display", "none");
+      
+      
+
+
+      // let allBoxes = await window.simpleBoxes.getAllBoxes("canvas-imageToAnnotate");
+      // console.log(allBoxes);
+    }
   });
 
   // resize of source image
