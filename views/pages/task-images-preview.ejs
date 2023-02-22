@@ -1,13 +1,40 @@
 <main class="container">
 
   <div id="taskOuter">
-<%=taskData.id%>
+	<div class="row" id="meta">
+		<div class="col-2">
+			<p><b>Task Name:</b></p>
+			<p><b>Side:</b></p>
+			<p><b>Sequence:</b></p>
+			<p><b>Assignee:</b></p>
+		</div>
+		<div class="col-4">
+			<p><%=taskData.displayName%></p>
+			<p><%=taskData.orientation%></p>
+			<p><%=(taskData.randomized == false ? 'Sequential' : 'Randomized')%></p>
+			<p><%=taskData.assigneeDiplayName%></p>
+		</div>
+		<div class="col-2">
+			<p><b>Date Created:</b></p>
+			<p><b>Annotate %:</b></p>
+			<p><b>Ground Truth %:</b></p>
+			<p><b>Div Line %:</b></p>
+		</div>
+		<div class="col-4">
+			<p><%=new Date(taskData.createdAt).toISOString().split('T')[0]%></p>
+			<p><%=Math.floor(taskData.progressAnnotation * 100)%></p>
+			<p><%=Math.floor(taskData.progressGroundTruth * 100)%></p>
+			<p><%=Math.floor(taskData.progressLineDivision * 100)%></p>
+		</div>
+	</div>
 
-            <% for (const image of images) { %>
-
-<p>(<%=image.id%>)</p>
-
+	<div id="images">
+           <% for (const image of images) { %>
+		<a >
+			<img style="margin: 10px; width: 12%; border-radius: 8px;" src="/uploads/<%=image.id%>" />
+		</a>
             <% } %>
+	</div>
 
   </div>
 
