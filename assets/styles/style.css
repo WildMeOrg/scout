@@ -45,6 +45,7 @@
 
 #groundTruthOuterWrapper{
   text-align: center;
+  max-width: 80%;
 }
 
 .groundTruthInnerWrapper{
