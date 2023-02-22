@@ -808,10 +808,9 @@ $( document ).ready(function() {
       //The selector itself
       const select = selector.querySelector("select.labelSelector");
 
-      //If user clicks at the selector it self
+      //If user clicks at the selector
       if (select) {
         const options = select.options;
-        console.log(options);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
           if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
