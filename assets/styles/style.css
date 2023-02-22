@@ -27,7 +27,9 @@
 
 
 #annotationOuterWrapper{
+  max-width: 80%;
   text-align: center;
+
 }
 
 #annotationInnerWrapper{
@@ -57,6 +59,10 @@
   overflow: scroll;
   height: var(--doubleImageHeight);
   max-width: 100%;
+}
+
+.sbsRow {
+  max-width: 80%;
 }
 
 .groundTruthInnerWrapperReadOnly{
