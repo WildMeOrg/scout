@@ -811,6 +811,10 @@ $( document ).ready(function() {
       //If user clicks at the selector
       if (select) {
         const options = select.options;
+      //If user clicks at the selector it self
+      if (select) {
+        const options = select.options[0];
+        console.log(options);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
           if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
