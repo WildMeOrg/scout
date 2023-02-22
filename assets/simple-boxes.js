@@ -586,9 +586,12 @@ window.simpleBoxes._.methods = {
       label.remove();
     }
     let labelContent = $('i.labelContent');
-    console.log(labelContent)
     for(const label of labelContent) {
       label.remove();
+    }
+    let divs = $('i.delHotKeyBox');
+    for(const div of divs) {
+      div.remove();
     }
     return;
   },
@@ -611,12 +614,20 @@ window.simpleBoxes._.methods = {
     handle.canvas.ctx.fillRect(copy.x, copy.y, copy.w, copy.h);
 
 
+    // //Draw the box which user can select and use DEL to delete
+    let divX = copy.w > 0 ? copy.x : copy.x + copy.w;
+    let divY = copy.h > 0 ? copy.y : copy.y + copy.h;
+    let div = `<i class="delHotKeyBox tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${divY}px; left: ${divX}px; width: ${copy.w}px; height: ${copy.h}px"></i>`;
+
+    if(!handle.readOnly){
+      $(div).insertAfter('#'+handle.canvas.id);
+    }
 
     // Draw the trash can
     let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
-    trashCanX+=15;
+    trashCanX-=15;
     let trashCanY = copy.h > 0 ? copy.y : copy.y + copy.h;
-    trashCanY+=15;
+    trashCanY-=37;
 
     let trashCanString = `<i class="bi bi-trash3-fill deleteBoxTrigger trashIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${trashCanY}px; left: ${trashCanX}px"></i>`;
 
@@ -625,31 +636,32 @@ window.simpleBoxes._.methods = {
 
     }
 
-
     // Draw the corners
 
-    // Draw the label trigger
-    let labelX = trashCanX + 30;
-    let labelY = trashCanY;
+    if ($("#toggle-switch").is(":checked")) {
 
+    // Draw the label trigger
+    let labelX = trashCanX + 25;
+    let labelY = trashCanY;
 
     let labelString = `
 <i class="bi bi-tag-fill labelBoxTrigger tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelY}px; left: ${labelX}px"></i>
-
 `;
-    $(labelString).insertAfter('#'+handle.canvas.id);
+    $(labelString).insertAfter('#'+handle.canvas.id);           
 
     //Draw the label
-    let labelContentX = labelX;
-    let labelContentY = labelY - 50;
+    let labelContentX = labelX + 25;
+    let labelContentY = labelY;
     let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
-    console.log("Drawing label", handle.id, copy.id, labelTest);
     let labelContentString = `
     <i class="bi labelContent tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelContentY}px; left: ${labelContentX}px">${labelTest == null ? "" :labelTest }</i>    
     `;
-
     //${labelTest == null ? "" :labelTest }
     $(labelContentString).insertAfter('#'+handle.canvas.id);
+
+    }
+    
+
 
     return;
   },
@@ -720,19 +732,16 @@ $( document ).ready(function() {
 
   // Trash cans
   $('body').on('click','i.deleteBoxTrigger', async (e) => {
-    console.log("deleting")
     e.preventDefault();
     let handleId = $(e.target).attr('data-handle-id');
     let boxId = $(e.target).attr('data-box-id');
     await window.simpleBoxes._.methods.removeBox(handleId,boxId);
-    console.log("trash can's handleID", handleId, boxId);
     await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
   });
 
   // Labeler
   $('body').on('click','i.labelBoxTrigger', async (e) => {
     e.preventDefault();
-    console.log("show label options")
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     $('.labelSelectorWrapper[data-box-id="'+boxId+'"]').removeClass('closed');
@@ -745,66 +754,132 @@ $( document ).ready(function() {
     <div class="labelSelectorWrapper" data-handle-id="${handleId}" data-box-id="${boxId}"  style="top: ${labelY}; left: ${labelX}">
       <select class="labelSelector" data-handle-id="${handleId}" data-box-id="${boxId}">
         <option value="">Select a Label</option>
-`;
+`;    
+
+
+
+    for(const allowedLabel of window.tagsList){
+      let selectedStr = allowedLabel == selectedLabel ? 'selected' : '';
+
+      labelStr+=`<option ${selectedStr} value="${allowedLabel}">${allowedLabel}</option>`
+    }
+
+
+    labelStr+=`
+
+          </select>
+        </div>
+
+        `;
+        $(labelStr).insertAfter('canvas#'+handleId);
+
+      });
+
+  const saveAndClose = async (select) => {
+    let val = select.selectedOptions[0].value;
+    let boxId = select.getAttribute('data-box-id');
+    let handleId = select.getAttribute('data-handle-id');
+
+    // Save that selection
+    window.simpleBoxes._.handles[handleId].boxes[boxId].label = val;
+    let allBoxes = await window.simpleBoxes.getAllBoxes(handleId);
+
+    // Close it
+    select.parentNode.remove();
+    window.simpleBoxes._.handles[handleId].canvas.state.selectOpen = false;
+    } 
+
+    //When press down hot keys, select corresponding label options
+  document.addEventListener('keydown', async function(event) {
+    //hot key and key code pair
+    const pair = [];
+    //sct=10 is not merged yet, so hard code the hotkeys here
+    [1,2,3,4,5,6,7,8,9].forEach(data => {
+      const s = data.toString();
+      pair.push({key: data, keyCode: data.toString().charCodeAt(0)});      
+    });
+    pair.forEach(async data => {
+      const labels = [{name: "buffalo", hotKey: "1"},{name: "elephant", hotKey: "2"},{name: "kob", hotKey: "3"}];      
+
+    //Detect keys pressed down  
+    if (event.keyCode == data.keyCode) { 
+      //Outer wrapper of the label selector
+      const selector = document.activeElement;
+      //The selector itself
+      const select = selector.querySelector("select.labelSelector");
+
+      //If user clicks at the selector it self
+      if (select) {
+        const options = select.options;
+        for (let i = 0; i < options.length; i++) {
+          //Find corresponding option
+          if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
+            //Set this label selected
+            select.selectedIndex = i;
+            //Save and close selector
+            await saveAndClose(select);
+            break;
+          }
+                }
+       //If user clicks at the selector it self
+      }else if(selector.tagName) {
+        const options = selector.options;     
+          for (let i = 0; i < options.length; i++) {
+            if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
+              selector.selectedIndex = i;
+              await saveAndClose(selector);
+              break;
+            }
+          }     
+        
+      }     
+      }
+    })
     
-
-
-
-for(const allowedLabel of window.tagsList){
-  let selectedStr = allowedLabel == selectedLabel ? 'selected' : '';
-
-  labelStr+=`<option ${selectedStr} value="${allowedLabel}">${allowedLabel}</option>`
-}
-
-
-labelStr+=`
-
-      </select>
-    </div>
-
-    `;
-    $(labelStr).insertAfter('canvas#'+handleId);
-
   });
+
+  //When press down DEL button, delete the focused annotation
+  document.addEventListener('keydown', async function() {
+    if (event.keyCode === 46) {
+      const focusedBox = document.querySelector('.delHotKeyBox:focus');
+      let handleId = focusedBox.getAttribute('data-handle-id');
+      let boxId = focusedBox.getAttribute('data-box-id');
+      await window.simpleBoxes._.methods.removeBox(handleId,boxId);
+      await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);      
+    }
+  });     
+   
+  //Event listener for the div which when will be set focus
+  $('body').on('click','i.delHotKeyBox',async (e) =>{
+    e.preventDefault();
+    e.target.setAttribute('tabindex', '0');
+    e.target.focus();
+  });
+
 
   $('body').on('input','select.labelSelector',async (e) =>{
     e.preventDefault();
-    console.log("selecting label, handle id is", $(e.target).attr('data-handle-id'));
     let val = $(e.target).val();
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
-    console.log("======================>");
-    console.log("Handle-id: ",handleId);
     // Save that selection
     window.simpleBoxes._.handles[handleId].boxes[boxId].label = val;
-    console.log("window.simpleBoxes._.handles[handleId].boxes[boxId].label", window.simpleBoxes._.handles[handleId].boxes[boxId].label);
-    console.log("======================>");
     let allBoxes = await window.simpleBoxes.getAllBoxes(handleId);
-    console.log(allBoxes);
-    console.log("======================>");
-
-
-
     // Close it
     $(e.target).parent().remove();
     window.simpleBoxes._.handles[handleId].canvas.state.selectOpen = false;
 
   });
 
-
+  //Toggle to show/hide labels
   $("body").on("change", "#toggle-switch", async (e) => {
     if ($("#toggle-switch").is(":checked")) {
-      console.log("123");
       $('i.labelContent').css("display", "block");
+      $('i.labelBoxTrigger').css("display", "block");
     } else {
-      console.log(456);
       $('i.labelContent').css("display", "none");
-      
-      
+      $('i.labelBoxTrigger').css("display", "none");     
 
-
-      // let allBoxes = await window.simpleBoxes.getAllBoxes("canvas-imageToAnnotate");
-      // console.log(allBoxes);
     }
   });
 
