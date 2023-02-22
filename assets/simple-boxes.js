@@ -380,7 +380,7 @@ window.simpleBoxes._.methods = {
         await window.simpleBoxes._.methods.saveActiveBox(handle,copy);
 
         } else {
-          console.log("I am dragging on nothing, so now we create a box so I can drag it's corner")
+          // console.log("I am dragging on nothing, so now we create a box so I can drag it's corner")
           let newBoxId = 'box-'+Date.now();
           state.activeBox = {
             id : newBoxId,
@@ -811,6 +811,7 @@ $( document ).ready(function() {
       //If user clicks at the selector it self
       if (select) {
         const options = select.options;
+        console.log(options);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
           if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
