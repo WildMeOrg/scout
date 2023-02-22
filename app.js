@@ -261,7 +261,7 @@ const init = async () => {
     await validateSettings();
     await showUrl();
     await passwordToken();
-    // await suppressLogs();
+    await suppressLogs();
     await startSails();
     cluster.fork();
 
