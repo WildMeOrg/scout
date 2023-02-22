@@ -663,20 +663,6 @@ window.simpleBoxes._.methods = {
     
 
 
-    //Draw the label
-    let labelContentX = labelX + 25;
-    let labelContentY = labelY;
-    let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
-    let labelContentString = `
-    <i class="bi labelContent tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelContentY}px; left: ${labelContentX}px">${labelTest == null ? "" :labelTest }</i>    
-    `;
-    //${labelTest == null ? "" :labelTest }
-    $(labelContentString).insertAfter('#'+handle.canvas.id);
-
-    }
-    
-
-
     return;
   },
   redrawCanvas : async (imageId,dimensions) => {
