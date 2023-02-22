@@ -664,16 +664,19 @@ window.simpleBoxes._.methods = {
 
 
     //Draw the label
-    let labelContentX = labelX;
-    let labelContentY = labelY - 50;
+    let labelContentX = labelX + 25;
+    let labelContentY = labelY;
     let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
-    // console.log("Drawing label", handle.id, copy.id, labelTest);
     let labelContentString = `
     <i class="bi labelContent tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelContentY}px; left: ${labelContentX}px">${labelTest == null ? "" :labelTest }</i>    
     `;
-
     //${labelTest == null ? "" :labelTest }
     $(labelContentString).insertAfter('#'+handle.canvas.id);
+
+    }
+    
+
+
     return;
   },
   redrawCanvas : async (imageId,dimensions) => {
@@ -744,56 +747,15 @@ $( document ).ready(function() {
   // Trash cans
   $('body').on('click','i.deleteBoxTrigger', async (e) => {
     e.preventDefault();
-    // console.log("deleting")
-    // let handleId = $(e.target).attr('data-handle-id');
-    // let boxId = $(e.target).attr('data-box-id');
-    // await window.simpleBoxes._.methods.removeBox(handleId,boxId);
-    // await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-    // console.log("trash can's handleID", handleId, boxId);
-    await trashToDelete(e);
-
-  });
-
-  // const selectElement = document.querySelector('.');
-
-// Add a keydown event listener to the document
-  // document.addEventListener('keydown', function(event) {
-  //   // Check if both Ctrl and "1" keys are pressed
-  //   if (event.ctrlKey && event.key === '1') {
-  //     // Get the option with the name "tiger"
-  //     const option = selectElement.querySelector('option[value="tiger"]');
-  //     // Select the option if it exists
-  //     if (option) {
-  //       option.selected = true;
-  //     }
-  //   }
-  // });
-
-
-  document.addEventListener('keydown', async function(e) {
-    e.preventDefault();
-    await trashToDelete(e);
-    // console.log("deleting")
-    // let handleId = $(e.target).attr('data-handle-id');
-    // let boxId = $(e.target).attr('data-box-id');
-    // await window.simpleBoxes._.methods.removeBox(handleId,boxId);
-    // await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-    // console.log("trash can's handleID", handleId, boxId);
-  });
-
-  const trashToDelete = async (e) => {
-    console.log("deleting")
     let handleId = $(e.target).attr('data-handle-id');
     let boxId = $(e.target).attr('data-box-id');
     await window.simpleBoxes._.methods.removeBox(handleId,boxId);
     await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-    console.log("trash can's handleID", handleId, boxId);
-  }
+  });
 
   // Labeler
   $('body').on('click','i.labelBoxTrigger', async (e) => {
     e.preventDefault();
-    console.log("show label options")
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     $('.labelSelectorWrapper[data-box-id="'+boxId+'"]').removeClass('closed');
@@ -911,10 +873,9 @@ $( document ).ready(function() {
 
   $('body').on('input','select.labelSelector',async (e) =>{
     e.preventDefault();
-    console.log("selecting label, handle id is", $(e.target).attr('data-handle-id'));
     let val = $(e.target).val();
     let boxId = $(e.target).attr('data-box-id');
-    let handleId = $(e.target).attr('data-handle-id');    
+    let handleId = $(e.target).attr('data-handle-id');
     // Save that selection
     window.simpleBoxes._.handles[handleId].boxes[boxId].label = val;
     let allBoxes = await window.simpleBoxes.getAllBoxes(handleId);
