@@ -210,7 +210,7 @@
 
 .hotKeyBox {
   width: 150px;
-  height: 250px;
+  height: 350px;
   background-color: #0d6efd;
   border-radius: 5px;
   margin-right: 30px;
@@ -220,11 +220,15 @@
   overflow: auto;
 }
 
-.hotKeySpan {
-  max-width: 200px;
+.hotKeySpan {  
+  max-width: 250px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.hotKeySpan i{
+  padding-right: 5px;
 }
 
 .labelBanner {
