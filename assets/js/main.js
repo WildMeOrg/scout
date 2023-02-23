@@ -738,8 +738,16 @@ const imageSelectionFormChange = async () => {
     if (event.target.matches('.saveButton')) { 
       //Get the labelLists div
       const parent = event.target.parentNode.parentNode;
-      //Get the label span
+      //Get the label span/input
       const label = parent.children[0].children[0];
+      // if(label.tagName.toLowerCase() === 'input') {        
+      //   const allLabelNames = [];
+      //   window.tagsList.forEach(data => allLabelNames.push(data.name));
+      //   console.log(label.value, label.innerText);
+      //   if(allLabelNames.find(data => data.name == label.value)) {
+      //     alert("Label name already exists");
+      //   }
+      // }
       
       let labelName = "";
       let source = "";
@@ -767,12 +775,16 @@ const imageSelectionFormChange = async () => {
           // console.log("need to update,", {id: id, name: labelName, hotKey: option, source: source});
           //Update db
           await updateLabel({name: labelName, hotKey: option, source: source})
-
         //Not in db, create new record
         }else {
-          labelName = label.value; 
-          //Check label name
-          if(labelName.trim()) {
+          labelName = label.value;
+          const allLabelNames = [];
+          window.tagsList.forEach(data => allLabelNames.push(data.name));
+          console.log(allLabelNames);
+          console.log(labelName);
+
+          //Check label name 
+          if(!allLabelNames.find(data => data == labelName) && labelName.trim()) {
             await createLabel({name: labelName, hotKey: option, source: "ll"})
           }else {
             alert("Label name invalid");
@@ -787,19 +799,24 @@ const imageSelectionFormChange = async () => {
     labelsList.addEventListener('click', async e => {
     if (e.target.matches('.editButton')) {
       
+      //Create a new selector
       const newSelect = document.createElement('select');
       newSelect.setAttribute('id', "selectHotKey");
       newSelect.setAttribute('required', '')
-          
+       
+      //Create a new save button
       const newSave = document.createElement('button');
       newSave.textContent = "Save"
       newSave.className = 'btn btn-primary saveButton';
       const parent = e.target.parentNode.parentNode;
       const leftDiv = parent.children[0];
       const rightDiv = parent.children[1];
+      //Replace the old hot key with a selector
       leftDiv.children[1].replaceWith(newSelect);
+      //Replace the edit button with a save button
       e.target.replaceWith(newSave);      
 
+      //Get options and insert to selector
       const allOptions = await getOptions();
       const selector = document.querySelector("#selectHotKey");
       const option1 = document.createElement('option');
@@ -831,6 +848,7 @@ const imageSelectionFormChange = async () => {
       if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
         deleteRow($(e.target));
         const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
+        //If in db, delete the row and record in db
         if(id) {
           deleteLabel(id);
           deleteRow($(e.target));
