@@ -28,11 +28,12 @@
 		</div>
 	</div>
 
-	<div id="images">
+	<div id="imagesPreviewGallery">
            <% for (const image of images) { %>
-		<a >
-			<img style="margin: 10px; width: 12%; border-radius: 8px;" src="/uploads/<%=image.id%>" />
-		</a>
+		<div class="d-inline-block imagePreviewWrapper">
+			<input type="checkbox" />
+			<img class="img-thumbnail" src="/uploads/<%=image.id%>" />
+		</div>
             <% } %>
 	</div>
 
