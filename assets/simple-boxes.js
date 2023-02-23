@@ -308,7 +308,7 @@ window.simpleBoxes._.methods = {
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
-      console.log("Dragging");
+      // console.log("Dragging");
       state.drag = true;
       if(overWhichBox.box){
         state.dragType = overWhichBox.dragType;
@@ -816,13 +816,13 @@ $( document ).ready(function() {
       //If user clicks at the selector
       if (select) {
         const options = select.options;
-        console.log(allLabels);
+        // console.log(allLabels);
         const label = allLabels.find(label => label.hotKey == data.key);
 
-        console.log(label.name);
+        // console.log(label.name);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
-          console.log(options[i].text, data.key);
+          // console.log(options[i].text, data.key);
           if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
             //Set this label selected
             select.selectedIndex = i;
@@ -834,7 +834,7 @@ $( document ).ready(function() {
        //If user clicks at the outer wrapper
       }else if(selector.tagName) {        
         const options = selector.options;     
-          console.log(allLabels.find(l => l.hotKey === data.key).name);
+          // console.log(allLabels.find(l => l.hotKey === data.key).name);
           for (let i = 0; i < options.length; i++) {
             if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
               selector.selectedIndex = i;
