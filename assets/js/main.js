@@ -1671,8 +1671,12 @@ $('.imagePreviewWrapper input').on('click', function(ev) {
 });
 
 $('.imagePreviewWrapper').on('click', function(ev) {
-console.log('DIV!!! ====> %o', ev);
+console.log('DIV!!! ====> %o', ev.currentTarget);
     ev.stopPropagation();
+    let imageId = ev.currentTarget.id.substring(14);
+console.log('id %s', imageId);
+    $('#imagePreviewModal .modal-body img').prop('src', '/uploads/' + imageId);
+    $('#imagePreviewModal').modal('show');
 });
 
 $('#imagesPreviewSelectAll').on('click', function(ev) {
