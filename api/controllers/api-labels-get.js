@@ -33,24 +33,8 @@ module.exports = {
 
     if(!this.req.session.userId){
       return exits.forbidden();
-    }
-    // let query = {};
-    // let name = inputs.name.toLowerCase().trim();      
-    // query.name = { contains : name };   
-    // let Labels = await Labels.find({where : query});   
-
-    // let result = {};
-    // result = Labels.find();
-
-    // if(inputs.source == "ml") {
-    //   result = await Labels.getMLLabels();
-    // } else 
-    //  if (inputs.source == "ll") {
-    //    result = await Labels.getCustomLabels();
-    //  } 
-    //  else {
-      result = await Labels.getAllLabels()
-    // }
+    }    
+      result = await Labels.getAllLabels()    
 
     return exits.success(result);
   }

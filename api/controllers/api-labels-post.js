@@ -35,9 +35,14 @@ module.exports = {
 
     let errorsObject = {};
 
-    // if (!this.req.session.userId) {
-    //   return exits.forbidden();
-    // }
+    if (!this.req.session.userId) {
+      return exits.forbidden();
+    }
+
+    if(!inputs.name.trim().toLowerCase().length) {
+      errorsObject.name = "Label name cannot be empty."
+      return exits.validationFailed({errorsObject : errorsObject});
+    }
 
     let matchingName = await Labels.find({where: { name: inputs.name.trim().toLowerCase() }, });
     let newLabel = {};
@@ -47,10 +52,7 @@ module.exports = {
       newLabel = await Labels.create({ name: inputs.name.trim().toLowerCase(), hotKey: inputs.hotKey, source: inputs.source }).fetch(); 
     } 
 
-    if(!inputs.name.trim().toLowerCase().length) {
-      errorsObject.name = "Label name cannot be empty."
-      return exits.validationFailed({errorsObject : errorsObject});
-    }
+    
        
     // If successful, return created label
 
