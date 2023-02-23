@@ -799,7 +799,7 @@ $( document ).ready(function() {
 
     //Get number's key code
     [0,1,2,3,4,5,6,7,8,9].forEach(data => {
-      pair.push({key: data, keyCode: data.toString().charCodeAt(0)});      
+      pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
     });
 
     pair.push({key: "ctrl", keyCode: 17});
@@ -807,7 +807,7 @@ $( document ).ready(function() {
     pair.forEach(async data => {            
 
     //Detect keys pressed down  
-    if (!event.ctrlKey && event.keyCode == data.keyCode) { 
+    if (event.keyCode == data.keyCode) { 
       //Outer wrapper of the label selector
       const selector = document.activeElement;
       //The selector itself
@@ -816,9 +816,14 @@ $( document ).ready(function() {
       //If user clicks at the selector
       if (select) {
         const options = select.options;
+        console.log(allLabels);
+        const label = allLabels.find(label => label.hotKey == data.key);
+
+        console.log(label.name);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
-          if (allLabels.find(l => l.hotKey == data.key).name && options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
+          console.log(options[i].text, data.key);
+          if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
             //Set this label selected
             select.selectedIndex = i;
             //Save and close selector
@@ -826,11 +831,12 @@ $( document ).ready(function() {
             break;
           }
                 }
-       //If user clicks at the selector it self
-      }else if(selector.tagName) {
+       //If user clicks at the outer wrapper
+      }else if(selector.tagName) {        
         const options = selector.options;     
+          console.log(allLabels.find(l => l.hotKey === data.key).name);
           for (let i = 0; i < options.length; i++) {
-            if (options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
+            if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
               selector.selectedIndex = i;
               await saveAndClose(selector);
               break;
@@ -838,42 +844,43 @@ $( document ).ready(function() {
           }     
         
       }     
-      } else if(event.ctrlKey && event.keyCode == data.keyCode) {
-        console.log(data.keyCode);
-        //Outer wrapper of the label selector
-      const selector = document.activeElement;
-      //The selector itself
-      const select = selector.querySelector("select.labelSelector");
+      // } else if(event.ctrlKey && event.keyCode == data.keyCode) {
+      //   console.log(data.keyCode);
+      //   console.log(options[i].text)
+      //     console.log(allLabels.find(l => l.hotKey == data.key).name);
+      //   //Outer wrapper of the label selector
+      // const selector = document.activeElement;
+      // //The selector itself
+      // const select = selector.querySelector("select.labelSelector");
 
-      //If user clicks at the selector
-      if (select) {
-        const options = select.options;
-        for (let i = 0; i < options.length; i++) {
-          //Find corresponding option
-          
-          console.log(`ctrl + ${data.key}`);
-          console.log(allLabels.find(l => l.hotKey == "ctrl + 1"))
+      // //If user clicks at the selector
+      // if (select) {
+      //   const options = select.options;
+      //   console.log(options[i].text)
+      //     console.log(allLabels.find(l => l.hotKey == data.key).name);
+      //   for (let i = 0; i < options.length; i++) {
+      //     //Find corresponding option          
 
-          if (allLabels.find(l => l.hotKey == `ctrl + ${data.key}`).name && options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
-            //Set this label selected
-            select.selectedIndex = i;
-            //Save and close selector
-            await saveAndClose(select);
-            break;
-          }
-                }
-       //If user clicks at the selector it self
-      }else if(selector.tagName) {
-        const options = selector.options;     
-          for (let i = 0; i < options.length; i++) {
-            if (options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
-              selector.selectedIndex = i;
-              await saveAndClose(selector);
-              break;
-            }
-          }     
+      //     if (allLabels.find(l => l.hotKey == `ctrl + ${data.key}`).name && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
+      //       //Set this label selected
+      //       select.selectedIndex = i;
+      //       //Save and close selector
+      //       await saveAndClose(select);
+      //       break;
+      //     }
+      //           }
+      //  //If user clicks at the selector it self
+      // }else if(selector.tagName) {
+      //   const options = selector.options;     
+      //     for (let i = 0; i < options.length; i++) {
+      //       if (options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
+      //         selector.selectedIndex = i;
+      //         await saveAndClose(selector);
+      //         break;
+      //       }
+      //     }     
         
-      } 
+      // } 
       }
     })
     

@@ -656,8 +656,7 @@ const imageSelectionFormChange = async () => {
   const labels = `<div class="individualLabel">
                           <div class="label">
                           <input type="text" id = "labelInput">
-                              <select class ="selectHotKey" id="selectHotKey">
-                                <option value="null">no hot key</option>                            
+                              <select class ="selectHotKey" id="selectHotKey">                                                        
                               </select>
                           </div>
                           <div class="buttons">
@@ -698,6 +697,7 @@ const imageSelectionFormChange = async () => {
       // allOptions.push("ctrl + "+count);
       count++;
     }
+    // document.getElementById("labelSelector").appendChild(option1)
     // const allLabels = await getAllLabels();
     // const used = allLabels.filter(data => data.hotKey.length !== 0);
     // const usedOptions = [];
@@ -706,6 +706,7 @@ const imageSelectionFormChange = async () => {
     // const result = allOptions.filter(data => !usedOptions.includes(data));
     return allOptions;    
   }
+
 
   const updateLabel = async (data) => {
     let label = {};
@@ -728,7 +729,7 @@ const imageSelectionFormChange = async () => {
     $("#labelEditModal").modal('show');
     // get data from db
     await getAllAndDisplay();       
-
+    
     //event listener for delegation save button
     const labelsList = document.getElementById('labelsList'); // replace with the ID of your div
     labelsList.addEventListener('click', async event => {
@@ -784,6 +785,7 @@ const imageSelectionFormChange = async () => {
     //event listener for delegation edit button    
     labelsList.addEventListener('click', async e => {
     if (e.target.matches('.editButton')) {
+      
       const newSelect = document.createElement('select');
       newSelect.setAttribute('id', "selectHotKey");
       newSelect.setAttribute('required', '')
@@ -796,18 +798,28 @@ const imageSelectionFormChange = async () => {
       const rightDiv = parent.children[1];
       leftDiv.children[1].replaceWith(newSelect);
       e.target.replaceWith(newSave);      
+
+      const allOptions = await getOptions();
+      const selector = document.querySelector("#selectHotKey");
+      allOptions.forEach(data => {
+        const option1 = document.createElement('option');
+        option1.textContent = data;
+        selector.appendChild(option1);
+      });
     }
 
-    if (e.target.matches('#selectHotKey')) {  
-      if(e.target.options.length) return;
-      const unUsedOptions = await getOptions();
-      unUsedOptions.forEach(option => {
-        const option1 = document.createElement('option');
-        option1.textContent = option;
-        e.target.appendChild(option1);
-        })               
+    // if (e.target.matches('#selectHotKey')) {  
+      // if(e.target.options.length) return;
+      // const options = await getOptions();
+      // console.log(options);
+      // options.forEach(option => {
+      //   const option1 = document.createElement('option');
+      //   option1.textContent = option;
+        // e.target.appendChild(option1);
+
+        // })               
        
-    }
+    // }
 });
 
     //event listener for delegation delete button
@@ -826,12 +838,31 @@ const imageSelectionFormChange = async () => {
 })        
     //event listener for create new label button
     $('button#addNewLabel').on('click', async (e) => {
-      e.preventDefault();
+      e.preventDefault();      
       await createLabelRow();
+      const allOptions = await getOptions();
+      const selector = document.querySelector("#selectHotKey");
+      allOptions.forEach(data => {
+        const option1 = document.createElement('option');
+        option1.textContent = data;
+        selector.appendChild(option1);
+      });
       return;
     });   
 
    })
+
+   window.addEventListener("load", function() {
+    // var hotKeyBox = document.getElementById("hotKeyBox");
+    // hotKeyBox.innerHTML = "";
+    const allLabels = window.tagsList;
+    allLabels.forEach(data => {
+      if(data.hotKey) {
+        let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
+        $('#hotKeyBox').append(hotKey)
+      }      
+    })
+  });
 
 
 $("#imageSelectionForm .bootstrap-datepicker").datepicker({
@@ -961,7 +992,9 @@ $('#annotationDoneButton').on('click',async (e)=>{
         errorMessage = 'Please select a label for all of your boxes.';
       } else {
         let label = annotation.label;
-        if(window.tagsList.indexOf(label) < 0){
+        const allLabelNames = [];
+        window.tagsList.forEach(tag => allLabelNames.push(tag.name));
+        if(allLabelNames.indexOf(label) < 0){
           errorMessage = 'One of your tags, ('+label+'), is not recognized. Please choose your tags from the available drop-down.';
         }
       }
@@ -1241,7 +1274,9 @@ setTimeout( async () => {
          errorMessage = 'Please select a label for all of your boxes.';
        } else {
          let label = annotation.label;
-         if(window.tagsList.indexOf(label) < 0){
+         const allLabelNames = [];
+        window.tagsList.forEach(tag => allLabelNames.push(tag.name));
+         if(allLabelNames.indexOf(label) < 0){
            errorMessage = 'One of your tags, ('+label+'), is not recognized. Please choose your tags from the available drop-down.';
          }
        }
