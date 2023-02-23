@@ -578,13 +578,11 @@ const imageSelectionFormChange = async () => {
 
 }
 
-
-
   //Get all labels from database
   const getAllLabels = async () => {
-    let actionLL = '/api/labels?';
+    let action = '/api/labels?';
     const responseLL = await fetch(
-      actionLL,
+      action,
       {
         method: 'GET'
       },
@@ -593,20 +591,22 @@ const imageSelectionFormChange = async () => {
       console.log("Error applying filters");
       return;
     }
-    let resLL = await responseLL.json();
-    window.tagsList = resLL;
-    return resLL;
+    let res = await responseLL.json();
+    window.tagsList = res;
+    return res;
   }
 
+  //Update window.tagsList
   window.tagsList = await getAllLabels();
 
   //Insert new label to database
   const createLabel = async (data) => {
       let label = {};
       label.name = data.name;  
-      label.hotKey = data.hotKey;  
+      label.hotKey = data.hotKey;
+      //ml labels will stay ml, otherwise source will be ll(lab lead)  
       label.source = data.source == "ml" ? "ml" : "ll";
-      console.log(label);
+      //Insert data to db
       let action = '/api/labels?'+ new URLSearchParams(label);    
       console.log(action);
       const response = await fetch(
@@ -616,19 +616,16 @@ const imageSelectionFormChange = async () => {
         },
       );
        return response; 
-    }
+  }
 
   //Delete label row from page
   const deleteRow = (row) => {
-    console.log(row);
     row.parent().parent().remove();
   }
 
   //Delete label from database
   const deleteLabel = async (id) => {
-    console.log("deleting db");          
     let action = '/api/labels/'+ id;
-    console.log("Action is ", action)
     const response = await fetch(
       action,
       {
@@ -655,9 +652,7 @@ const imageSelectionFormChange = async () => {
   };  
 
   //Create a new row and append it to labelsList
-  const createLabelRow = async () => {
-
-  
+  const createLabelRow = async () => {  
   const labels = `<div class="individualLabel">
                           <div class="label">
                           <input type="text" id = "labelInput">
@@ -673,6 +668,7 @@ const imageSelectionFormChange = async () => {
   $('#labelsList').append(labels);    
   }
 
+  //Get all labels from db and display
   const getAllAndDisplay = async () => {
     labelsList.innerHTML = "";
     const data = await getAllLabels();
@@ -693,32 +689,30 @@ const imageSelectionFormChange = async () => {
     });
   }
 
+  //Generate options
   const getOptions = async () => {
     const allOptions = [];
     let count = 0;
-
-    [0,1,2,3,4,5,6,7,8,9].forEach(data => {      
-      allOptions.push("ctrl "+data);
-      allOptions.push("shft + "+data);
-    });    
-
-    const allLabels = await getAllLabels();
-    const used = allLabels.filter(data => data.hotKey.length !== 0);
-    const usedOptions = [];
-    used.forEach(data => usedOptions.push(data.hotKey));
-    const result = allOptions.filter(data => !usedOptions.includes(data));
-    return result;
+    while(count<10) {
+      allOptions.push(count);
+      // allOptions.push("ctrl + "+count);
+      count++;
+    }
+    // const allLabels = await getAllLabels();
+    // const used = allLabels.filter(data => data.hotKey.length !== 0);
+    // const usedOptions = [];
+    // used.forEach(data => usedOptions.push(data.hotKey));
+    // //Only return unused 
+    // const result = allOptions.filter(data => !usedOptions.includes(data));
+    return allOptions;    
   }
 
-    const updateLabel = async (data) => {
-    console.log("updating", data);
+  const updateLabel = async (data) => {
     let label = {};
     label.name = data.name;  
     label.hotKey = data.hotKey;  
     label.source = data.source == "ml" ? "ml" : "ll";
-    console.log(label);
     let action = '/api/labels?'+ new URLSearchParams(label);    
-    console.log(action);
     const response = await fetch(
       action,
       {
@@ -726,7 +720,7 @@ const imageSelectionFormChange = async () => {
       },
     );
        return response; 
-    }
+  }
 
   //Event listener for the "Label" button on task page, entrypoint for label manager too
   $('#editLabelButton').on('click', async (e) => {
@@ -740,55 +734,59 @@ const imageSelectionFormChange = async () => {
     labelsList.addEventListener('click', async event => {
       
     if (event.target.matches('.saveButton')) { 
+      //Get the labelLists div
       const parent = event.target.parentNode.parentNode;
+      //Get the label span
       const label = parent.children[0].children[0];
       
       let labelName = "";
       let source = "";
 
       const mySelect = document.getElementById("selectHotKey");
+      //Get selected hot key
       const selectedOption = mySelect.options[mySelect.selectedIndex] ? mySelect.options[mySelect.selectedIndex].textContent : "";            
-      console.log("selectedOption");
-      const id = label.getAttribute("data-label-id");
-      
+      //Get id
+      const id = label.getAttribute("data-label-id");      
       const option = selectedOption ? selectedOption : ""
-
-      if(id) {
-        labelName = label.innerText; 
-        const all = await getAllLabels();
-        all.forEach( data => {
-          if(data.name == labelName) {
-            source = data.source;
-          }
-        })             
-        
-        console.log("need to update,", {id: id, name: labelName, hotKey: option, source: source});
-        await updateLabel({name: labelName, hotKey: option, source: source})
-
+      //Check if this hot key is already used, if yes show alert, else continue to save
+      const all = await getAllLabels();
+      if(selectedOption !== "" && all.find(data => data.hotKey == selectedOption)) {
+          alert("Hot key alreay in use");          
       }else {
-        labelName = label.value; 
-        if(labelName.trim()) {
-          await createLabel({name: labelName, hotKey: option, source: "ll"})
-        }else {
-          alert("Label name invalid");
-        }              
-        
-      }          
+        //If record in db
+        if(id) {
+          labelName = label.innerText;           
+          all.forEach( data => {
+            if(data.name == labelName) {
+              source = data.source;
+            }
+          })           
+          
+          // console.log("need to update,", {id: id, name: labelName, hotKey: option, source: source});
+          //Update db
+          await updateLabel({name: labelName, hotKey: option, source: source})
 
-      await getAllAndDisplay();
-      // deleteRow($(event.target)); 
-      // displayLabel({id: id, name: labelName, hotKey : option, source: source});       
+        //Not in db, create new record
+        }else {
+          labelName = label.value; 
+          //Check label name
+          if(labelName.trim()) {
+            await createLabel({name: labelName, hotKey: option, source: "ll"})
+          }else {
+            alert("Label name invalid");
+          }                        
+        } 
+        await getAllAndDisplay();
+      }     
     }
 });
    
     //event listener for delegation edit button    
     labelsList.addEventListener('click', async e => {
     if (e.target.matches('.editButton')) {
-      console.log("clicking at edit")
       const newSelect = document.createElement('select');
       newSelect.setAttribute('id', "selectHotKey");
       newSelect.setAttribute('required', '')
-        // newSelect.addClass("select");    
           
       const newSave = document.createElement('button');
       newSave.textContent = "Save"
@@ -797,25 +795,12 @@ const imageSelectionFormChange = async () => {
       const leftDiv = parent.children[0];
       const rightDiv = parent.children[1];
       leftDiv.children[1].replaceWith(newSelect);
-        // const customDelete = rightDiv.children[1];
-        // if(customDelete){
-      e.target.replaceWith(newSave);
-      // } else {
-      //   rightDiv.appendChild(newSave);
-      // };    
-
-       
+      e.target.replaceWith(newSave);      
     }
 
     if (e.target.matches('#selectHotKey')) {  
-
-      console.log("deleting options", e.target);      
-      while (e.target.options.length > 0) {
-        e.target.remove(0);
-      }          
+      if(e.target.options.length) return;
       const unUsedOptions = await getOptions();
-      console.log(unUsedOptions);
-
       unUsedOptions.forEach(option => {
         const option1 = document.createElement('option');
         option1.textContent = option;
@@ -828,11 +813,9 @@ const imageSelectionFormChange = async () => {
     //event listener for delegation delete button
     labelsList.addEventListener('click', async e => {
       if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
-        console.log("clicking at delete")
         deleteRow($(e.target));
         const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
         if(id) {
-          console.log(id);
           deleteLabel(id);
           deleteRow($(e.target));
         } else {
@@ -844,7 +827,6 @@ const imageSelectionFormChange = async () => {
     //event listener for create new label button
     $('button#addNewLabel').on('click', async (e) => {
       e.preventDefault();
-      console.log('click add new label button');
       await createLabelRow();
       return;
     });   
@@ -1010,7 +992,7 @@ $('#annotationDoneButton').on('click',async (e)=>{
   let boxesCount = annotationsArray.length;
   if(boxesCount > 0){
     // Send annotations to API to create new annotation
-    console.log("Creating annotation with ",boxesCount," boxes");
+    // console.log("Creating annotation with ",boxesCount," boxes");
 
     let submissionData = {
       'queuedImageId' : window.data.queuedImageId,

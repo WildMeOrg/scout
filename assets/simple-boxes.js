@@ -757,8 +757,10 @@ $( document ).ready(function() {
 `;    
 
 
+    const allLabelNames = [];
+    window.tagsList.forEach(data => allLabelNames.push(data.name));
 
-    for(const allowedLabel of window.tagsList){
+    for(const allowedLabel of allLabelNames){
       let selectedStr = allowedLabel == selectedLabel ? 'selected' : '';
 
       labelStr+=`<option ${selectedStr} value="${allowedLabel}">${allowedLabel}</option>`
@@ -793,16 +795,19 @@ $( document ).ready(function() {
   document.addEventListener('keydown', async function(event) {
     //hot key and key code pair
     const pair = [];
-    //sct=10 is not merged yet, so hard code the hotkeys here
-    [1,2,3,4,5,6,7,8,9].forEach(data => {
-      const s = data.toString();
+    const allLabels = window.tagsList;
+
+    //Get number's key code
+    [0,1,2,3,4,5,6,7,8,9].forEach(data => {
       pair.push({key: data, keyCode: data.toString().charCodeAt(0)});      
     });
-    pair.forEach(async data => {
-      const labels = [{name: "buffalo", hotKey: "1"},{name: "elephant", hotKey: "2"},{name: "kob", hotKey: "3"}];      
+
+    pair.push({key: "ctrl", keyCode: 17});
+
+    pair.forEach(async data => {            
 
     //Detect keys pressed down  
-    if (event.keyCode == data.keyCode) { 
+    if (!event.ctrlKey && event.keyCode == data.keyCode) { 
       //Outer wrapper of the label selector
       const selector = document.activeElement;
       //The selector itself
@@ -811,13 +816,9 @@ $( document ).ready(function() {
       //If user clicks at the selector
       if (select) {
         const options = select.options;
-      //If user clicks at the selector it self
-      if (select) {
-        const options = select.options[0];
-        console.log(options);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
-          if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
+          if (allLabels.find(l => l.hotKey == data.key).name && options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
             //Set this label selected
             select.selectedIndex = i;
             //Save and close selector
@@ -829,7 +830,7 @@ $( document ).ready(function() {
       }else if(selector.tagName) {
         const options = selector.options;     
           for (let i = 0; i < options.length; i++) {
-            if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
+            if (options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
               selector.selectedIndex = i;
               await saveAndClose(selector);
               break;
@@ -837,6 +838,42 @@ $( document ).ready(function() {
           }     
         
       }     
+      } else if(event.ctrlKey && event.keyCode == data.keyCode) {
+        console.log(data.keyCode);
+        //Outer wrapper of the label selector
+      const selector = document.activeElement;
+      //The selector itself
+      const select = selector.querySelector("select.labelSelector");
+
+      //If user clicks at the selector
+      if (select) {
+        const options = select.options;
+        for (let i = 0; i < options.length; i++) {
+          //Find corresponding option
+          
+          console.log(`ctrl + ${data.key}`);
+          console.log(allLabels.find(l => l.hotKey == "ctrl + 1"))
+
+          if (allLabels.find(l => l.hotKey == `ctrl + ${data.key}`).name && options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
+            //Set this label selected
+            select.selectedIndex = i;
+            //Save and close selector
+            await saveAndClose(select);
+            break;
+          }
+                }
+       //If user clicks at the selector it self
+      }else if(selector.tagName) {
+        const options = selector.options;     
+          for (let i = 0; i < options.length; i++) {
+            if (options[i].value == allLabels.find(l => l.hotKey == data.key).name) {
+              selector.selectedIndex = i;
+              await saveAndClose(selector);
+              break;
+            }
+          }     
+        
+      } 
       }
     })
     
