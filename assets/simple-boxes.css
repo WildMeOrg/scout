@@ -7,7 +7,7 @@
 .simpleBoxesInnerWrapper{
   height: 455px;
   overflow: scroll;
-  pos
+  
 }
 
 .simpleBoxesImageAndCanvasWrapper{
@@ -70,8 +70,4 @@ i.tagIcon{
 .labelSelectorWrapper.closed{
 
   display: none;
-}
-
-.labelSelector{
-
 }

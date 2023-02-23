@@ -656,7 +656,8 @@ const imageSelectionFormChange = async () => {
   const labels = `<div class="individualLabel">
                           <div class="label">
                           <input type="text" id = "labelInput">
-                              <select class ="selectHotKey" id="selectHotKey">                                                        
+                              <select class ="selectHotKey" id="selectHotKey">
+                                <option></option>                                                        
                               </select>
                           </div>
                           <div class="buttons">
@@ -801,6 +802,9 @@ const imageSelectionFormChange = async () => {
 
       const allOptions = await getOptions();
       const selector = document.querySelector("#selectHotKey");
+      const option1 = document.createElement('option');
+      option1.textContent = "";
+      selector.appendChild(option1)
       allOptions.forEach(data => {
         const option1 = document.createElement('option');
         option1.textContent = data;

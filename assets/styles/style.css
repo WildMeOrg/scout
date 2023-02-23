@@ -217,6 +217,14 @@
   margin-bottom: 50px;
   padding : 15px;
   color: white;
+  overflow: auto;
+}
+
+.hotKeySpan {
+  max-width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .labelBanner {
