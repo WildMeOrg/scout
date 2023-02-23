@@ -1,5 +1,21 @@
 /* Custom styles */
 
+#imagesPreviewGallery .imagePreviewWrapper {
+    position: relative;
+    width: 14% !important;
+    cursor: pointer;
+}
+#imagesPreviewGallery .imagePreviewWrapper:hover img {
+    background-color: #555;
+}
+
+#imagesPreviewGallery .imagePreviewWrapper input[type=checkbox] {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+
 #sidebar-opened{
   display: none;
 }
