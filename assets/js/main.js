@@ -608,7 +608,7 @@ const imageSelectionFormChange = async () => {
       label.source = data.source == "ml" ? "ml" : "ll";
       //Insert data to db
       let action = '/api/labels?'+ new URLSearchParams(label);    
-      console.log(action);
+      // console.log(action);
       const response = await fetch(
         action,
         {
@@ -779,9 +779,7 @@ const imageSelectionFormChange = async () => {
         }else {
           labelName = label.value;
           const allLabelNames = [];
-          window.tagsList.forEach(data => allLabelNames.push(data.name));
-          console.log(allLabelNames);
-          console.log(labelName);
+          window.tagsList.forEach(data => allLabelNames.push(data.name));          
 
           //Check label name 
           if(!allLabelNames.find(data => data == labelName) && labelName.trim()) {
@@ -862,6 +860,10 @@ const imageSelectionFormChange = async () => {
     $('button#addNewLabel').on('click', async (e) => {
       e.preventDefault();      
       await createLabelRow();
+      const labelsList = document.getElementById("labelsList");
+      //Let the page focus on the botton of label list where the new row is inserted
+      labelsList.scrollTop = labelsList.scrollHeight - labelsList.clientHeight;
+      //Get options and append to selector
       const allOptions = await getOptions();
       const selector = document.querySelector("#selectHotKey");
       allOptions.forEach(data => {

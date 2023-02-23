@@ -808,7 +808,7 @@ $( document ).ready(function() {
 
     //Detect keys pressed down  
     if (event.keyCode == data.keyCode) { 
-      //Outer wrapper of the label selector
+      //Outter wrapper of the label selector
       const selector = document.activeElement;
       //The selector itself
       const select = selector.querySelector("select.labelSelector");
@@ -816,13 +816,9 @@ $( document ).ready(function() {
       //If user clicks at the selector
       if (select) {
         const options = select.options;
-        // console.log(allLabels);
         const label = allLabels.find(label => label.hotKey == data.key);
-
-        // console.log(label.name);
         for (let i = 0; i < options.length; i++) {
           //Find corresponding option
-          // console.log(options[i].text, data.key);
           if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
             //Set this label selected
             select.selectedIndex = i;
@@ -832,16 +828,19 @@ $( document ).ready(function() {
           }
                 }
        //If user clicks at the outer wrapper
-      }else if(selector.tagName) {        
+      }else if(selector) {        
         const options = selector.options;     
           // console.log(allLabels.find(l => l.hotKey === data.key).name);
-          for (let i = 0; i < options.length; i++) {
-            if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
-              selector.selectedIndex = i;
-              await saveAndClose(selector);
-              break;
-            }
-          }     
+          if(options) {
+            for (let i = 0; i < options.length; i++) {
+              if (allLabels.find(l => l.hotKey == data.key) && options[i].text == allLabels.find(l => l.hotKey == data.key).name) {
+                selector.selectedIndex = i;
+                await saveAndClose(selector);
+                break;
+              }
+            } 
+          }
+              
         
       }     
       // } else if(event.ctrlKey && event.keyCode == data.keyCode) {
