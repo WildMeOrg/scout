@@ -839,10 +839,11 @@ $( document ).ready(function() {
                 break;
               }
             } 
-          }
-              
+          }      
         
-      }     
+      }    
+      
+      //Keep the code here in case user still wants the "ctrl" + number hot key
       // } else if(event.ctrlKey && event.keyCode == data.keyCode) {
       //   console.log(data.keyCode);
       //   console.log(options[i].text)
@@ -896,7 +897,7 @@ $( document ).ready(function() {
     }
   });     
    
-  //Event listener for the div which when will be set focus
+  //Event listener for the div which will be set focusd on
   $('body').on('click','i.delHotKeyBox',async (e) =>{
     e.preventDefault();
     e.target.setAttribute('tabindex', '0');
