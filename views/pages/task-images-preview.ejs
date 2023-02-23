@@ -28,9 +28,23 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-8"></div>
+		<div class="col-2">
+            <button class="btn btn-secondary btn-sm ms-5" type="button" id="imagesPreviewSelectAll">
+              Select All
+            </button>
+		</div>
+		<div class="col-2">
+            <button class="btn btn-secondary btn-sm ms-5" type="button" id="imagesPreviewDelete" disabled>
+              Delete Images
+            </button>
+		</div>
+	</div>
+
 	<div id="imagesPreviewGallery">
            <% for (const image of images) { %>
-		<div class="d-inline-block imagePreviewWrapper">
+		<div id="image-preview-<%=image.id%>" class="d-inline-block imagePreviewWrapper">
 			<input type="checkbox" />
 			<img class="img-thumbnail" src="/uploads/<%=image.id%>" />
 		</div>

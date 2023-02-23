@@ -1649,3 +1649,40 @@ window.convertAnnotationsToW3c = (box) => {
   };
   return converted;
 };
+
+window.imagePreviewsUpdateButtons = function() {
+    let numImages = $('.imagePreviewWrapper img').length;
+    let numSelected = $('.imagePreviewWrapper input:checked').length;
+    if (numImages == numSelected) {
+        $('#imagesPreviewSelectAll').html('De-select All');
+    } else {
+        $('#imagesPreviewSelectAll').html('Select All');
+    }
+    if (numSelected) {
+        $('#imagesPreviewDelete').prop('disabled', false).html('Delete ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
+    } else {
+        $('#imagesPreviewDelete').prop('disabled', true).html('Delete Images');
+    }
+};
+
+$('.imagePreviewWrapper input').on('click', function(ev) {
+    ev.stopPropagation();
+    imagePreviewsUpdateButtons();
+});
+
+$('.imagePreviewWrapper').on('click', function(ev) {
+console.log('DIV!!! ====> %o', ev);
+    ev.stopPropagation();
+});
+
+$('#imagesPreviewSelectAll').on('click', function(ev) {
+    let numImages = $('.imagePreviewWrapper img').length;
+    let numSelected = $('.imagePreviewWrapper input:checked').length;
+    if (numImages == numSelected) {
+        $('.imagePreviewWrapper input').prop('checked', false);
+    } else {
+        $('.imagePreviewWrapper input').prop('checked', true);
+    }
+    imagePreviewsUpdateButtons();
+});
+
