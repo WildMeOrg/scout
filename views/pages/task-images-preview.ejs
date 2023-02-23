@@ -1,6 +1,6 @@
 <main class="container">
 
-  <div id="taskOuter">
+  <div id="taskOuter" class="mt-5">
 	<div class="row" id="meta">
 		<div class="col-2">
 			<p><b>Task Name:</b></p>
@@ -51,7 +51,30 @@
             <% } %>
 	</div>
 
-  </div>
 
+    <div class="modal fade modal-lg" id="imagePreviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Image Preview</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+		<img style="width: 100%;" />
+		<div style="text-align: center; padding-top: 10px;">
+		    <button class="btn btn-secondary btn-sm ms-5" type="button">Select</button>
+		    <button class="btn btn-secondary btn-sm ms-5" type="button">Delete</button>
+		</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </main>
