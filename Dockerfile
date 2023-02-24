@@ -45,7 +45,7 @@ RUN npm cache clean --force
 RUN rm -rf node_modules
 RUN npm install
 RUN npm install sails -g
-RUN npm install mongo-express -g
+RUN npm install mongo-express@1.0.0 -g
 RUN npm install gm -g
 RUN npm install readline-sync --save
 RUN npm install connect-mongodb-session --save
