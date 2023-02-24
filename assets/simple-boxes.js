@@ -791,14 +791,16 @@ $( document ).ready(function() {
     window.simpleBoxes._.handles[handleId].canvas.state.selectOpen = false;
     }   
 
-  //When press down DEL button, delete the focused annotation
+  // When press down DEL button, delete the focused annotation
   document.addEventListener('keydown', async function() {
     if (event.keyCode === 46) {
       const focusedBox = document.querySelector('.delHotKeyBox:focus');
-      let handleId = focusedBox.getAttribute('data-handle-id');
-      let boxId = focusedBox.getAttribute('data-box-id');
-      await window.simpleBoxes._.methods.removeBox(handleId,boxId);
-      await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);      
+      if(focusedBox) {
+        let handleId = focusedBox.getAttribute('data-handle-id');
+        let boxId = focusedBox.getAttribute('data-box-id');
+        await window.simpleBoxes._.methods.removeBox(handleId,boxId);
+        await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);    
+      }        
     }
   });       
 
@@ -807,12 +809,11 @@ $( document ).ready(function() {
     e.preventDefault();
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
-    // console.log(e.target);
     let boxId = $(e.target).attr('data-box-id');
-    let handleId = $(e.target).attr('data-handle-id');    
-    
-    async function handleKeyDown(event) {       
-      // Hot key and key code pair
+    let handleId = $(e.target).attr('data-handle-id');   
+
+    // console.log("e.target is, ",e.target, "boxID at first is ", boxId);
+    // Hot key and key code pair 
     const pair = [];
     const allLabels = window.tagsList;
 
@@ -821,21 +822,32 @@ $( document ).ready(function() {
       pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
     });
 
-    pair.push({key: "ctrl", keyCode: 17});
-      
-        for(let i = 0; i < pair.length; i++) {
-          const data = pair[i];
+    let timeoutId = null;
+    async function handleKeyDown(event) {         
+      // Clear the previous timeout, if there is one
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+
+      // Set a new timeout to execute the function after a delay
+      timeoutId = setTimeout(async () => {
+        for(let i = 0; i < pair.length; i++) {          
           // Detect keys pressed down
-          if (event.keyCode === data.keyCode) { 
-            window.simpleBoxes._.handles[handleId].boxes[boxId].label = allLabels.find(l => l.hotKey == data.key).name;
-            await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-            // Remove the event listener after the label has been updated
-            document.removeEventListener('keydown', handleKeyDown);
+          if (event.keyCode === pair[i].keyCode) {
+            const label = allLabels.find(l => l.hotKey === pair[i].key);
+            if(label) {
+              window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
+              // Remove the event listener after the label has been updated
+              document.removeEventListener('keydown', handleKeyDown);
+              await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
+            }            
+            break;
           }
-        }              
-      // document.removeEventListener('keydown', handleKeyDown);
-      // await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]); 
-    }  
+        }
+        timeoutId = null;
+      }, 500); 
+    }
     document.addEventListener('keydown', handleKeyDown, {once: true});    
   });
 
