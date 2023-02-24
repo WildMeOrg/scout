@@ -697,14 +697,7 @@ const imageSelectionFormChange = async () => {
       allOptions.push(count);
       // allOptions.push("ctrl + "+count);
       count++;
-    }
-    // document.getElementById("labelSelector").appendChild(option1)
-    // const allLabels = await getAllLabels();
-    // const used = allLabels.filter(data => data.hotKey.length !== 0);
-    // const usedOptions = [];
-    // used.forEach(data => usedOptions.push(data.hotKey));
-    // //Only return unused 
-    // const result = allOptions.filter(data => !usedOptions.includes(data));
+    }    
     return allOptions;    
   }
 
@@ -732,22 +725,14 @@ const imageSelectionFormChange = async () => {
     await getAllAndDisplay();       
     
     //event listener for delegation save button
-    const labelsList = document.getElementById('labelsList'); // replace with the ID of your div
+    const labelsList = document.getElementById('labelsList'); 
     labelsList.addEventListener('click', async event => {
       
     if (event.target.matches('.saveButton')) { 
       //Get the labelLists div
       const parent = event.target.parentNode.parentNode;
       //Get the label span/input
-      const label = parent.children[0].children[0];
-      // if(label.tagName.toLowerCase() === 'input') {        
-      //   const allLabelNames = [];
-      //   window.tagsList.forEach(data => allLabelNames.push(data.name));
-      //   console.log(label.value, label.innerText);
-      //   if(allLabelNames.find(data => data.name == label.value)) {
-      //     alert("Label name already exists");
-      //   }
-      // }
+      const label = parent.children[0].children[0];      
       
       let labelName = "";
       let source = "";
@@ -772,7 +757,6 @@ const imageSelectionFormChange = async () => {
             }
           })           
           
-          // console.log("need to update,", {id: id, name: labelName, hotKey: option, source: source});
           //Update db
           await updateLabel({name: labelName, hotKey: option, source: source})
         //Not in db, create new record
@@ -827,23 +811,11 @@ const imageSelectionFormChange = async () => {
       });
     }
 
-    // if (e.target.matches('#selectHotKey')) {  
-      // if(e.target.options.length) return;
-      // const options = await getOptions();
-      // console.log(options);
-      // options.forEach(option => {
-      //   const option1 = document.createElement('option');
-      //   option1.textContent = option;
-        // e.target.appendChild(option1);
-
-        // })               
-       
-    // }
 });
 
     //event listener for delegation delete button
     labelsList.addEventListener('click', async e => {
-      if (e.target.matches('.deleteButton')) { // replace with the class of your buttons
+      if (e.target.matches('.deleteButton')) { 
         deleteRow($(e.target));
         const id = e.target.parentNode.parentNode.children[0].children[0].getAttribute("data-label-id")
         //If in db, delete the row and record in db
