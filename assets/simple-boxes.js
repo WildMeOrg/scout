@@ -902,11 +902,13 @@ $( document ).ready(function() {
     e.preventDefault();
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
-    console.log(e.target);
+    // console.log(e.target);
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     
+    
     async function handleKeyDown(event) {
+       
       // Hot key and key code pair
     const pair = [];
     const allLabels = window.tagsList;
@@ -920,18 +922,19 @@ $( document ).ready(function() {
       pair.forEach(async data => {
   
         // Detect keys pressed down
-        if (event.keyCode == data.keyCode) { 
+        if (event.keyCode === data.keyCode) { 
           // console.log("boxID is", boxId);
           window.simpleBoxes._.handles[handleId].boxes[boxId].label = allLabels.find(l => l.hotKey == data.key).name;
           await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
           // Remove the event listener after the label has been updated
-          // document.removeEventListener('keydown', handleKeyDown);
+          document.removeEventListener('keydown', handleKeyDown);
         }
       });
-      document.removeEventListener('keydown', handleKeyDown);
+      // document.removeEventListener('keydown', handleKeyDown);
+      // await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]); 
     }  
-    document.addEventListener('keydown', handleKeyDown);
-
+    document.addEventListener('keydown', handleKeyDown, {once: true});
+    
   });
 
 
