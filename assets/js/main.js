@@ -1650,6 +1650,7 @@ window.convertAnnotationsToW3c = (box) => {
   return converted;
 };
 
+window.imagePreviewModalImageId = null;
 window.imagePreviewsUpdateButtons = function() {
     let numImages = $('.imagePreviewWrapper img').length;
     let numSelected = $('.imagePreviewWrapper input:checked').length;
@@ -1671,10 +1672,9 @@ $('.imagePreviewWrapper input').on('click', function(ev) {
 });
 
 $('.imagePreviewWrapper').on('click', function(ev) {
-console.log('DIV!!! ====> %o', ev.currentTarget);
     ev.stopPropagation();
     let imageId = ev.currentTarget.id.substring(14);
-console.log('id %s', imageId);
+    window.imagePreviewModalImageId = imageId;
     $('#imagePreviewModal .modal-body img').prop('src', '/uploads/' + imageId);
     $('#imagePreviewModal').modal('show');
 });
@@ -1689,4 +1689,55 @@ $('#imagesPreviewSelectAll').on('click', function(ev) {
     }
     imagePreviewsUpdateButtons();
 });
+
+$('#imagesPreviewDelete').on('click', async function(ev) {
+    let selected = $('.imagePreviewWrapper input:checked');
+    if (!selected.length) return;
+    let imageIds = [];
+    for (let i = 0 ; i < selected.length ; i++) {
+        imageIds.push(selected[i].parentElement.id.substring(14));
+    }
+    const results = await imagesDelete(imageIds);
+    if (!results || !results.success) {
+        alert('error deleting');
+        return;
+    }
+    imagesDeleteComplete(results);
+    imagePreviewsUpdateButtons();
+});
+
+window.imagePreviewModalSelect = function() {
+    if (!imagePreviewModalImageId) return;
+    $('#image-preview-' + imagePreviewModalImageId + ' input').prop('checked', true);
+    imagePreviewsUpdateButtons();
+    $('#imagePreviewModal').modal('hide');
+}
+
+window.imagePreviewModalDelete = async function() {
+    if (!imagePreviewModalImageId) return;
+    const results = await imagesDelete([imagePreviewModalImageId]);
+    if (!results || !results.success) {
+        alert('error deleting');
+        return;
+    }
+    imagesDeleteComplete(results);
+    imagePreviewsUpdateButtons();
+    $('#imagePreviewModal').modal('hide');
+}
+
+window.imagesDeleteComplete = function(results) {
+    if (!results || !results.imageIds) return;
+    for (const id of results.imageIds) {
+        $('#image-preview-' + id).remove();
+    }
+}
+
+window.imagesDelete = async (imageIds) => {
+    // FIXME - do the actual delete api here (TBD)
+    return {
+        success: true,
+        imageIds: imageIds
+    };
+}
+
 
