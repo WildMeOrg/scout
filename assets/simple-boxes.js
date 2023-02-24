@@ -954,9 +954,11 @@ $( document ).ready(function() {
     if ($("#toggle-switch").is(":checked")) {
       $('i.labelContent').css("display", "block");
       $('i.labelBoxTrigger').css("display", "block");
+      $('i.deleteBoxTrigger ').css("display", "block");
     } else {
       $('i.labelContent').css("display", "none");
-      $('i.labelBoxTrigger').css("display", "none");     
+      $('i.labelBoxTrigger').css("display", "none");  
+      $('i.deleteBoxTrigger ').css("display", "none");   
 
     }
   });
