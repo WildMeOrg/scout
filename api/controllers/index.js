@@ -35,6 +35,7 @@ module.exports = {
 
       // If there are no users, redirect to /signup page
       if(!userCount){
+        await Labels.createMLLabel();
         throw { noUsers: '/signup'};
       } else {
         // If there are users in the system, check if visitor is logged in

@@ -308,7 +308,7 @@ window.simpleBoxes._.methods = {
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
-      console.log("Dragging");
+      // console.log("Dragging");
       state.drag = true;
       if(overWhichBox.box){
         state.dragType = overWhichBox.dragType;
@@ -757,8 +757,10 @@ $( document ).ready(function() {
 `;    
 
 
+    const allLabelNames = [];
+    window.tagsList.forEach(data => allLabelNames.push(data.name));
 
-    for(const allowedLabel of window.tagsList){
+    for(const allowedLabel of allLabelNames){
       let selectedStr = allowedLabel == selectedLabel ? 'selected' : '';
 
       labelStr+=`<option ${selectedStr} value="${allowedLabel}">${allowedLabel}</option>`
@@ -787,56 +789,7 @@ $( document ).ready(function() {
     // Close it
     select.parentNode.remove();
     window.simpleBoxes._.handles[handleId].canvas.state.selectOpen = false;
-    } 
-
-    //When press down hot keys, select corresponding label options
-  document.addEventListener('keydown', async function(event) {
-    //hot key and key code pair
-    const pair = [];
-    //sct=10 is not merged yet, so hard code the hotkeys here
-    [1,2,3,4,5,6,7,8,9].forEach(data => {
-      const s = data.toString();
-      pair.push({key: data, keyCode: data.toString().charCodeAt(0)});      
-    });
-    pair.forEach(async data => {
-      const labels = [{name: "buffalo", hotKey: "1"},{name: "elephant", hotKey: "2"},{name: "kob", hotKey: "3"}];      
-
-    //Detect keys pressed down  
-    if (event.keyCode == data.keyCode) { 
-      //Outer wrapper of the label selector
-      const selector = document.activeElement;
-      //The selector itself
-      const select = selector.querySelector("select.labelSelector");
-
-      //If user clicks at the selector
-      if (select) {
-        const options = select.options;
-        for (let i = 0; i < options.length; i++) {
-          //Find corresponding option
-          if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
-            //Set this label selected
-            select.selectedIndex = i;
-            //Save and close selector
-            await saveAndClose(select);
-            break;
-          }
-                }
-       //If user clicks at the selector it self
-      }else if(selector.tagName) {
-        const options = selector.options;     
-          for (let i = 0; i < options.length; i++) {
-            if (options[i].value == labels.find(l => l.hotKey == data.key).name) {
-              selector.selectedIndex = i;
-              await saveAndClose(selector);
-              break;
-            }
-          }     
-        
-      }     
-      }
-    })
-    
-  });
+    }   
 
   //When press down DEL button, delete the focused annotation
   document.addEventListener('keydown', async function() {
@@ -847,13 +800,43 @@ $( document ).ready(function() {
       await window.simpleBoxes._.methods.removeBox(handleId,boxId);
       await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);      
     }
-  });     
-   
-  //Event listener for the div which when will be set focus
+  });       
+
+   //Event listener for the div which when will be set focus
   $('body').on('click','i.delHotKeyBox',async (e) =>{
     e.preventDefault();
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
+    // console.log(e.target);
+    let boxId = $(e.target).attr('data-box-id');
+    let handleId = $(e.target).attr('data-handle-id');    
+    
+    async function handleKeyDown(event) {       
+      // Hot key and key code pair
+    const pair = [];
+    const allLabels = window.tagsList;
+
+    //Get number's key code
+    [0,1,2,3,4,5,6,7,8,9].forEach(data => {
+      pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
+    });
+
+    pair.push({key: "ctrl", keyCode: 17});
+      
+        for(let i = 0; i < pair.length; i++) {
+          const data = pair[i];
+          // Detect keys pressed down
+          if (event.keyCode === data.keyCode) { 
+            window.simpleBoxes._.handles[handleId].boxes[boxId].label = allLabels.find(l => l.hotKey == data.key).name;
+            await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
+            // Remove the event listener after the label has been updated
+            document.removeEventListener('keydown', handleKeyDown);
+          }
+        }              
+      // document.removeEventListener('keydown', handleKeyDown);
+      // await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]); 
+    }  
+    document.addEventListener('keydown', handleKeyDown, {once: true});    
   });
 
 
@@ -876,9 +859,11 @@ $( document ).ready(function() {
     if ($("#toggle-switch").is(":checked")) {
       $('i.labelContent').css("display", "block");
       $('i.labelBoxTrigger').css("display", "block");
+      $('i.deleteBoxTrigger ').css("display", "block");
     } else {
       $('i.labelContent').css("display", "none");
-      $('i.labelBoxTrigger').css("display", "none");     
+      $('i.labelBoxTrigger').css("display", "none");  
+      $('i.deleteBoxTrigger ').css("display", "none");   
 
     }
   });
