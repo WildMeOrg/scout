@@ -63,7 +63,7 @@ window.debugAnnotations = async () =>{
   await window.debugAnnotations();
 }
 
-$( document ).ready( async () => {
+$( document ).ready( async () => {  
 
 $('form.handleable').each(function(index) {
 
@@ -598,7 +598,7 @@ const imageSelectionFormChange = async () => {
 
   //Update window.tagsList
   window.tagsList = await getAllLabels();
-
+  
   //Insert new label to database
   const createLabel = async (data) => {
       let label = {};
@@ -735,7 +735,9 @@ const imageSelectionFormChange = async () => {
     });
     return;
   }      
+
   const labelEditModal = document.getElementById("labelEditModal");  
+
   if(labelEditModal) {
     labelEditModal.addEventListener('show.bs.modal', () => {
       const button = document.getElementById('addNewLabel');
@@ -747,7 +749,13 @@ const imageSelectionFormChange = async () => {
       button.removeEventListener('click', onButtonClicked);
     });
   } 
-  
+
+  window.tagsList.forEach(data => {
+    if(data.hotKey) {
+      let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
+      $('#hotKeyBox').append(hotKey)
+    }      
+  })  
 
   //Event listener for the "Label" button on task page, entrypoint for label manager too
   $('#editLabelButton').on('click', async (e) => {
@@ -864,17 +872,17 @@ const imageSelectionFormChange = async () => {
 
    })
 
-   window.addEventListener("load", function() {
-    // var hotKeyBox = document.getElementById("hotKeyBox");
-    // hotKeyBox.innerHTML = "";
-    const allLabels = window.tagsList;
-    allLabels.forEach(data => {
-      if(data.hotKey) {
-        let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
-        $('#hotKeyBox').append(hotKey)
-      }      
-    })
-  });
+  //  window.addEventListener("load", function() {
+  //   // var hotKeyBox = document.getElementById("hotKeyBox");
+  //   // hotKeyBox.innerHTML = "";
+  //   const allLabels = window.tagsList;
+  //   allLabels.forEach(data => {
+  //     if(data.hotKey) {
+  //       let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
+  //       $('#hotKeyBox').append(hotKey)
+  //     }      
+  //   })
+  // });
 
 
 $("#imageSelectionForm .bootstrap-datepicker").datepicker({
