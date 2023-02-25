@@ -653,7 +653,8 @@ const imageSelectionFormChange = async () => {
 
   //Create a new row and append it to labelsList
   const createLabelRow = async () => {  
-  const labels = `<div class="individualLabel">
+    console.log("creating new row")
+    const labels = `<div class="individualLabel">
                           <div class="label">
                           <input type="text" id = "labelInput">
                               <select class ="selectHotKey" id="selectHotKey">
@@ -665,7 +666,7 @@ const imageSelectionFormChange = async () => {
                             <button class="btn btn-primary deleteButton">Delete</button>
                           </div>
                       </div>`;
-  $('#labelsList').append(labels);    
+    $('#labelsList').append(labels);    
   }
 
   //Get all labels from db and display
@@ -716,6 +717,37 @@ const imageSelectionFormChange = async () => {
     );
        return response; 
   }
+
+
+  const onButtonClicked = async() => {
+    await createLabelRow();
+    const labelsList = document.getElementById("labelsList");
+    //Let the page focus on the botton of label list where the new row is inserted
+    labelsList.scrollTop = labelsList.scrollHeight - labelsList.clientHeight;
+    //Get options and append to selector
+    const allOptions = await getOptions();
+    const selectors = document.querySelectorAll("#selectHotKey");
+    const lastSelector = selectors[selectors.length-1]
+    allOptions.forEach(data => {
+      const option1 = document.createElement('option');
+      option1.textContent = data;
+      lastSelector.appendChild(option1);
+    });
+    return;
+  }      
+  const labelEditModal = document.getElementById("labelEditModal");  
+  if(labelEditModal) {
+    labelEditModal.addEventListener('show.bs.modal', () => {
+      const button = document.getElementById('addNewLabel');
+      button.addEventListener('click', onButtonClicked);
+    });
+    
+    labelEditModal.addEventListener('hidden.bs.modal', () => {
+      const button = document.getElementById('addNewLabel');
+      button.removeEventListener('click', onButtonClicked);
+    });
+  } 
+  
 
   //Event listener for the "Label" button on task page, entrypoint for label manager too
   $('#editLabelButton').on('click', async (e) => {
@@ -791,6 +823,7 @@ const imageSelectionFormChange = async () => {
       newSave.textContent = "Save"
       newSave.className = 'btn btn-primary saveButton';
       const parent = e.target.parentNode.parentNode;
+      console.log(parent);
       const leftDiv = parent.children[0];
       const rightDiv = parent.children[1];
       //Replace the old hot key with a selector
@@ -827,24 +860,7 @@ const imageSelectionFormChange = async () => {
         }
     }
 
-})        
-    //event listener for create new label button
-    $('button#addNewLabel').on('click', async (e) => {
-      e.preventDefault();      
-      await createLabelRow();
-      const labelsList = document.getElementById("labelsList");
-      //Let the page focus on the botton of label list where the new row is inserted
-      labelsList.scrollTop = labelsList.scrollHeight - labelsList.clientHeight;
-      //Get options and append to selector
-      const allOptions = await getOptions();
-      const selector = document.querySelector("#selectHotKey");
-      allOptions.forEach(data => {
-        const option1 = document.createElement('option');
-        option1.textContent = data;
-        selector.appendChild(option1);
-      });
-      return;
-    });   
+})            
 
    })
 

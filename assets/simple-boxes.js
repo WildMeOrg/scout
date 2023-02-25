@@ -804,51 +804,36 @@ $( document ).ready(function() {
     }
   });       
 
-   //Event listener for the div which when will be set focus
-  $('body').on('click','i.delHotKeyBox',async (e) =>{
-    e.preventDefault();
-    e.target.setAttribute('tabindex', '0');
-    e.target.focus();
-    let boxId = $(e.target).attr('data-box-id');
-    let handleId = $(e.target).attr('data-handle-id');   
-
-    // console.log("e.target is, ",e.target, "boxID at first is ", boxId);
-    // Hot key and key code pair 
+  const boxKeyDownEvent = async (keycode, handleId, boxId) => {
     const pair = [];
-    const allLabels = window.tagsList;
-
-    //Get number's key code
     [0,1,2,3,4,5,6,7,8,9].forEach(data => {
       pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
     });
 
-    let timeoutId = null;
-    async function handleKeyDown(event) {         
-      // Clear the previous timeout, if there is one
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
+    for(let i = 0; i < pair.length; i++) {          
+      // Detect keys pressed down
+      if (keycode === pair[i].keyCode) {
+        const label = window.tagsList.find(l => l.hotKey === pair[i].key);
+        if(label) {
+          window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
+          // Remove the event listener after the label has been updated
+          await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
+        }            
+        break;
       }
-
-      // Set a new timeout to execute the function after a delay
-      timeoutId = setTimeout(async () => {
-        for(let i = 0; i < pair.length; i++) {          
-          // Detect keys pressed down
-          if (event.keyCode === pair[i].keyCode) {
-            const label = allLabels.find(l => l.hotKey === pair[i].key);
-            if(label) {
-              window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
-              // Remove the event listener after the label has been updated
-              document.removeEventListener('keydown', handleKeyDown);
-              await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-            }            
-            break;
-          }
-        }
-        timeoutId = null;
-      }, 500); 
     }
-    document.addEventListener('keydown', handleKeyDown, {once: true});    
+  }
+  $('body').on('click', 'i.delHotKeyBox', async (e) => {
+    e.target.setAttribute('tabindex', '0');
+    e.target.focus();
+  });
+
+  $('body').on('keydown', 'i.delHotKeyBox', async (e) => {
+    let boxId = $(e.target).attr('data-box-id');
+    let handleId = $(e.target).attr('data-handle-id');
+    if($(e.target).attr('tabindex') === '0') {
+      await boxKeyDownEvent(e.keyCode, handleId, boxId);
+    }
   });
 
 
