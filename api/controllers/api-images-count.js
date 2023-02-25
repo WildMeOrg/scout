@@ -13,6 +13,10 @@ module.exports = {
       type : 'string',
       description : 'Partial match or use * as wildcard for image name'
     },
+    labels: {
+      type: 'ref',
+      description: 'labels to match'
+    },
     sourceTask : {
       type : 'string',
       description : 'The source task to copy from'
@@ -68,6 +72,20 @@ module.exports = {
       };
     }
 
+    let labels = [];
+    // what a hassle
+    if (inputs.labels) {
+        let arr = [];
+        if (Array.isArray(inputs.labels)) {
+            arr = inputs.labels;
+        } else {  // assuming string, sorrynotsorry
+            arr.push(inputs.labels);
+        }
+        for (const label of arr) {
+            if (label.length) labels.push(label);
+        }
+    }
+
     if(inputs.sourceTask){
       let matchingTasks = await Tasks.find({where : {displayName : inputs.sourceTask}, limit : 1})
 
@@ -115,6 +133,7 @@ module.exports = {
     imageCount = 0;
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);
+      imagesFound = await Images.filterByLabels(imagesFound, labels);
       imageCount = imagesFound.length;
     }
 
