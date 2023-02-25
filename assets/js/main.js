@@ -738,13 +738,11 @@ const imageSelectionFormChange = async () => {
   const labelEditModal = document.getElementById("labelEditModal");  
   if(labelEditModal) {
     labelEditModal.addEventListener('show.bs.modal', () => {
-      console.log("open");
       const button = document.getElementById('addNewLabel');
       button.addEventListener('click', onButtonClicked);
     });
     
     labelEditModal.addEventListener('hidden.bs.modal', () => {
-      console.log("close");
       const button = document.getElementById('addNewLabel');
       button.removeEventListener('click', onButtonClicked);
     });
@@ -862,37 +860,7 @@ const imageSelectionFormChange = async () => {
         }
     }
 
-})        
-    // const onButtonClicked = async() => {
-    //   await createLabelRow();
-    //   const labelsList = document.getElementById("labelsList");
-    //   //Let the page focus on the botton of label list where the new row is inserted
-    //   labelsList.scrollTop = labelsList.scrollHeight - labelsList.clientHeight;
-    //   //Get options and append to selector
-    //   const allOptions = await getOptions();
-    //   const selectors = document.querySelectorAll("#selectHotKey");
-    //   const lastSelector = selectors[selectors.length-1]
-    //   allOptions.forEach(data => {
-    //     const option1 = document.createElement('option');
-    //     option1.textContent = data;
-    //     lastSelector.appendChild(option1);
-    //   });
-    //   return;
-    // }      
-    // const labelEditModal = document.getElementById("labelEditModal");  
-    // console.log(labelEditModal);
-    // labelEditModal.addEventListener('show.bs.modal', () => {
-    //   console.log("open");
-    //   const button = document.getElementById('addNewLabel');
-    //   button.addEventListener('click', onButtonClicked);
-    // });
-    
-    // labelEditModal.addEventListener('hidden.bs.modal', () => {
-    //   console.log("close");
-    //   const button = document.getElementById('addNewLabel');
-    //   button.removeEventListener('click', onButtonClicked);
-    // });
-
+})            
 
    })
 
