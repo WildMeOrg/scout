@@ -872,19 +872,6 @@ const imageSelectionFormChange = async () => {
 
    })
 
-  //  window.addEventListener("load", function() {
-  //   // var hotKeyBox = document.getElementById("hotKeyBox");
-  //   // hotKeyBox.innerHTML = "";
-  //   const allLabels = window.tagsList;
-  //   allLabels.forEach(data => {
-  //     if(data.hotKey) {
-  //       let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
-  //       $('#hotKeyBox').append(hotKey)
-  //     }      
-  //   })
-  // });
-
-
 $("#imageSelectionForm .bootstrap-datepicker").datepicker({
 
 }).on("change", async () => {
