@@ -1118,14 +1118,11 @@ $('#annotationDoneButton').on('click',async (e)=>{
 
 setTimeout( async () => {
 
+   await simpleBoxes.debug()
+   window.sbHandleLeft = await simpleBoxes.initHandle('imageToGroundTruth',[],false);
    // Draw main boxes (if any)
    if(window.data.chosenAnnotations && window.data.chosenAnnotations.boundingBoxes.length){
-
-     await simpleBoxes.debug()
-     window.sbHandleLeft = await simpleBoxes.initHandle('imageToGroundTruth',[],false);
      await simpleBoxes.loadBoxes(window.sbHandleLeft.id,window.data.chosenAnnotations.boundingBoxes);
-
-
    }
 
 },500);
