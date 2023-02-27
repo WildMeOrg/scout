@@ -189,8 +189,8 @@
               class="input-group mb-3" >
               <div class="form-floating">
                 <select size="5" required class="form-select form-control" multiple name="labels" id="labels" aria-label="multiple select">
-                  <% for (const tag of allTags) { %>
-                    <option><%=tag%></option>
+                  <% for (const labelName of allLabelNames) { %>
+                    <option><%=labelName%></option>
                   <% } %>
 		</select>
               </div>
