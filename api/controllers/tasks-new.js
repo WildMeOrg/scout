@@ -42,7 +42,14 @@ module.exports = {
     // Get users
     let users = await Users.find();
 
-    let allTags = await Annotations.allTags();
+    let allLabels = await Labels.getAllLabels();
+    let allLabelNames = [];
+    for (let lbl of allLabels) {
+        allLabelNames.push(lbl.name);
+    }
+    allLabelNames = allLabelNames.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
 
     // Get the status of the ingestion worker
     ingestionActive = false;
@@ -57,7 +64,7 @@ module.exports = {
       users: users,
       imageCountTotal : imageCount,
       ingestionActive : ingestionActive,
-      allTags : allTags,
+      allLabelNames : allLabelNames,
       tasks : tasks
     };
     let clientData = {
