@@ -670,7 +670,7 @@ const imageSelectionFormChange = async () => {
 
   //Create a new row and append it to labelsList
   const createLabelRow = async () => {  
-    console.log("creating new row")
+    // console.log("creating new row")
     const labels = `<div class="individualLabel">
                           <div class="label">
                           <input type="text" id = "labelInput">
