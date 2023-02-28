@@ -38,6 +38,7 @@ module.exports.routes = {
   'POST /api/exports/' : { action: 'api-exports-post'},
   'GET /api/images/' : { action: 'api-images-count'},
   'PUT /api/images/:imageid' : { action: 'api-images-put' },
+  'DELETE /api/images' : { action: 'api-images-delete' },
   'POST /api/tasks' : { action: 'api-tasks-post' },
   'GET /api/tasks' : { action: 'api-tasks-get' },
   'POST /api/annotations' : { action: 'api-annotations-post' },

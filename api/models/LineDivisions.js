@@ -7,5 +7,9 @@ module.exports = {
     userId: { type: 'string', required: true},
     topX: { type: 'number', required: true},
     bottomX: { type: 'number', required: true}
-  }
+  },
+
+    deleteForImage: async function(imageId) {
+console.log('deleted LineDivisions for imageId=%o', imageId);
+    }
 };

@@ -8,5 +8,9 @@ module.exports = {
     assignee: { type: 'string', required: true},
     wicConfidence: { type: 'number'},
     boundingBoxes : { type: 'json', columnType : "array" }
-  }
+  },
+
+    deleteForImage: async function(imageId) {
+console.log('deleted Annotation for imageId=%o', imageId);
+    }
 };
