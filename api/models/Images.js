@@ -19,14 +19,33 @@ module.exports = {
       let annots = await Annotations.find({
         imageId : image.id,
       });
-      if (!annots || !annots.length) continue;
+      annots = annots || [];
+      let gts = await GroundTruths.find({
+        imageId : image.id,
+      });
+      gts = gts || [];
+      if (!annots.length && !gts.length) continue;
+
+      let found = false;
       // bummer, label is within boundingBoxes
-      checkImage: for (const annot of annots) {
+      checkImageAnnot: for (const annot of annots) {
         // finding just one is good enough, cuz this is an "or" search
         for (const bbox of annot.boundingBoxes) {
           if (labels.indexOf(bbox.label) > -1) {
             imagesWithLabels.push(image);
-            break checkImage;
+            found = true;
+            break checkImageAnnot;
+          }
+        }
+      }
+      if (!found) {  // lets try GT as well
+        checkImageGT: for (const gt of gts) {
+          // finding just one is good enough, cuz this is an "or" search
+          for (const bbox of gt.boundingBoxes) {
+            if (labels.indexOf(bbox.label) > -1) {
+              imagesWithLabels.push(image);
+              break checkImageGT;
+            }
           }
         }
       }
