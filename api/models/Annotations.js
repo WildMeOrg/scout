@@ -11,6 +11,7 @@ module.exports = {
   },
 
     deleteForImage: async function(imageId) {
-console.log('deleted Annotation for imageId=%o', imageId);
+        let deleted = await Annotations.destroy({imageId: imageId}).fetch();
+        console.log('- destroyed Annotations %o', deleted);
     }
 };
