@@ -51,6 +51,34 @@ module.exports = {
       }
     }
     return imagesWithLabels;
-  }
+  },
+
+    deleteCascade: async function(id) {
+        let image = await Images.findOne({id: id});
+        if (!image) return;
+
+        // all these things reference Images, so must be also deleted where appropriate
+        console.info('deleting associated objects for imageId=%s', id);
+        await QueuedImages.deleteForImage(id);
+        await SequencedPairs.deleteForImage(id);
+        await Annotations.deleteForImage(id);
+        await GroundTruths.deleteForImage(id);
+        await LineDivisions.deleteForImage(id);
+
+        console.info('deleting actual image id=%s', id);
+    //let deletedImages = await Images.destroy({id: { in: input.imageIds }}).fetch();
+
+        // tasks (list) are linked within Image, so that will be gone automatically
+        //  confirmed 2023-02-27 that Tasks with *no images* can be left alone so no cascade needed to delete Task
+        //  but we do need to update the various counts on those tasks affected
+        for (const taskId of image.taskIds){
+            console.info('- recalculating for imageId=%s taskId=%o', id, taskId);
+            await sails.helpers.recalculatePercentages('imageCount',taskId);
+            await sails.helpers.recalculatePercentages('gt',taskId);
+            await sails.helpers.recalculatePercentages('annotations',taskId);
+            await sails.helpers.recalculatePercentages('ld',taskId);
+        }
+        return image;
+    },
 
 };

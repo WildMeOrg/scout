@@ -144,6 +144,19 @@ module.exports = {
 
       }
 
+        // imageCount
+      if(type == 'imageCount'){
+        // Count the number where gt is complete
+        let imageCount = await Images.count({
+            taskIds : [taskId]
+        });
+       let updatedTask = await Tasks.updateOne({ id: taskId })
+       .set({
+         imageCount: imageCount
+       });
+       }
+
+
       return exits.success({});
 
 
