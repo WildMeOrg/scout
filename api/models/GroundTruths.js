@@ -8,6 +8,7 @@ module.exports = {
   },
 
     deleteForImage: async function(imageId) {
-console.log('deleted GroundTruths for imageId=%o', imageId);
+        let deleted = await GroundTruths.destroy({imageId: imageId}).fetch();
+        console.log('- destroyed GroundTruths %o', deleted);
     }
 };

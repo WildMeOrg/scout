@@ -10,6 +10,7 @@ module.exports = {
   },
 
     deleteForImage: async function(imageId) {
-console.log('deleted LineDivisions for imageId=%o', imageId);
+        let deleted = await LineDivisions.destroy({imageId: imageId}).fetch();
+        console.log('- destroyed LineDivisions %o', deleted);
     }
 };

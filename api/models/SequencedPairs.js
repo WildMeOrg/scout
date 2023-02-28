@@ -8,6 +8,9 @@ module.exports = {
   },
 
     deleteForImage: async function(imageId) {
-console.log('deleted SequencedPairs for imageId=%o', imageId);
+        let deleted = await SequencedPairs.destroy({
+            or: [ {imageLeftId: imageId}, {imageRightId: imageId} ]
+        }).fetch();
+        console.log('- destroyed SequencedPairs %o', deleted);
     }
 };

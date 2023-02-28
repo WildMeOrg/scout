@@ -7,6 +7,7 @@ module.exports = {
   },
 
     deleteForImage: async function(imageId) {
-console.log('deleted QueuedImage for imageId=%o', imageId);
+        let deleted = await QueuedImages.destroy({imageId: imageId}).fetch();
+        console.log('- destroyed QueuedImages %o', deleted);
     }
 };

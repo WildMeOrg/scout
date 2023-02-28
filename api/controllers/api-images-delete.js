@@ -36,15 +36,11 @@ module.exports = {
 
     if (!inputs.imageIds.length) throw Error('must provided at least one image id');
 
-/*
-    let updatedImage = await Images.updateOne({ id: inputs.imageid })
-    .set({
-      gtComplete:true
-    });
-*/
+    let ct = 0;
     for (const imageId of inputs.imageIds) {
+        ct++;
         let res = await Images.deleteCascade(imageId);
-console.log('DELETE >>> %o -> %o', imageId, res);
+        console.debug('%d) api FINISHED deleted Image >>> %o -> %o', ct, imageId, res);
     }
 
     return exits.success({});
