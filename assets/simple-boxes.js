@@ -572,25 +572,7 @@ window.simpleBoxes._.methods = {
       let boxData = handle.boxes[box];
       let isHover = boxData.id == handle.canvas.state.hoverBox ? true : false;
       await window.simpleBoxes._.methods.drawIndividualBox(handle,boxData,isHover);
-    }
-    
-    // e.target.setAttribute('tabindex', '0');
-    // e.target.focus();
-
-    const allBoxes = Object.entries(await window.simpleBoxes.getAllBoxes(handle.id));
-    const ids = [];
-    allBoxes.forEach(data => ids.push(data[0].slice(4,)));
-    //Get the latest annotation id
-    const sortedId = ids.sort((a,b) => b-a)[0];
-    //Get the red box, hard-coded "3" here, every annotation has 4 items: 
-    //the trash can icon, the label icon, label, and the red box. They all have the same data-box-id
-    //For now the red box is the 4th item of these, so hard-coded [3].
-    const latestAnnotation = document.querySelectorAll(`[data-box-id = 'box-${sortedId}']`)[3];    
-    if(latestAnnotation) {
-      latestAnnotation.setAttribute('tabindex', '0');
-      latestAnnotation.focus(); 
-    }
-       
+    }     
 
     return;
   },
