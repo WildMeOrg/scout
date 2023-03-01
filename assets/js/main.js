@@ -438,6 +438,9 @@ let getTaskRow = async (task) => {
         <button id="del-${task.id}" data-task-displayName="${task.displayName}" ${disabledAdditions.deletion} data-task-id="${task.id}" class="btn btn-sm btn-secondary taskDeletionTrigger">
           Delete
         </button>
+        <button id="prev-${task.id}" data-link="/tasks/images-preview/${task.id}" class="task-list-button-outbound btn btn-sm btn-secondary">
+            Images
+        </button>
         `;
     }
 
@@ -1733,7 +1736,19 @@ window.imagesDeleteComplete = function(results) {
 }
 
 window.imagesDelete = async (imageIds) => {
-    // FIXME - do the actual delete api here (TBD)
+    const response = await fetch(
+        '/api/images',
+        {
+            method: 'DELETE',
+            body: JSON.stringify({ imageIds: imageIds }),
+            headers: { 'Content-Type': 'application/json' }
+        }
+    );
+    if (!response.ok) {
+        alert('error!');
+        console.log('response => %o', response);
+        return;
+    }
     return {
         success: true,
         imageIds: imageIds
