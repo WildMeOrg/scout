@@ -56,6 +56,14 @@ module.exports = {
       type : 'string',
       description : ''
     },
+    filterWicMin : {
+      type : 'string',
+      description : ''
+    },
+    filterWicMax : {
+      type : 'string',
+      description : ''
+    },
     filteredImageCount : {
       type : 'string',
       description : ''
@@ -125,6 +133,8 @@ module.exports = {
         filterSource: inputs.filterSource,
         filterDateStart: inputs.filterDateStart,
         filterDateEnd: inputs.filterDateEnd,
+        filterWicMin: inputs.filterWicMin,
+        filterWicMax: inputs.filterWicMax,
         taskId : newTask.id
       };
 
@@ -140,6 +150,22 @@ module.exports = {
         imageFilters.filteredImageCount = parseInt(inputs.filteredImageCount);
       }
 
+      if(!inputs.filterWicMin.length){
+        imageFilters.filterWicMin = 0;
+      }
+
+      if(!inputs.filterWicMax.length){
+        imageFilters.filterWicMax = 0;
+      }
+
+      if(inputs.filterWicMin.length){
+        imageFilters.filterWicMin = parseFloat(inputs.filterWicMin);
+      }
+
+      if(inputs.filterWicMax.length){
+        imageFilters.filterWicMax = parseFloat(inputs.filterWicMax);
+      }
+      
       let newUnQueuedTask = await UnQueuedTasks.create(imageFilters).fetch();
       if(!newTask){
         throw Error('Unknown error occured');
