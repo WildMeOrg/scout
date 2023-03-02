@@ -36,7 +36,16 @@ module.exports = {
     subsetEnd : {
       type : 'number',
       description : 'End of subset'
-    }
+    },
+    wicMin : {
+      type : 'number',
+      description : 'wic minimum'
+    },
+    wicMax : {
+      type : 'number',
+      description : 'wic maximum'
+    },
+
   },
 
   exits: {
@@ -134,6 +143,7 @@ module.exports = {
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);
       imagesFound = await Images.filterByLabels(imagesFound, labels);
+      imagesFound = await Images.filterByWic(imagesFound, inputs.wicMin, inputs.wicMax);
       imageCount = imagesFound.length;
     }
 

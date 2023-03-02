@@ -51,6 +51,30 @@ module.exports = {
       }
     }
     return imagesWithLabels;
+  },
+
+  filterByWic: async function(imageList, wicMin, wicMax) {
+    // return imageList;
+    if (!wicMin && !wicMax) return imageList;    
+    let result = [];    
+    for (const image of imageList) {
+    let imagesWithWic = await Annotations.find({
+      imageId : image.id,
+    });
+    imagesWithWic = imagesWithWic || [];
+    if (!imagesWithWic.length) continue;
+
+    wicMin = wicMin || 0;
+    wicMax = wicMax || 1;
+
+    for(const wic of imagesWithWic) {
+      if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
+        result.push(image);
+        break;
+      }
+    }  
+  }
+    return result;
   }
 
 };
