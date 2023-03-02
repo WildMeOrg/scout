@@ -66,6 +66,7 @@ module.exports = {
         await LineDivisions.deleteForImage(id);
         await SequencedPairs.deleteForImage(id);
 
+
         console.info('deleting actual image id=%s', id);
         let deletedImage = await Images.destroyOne({id: id});
 
@@ -105,5 +106,6 @@ module.exports = {
       }
     return result;
   }
+
 
 };
