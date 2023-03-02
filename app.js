@@ -1154,9 +1154,8 @@ const invokeMl = async (fullPath,configName) => {
       return await workers.taskQueuer();
     }
     imagesFound = await Images.filterByLabels(imagesFound, taskData.filterLabels);
-    console.log(imagesFound, "min and max are ",taskData.filterWicMin, taskData.filterWicMax);
     imagesFound = await Images.filterByWic(imagesFound, taskData.filterWicMin, taskData.filterWicMax);
-    console.log(imagesFound);
+    console.log(taskData, "min and max are ",taskData.filterWicMin, taskData.filterWicMax);
 
     // Update the task itself with imageCount
     let updatedTask = await Tasks.updateOne({ id: taskData.taskId })
