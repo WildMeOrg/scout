@@ -929,6 +929,7 @@ $('#imageSelectionFormSubmit').on('click',(e) => {
   $('#filterSubsetEnd').val(window.imageSelectionFormSavedInputs.subsetEnd || '');
   $('#filterWicMin').val(window.imageSelectionFormSavedInputs.wicMin || '');
   $('#filterWicMax').val(window.imageSelectionFormSavedInputs.wicMax || '');
+  console.log(window.imageSelectionFormSavedInputs.wicMin, window.imageSelectionFormSavedInputs.wicMax);
   $('#filterLabels').val(window.imageSelectionFormSavedInputs.labels || '');
   // Set filtered count value
   $('#totalFilteredImages').text(window.imageSelectionFormSavedCount || 0);

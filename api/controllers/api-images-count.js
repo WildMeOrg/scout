@@ -130,14 +130,11 @@ module.exports = {
       cmd.skip = skip;
     }
 
-
     if(inputs.subsetEnd){
       let limit = inputs.subsetEnd - skip > 0 ? inputs.subsetEnd - skip: 0;
       cmd.limit = limit;
 
     }
-
-
 
     imageCount = 0;
     if(!overrideToZero){
