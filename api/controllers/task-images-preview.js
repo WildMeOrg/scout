@@ -11,6 +11,10 @@ module.exports = {
     taskid : {
       type : 'string',
       description : 'id of task'
+    },
+    sortby: {
+        type: 'string',
+        description: 'field to sort by'
     }
   },
 
@@ -57,13 +61,16 @@ module.exports = {
     }
     let taskData = tasks[0];
 
+    let sortBy = inputs.sortby || 'exifTimestamp';
   let images = await Images.find({
     where : {
       taskIds : [taskData.id]
-    }
+    },
+    sort: sortBy
   });
 
     let serverData = {
+      sortBy: sortBy,
       taskData: taskData,
       images: images
     };
