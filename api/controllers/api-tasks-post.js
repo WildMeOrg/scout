@@ -151,11 +151,19 @@ module.exports = {
       }
 
       if(!inputs.filterWicMin.length){
+<<<<<<< HEAD
         imageFilters.filterWicMin = -99999;
       }
 
       if(!inputs.filterWicMax.length){
         imageFilters.filterWicMax = 99999;
+=======
+        imageFilters.filterWicMin = 0;
+      }
+
+      if(!inputs.filterWicMax.length){
+        imageFilters.filterWicMax = 0;
+>>>>>>> c6a20ee (sct-17 filter by wic score)
       }
 
       if(inputs.filterWicMin.length){
