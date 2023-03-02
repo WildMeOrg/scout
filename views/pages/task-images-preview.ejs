@@ -29,7 +29,15 @@
 	</div>
 
 	<div class="row">
-		<div class="col-8"></div>
+		<div class="col-6"></div>
+		<div class="col-2">
+			<select onChange="window.location = window.location.pathname + '?sortby=' + this.value;" class="form-select form-select-sm form-control" id="sortby" aria-label="select">
+				<option value="">Sort by</option>
+				<option <%=(sortBy=='originalFilenameLower'?'selected':'')%> value="originalFilenameLower">File name</option>
+				<option <%=(sortBy=='exifTimestamp'?'selected':'')%> value="exifTimestamp">Image time/date</option>
+				<option <%=(sortBy=='createdAt'?'selected':'')%> value="createdAt">Time created</option>
+			</select>
+		</div>
 		<div class="col-2">
             <button class="btn btn-secondary btn-sm ms-5" type="button" id="imagesPreviewSelectAll">
               Select All
