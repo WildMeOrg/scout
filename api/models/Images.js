@@ -81,4 +81,24 @@ module.exports = {
         return image;
     },
 
+    filterByWic: async function(imageList, wicMin, wicMax) {
+      // return imageList;
+      if (wicMin === -99999 && wicMax === 99999) return imageList;    
+      let result = [];    
+      for (const image of imageList) {
+      let imagesWithWic = await Annotations.find({
+        imageId : image.id,
+      });
+      imagesWithWic = imagesWithWic || [];
+      if (!imagesWithWic.length) continue;
+  
+      for(const wic of imagesWithWic) {
+        if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
+          result.push(image);
+        }
+      }  
+    }
+      return result;
+    }
+
 };
