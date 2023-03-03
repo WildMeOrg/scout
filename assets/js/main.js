@@ -449,7 +449,7 @@ let getTaskRow = async (task) => {
         `;
 
         //tagDiv += '<button class="btn btn-sm btn-outline-secondary">New Tag</button>';
-        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary"><i class="bi-pencil"></i></button>';
+        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return window.openEditTag(this);"><i class="bi-pencil"></i></button>';
     }
 
     tagDiv += '</div>';
@@ -460,6 +460,15 @@ ${tagDiv}
       </tr>
       `;
   return template;
+};
+
+window.openEditTag = function(el) {
+    $('.tag-edit-div').hide();
+    let isOpen = el.dataset.open;
+    $('.tag-edit-button').each(function() { delete this.dataset.open; });
+    if (isOpen) return;
+    el.dataset.open = true;
+    $(el).parent().find('.tag-edit-div').css('display', 'inline-block');
 };
 
 $('button#taskResetButton').on('click', async (e) =>{
