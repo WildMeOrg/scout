@@ -624,6 +624,10 @@ window.simpleBoxes._.methods = {
       $(div).insertAfter('#'+handle.canvas.id);
     }
 
+    // Draw the corners
+
+    if ($("#toggle-switch").is(":checked")) {
+      
     // Draw the trash can
     let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
     trashCanX-=15;
@@ -636,10 +640,6 @@ window.simpleBoxes._.methods = {
       $(trashCanString).insertAfter('#'+handle.canvas.id);
 
     }
-
-    // Draw the corners
-
-    if ($("#toggle-switch").is(":checked")) {
 
     // Draw the label trigger
     let labelX = trashCanX + 25;
