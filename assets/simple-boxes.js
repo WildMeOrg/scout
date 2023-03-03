@@ -600,8 +600,6 @@ window.simpleBoxes._.methods = {
         latestAnnotation.setAttribute('tabindex', '0');
         latestAnnotation.focus(); 
     }
-     
-      
   }   
     return;
   },
