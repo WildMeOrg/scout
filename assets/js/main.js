@@ -408,8 +408,13 @@ let getTaskRow = async (task) => {
     'deletion': task.iCanDelete ? '' : 'disabled',
   }
 
+    let tagDiv = '<div class="task-tags"><b>Tags:</b> ';
+
+    tagDiv += '<div class="task-tag">fake tag</div>';
+    tagDiv += '<div class="task-tag">tag2</div>';
+
   let template = `
-  <tr>
+  <tr style="position: relative; height: 5em;">
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
     <td>${task.randomized == false ? 'seq' : 'rnd'}</td>
@@ -442,9 +447,15 @@ let getTaskRow = async (task) => {
             Images
         </button>
         `;
+
+        //tagDiv += '<button class="btn btn-sm btn-outline-secondary">New Tag</button>';
+        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary"><i class="bi-pencil"></i></button>';
     }
 
+    tagDiv += '</div>';
+
     template+=`
+${tagDiv}
         </td>
       </tr>
       `;

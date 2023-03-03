@@ -15,6 +15,42 @@
     right: 15px;
 }
 
+.task-tags {
+    position: absolute;
+    display: block;
+    left: 0;
+    bottom: 0;
+    padding: 0 0 8px 8px;
+}
+
+.task-tag {
+    display: inline-block;
+    padding: 2px 4px;
+    border: solid 1px #888;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #888;
+    margin: 0 2px;
+}
+
+.tag-edit-div {
+    /* display: inline-block;*/
+    display: none;
+}
+.tag-edit-div input,
+.tag-edit-div button {
+    margin: 0 3px;
+}
+.tag-edit-div input {
+    width: 10em;
+}
+
+.tag-edit-button {
+    visibility: hidden;
+}
+tr:hover .tag-edit-button {
+    visibility: visible;
+}
 
 #sidebar-opened{
   display: none;
