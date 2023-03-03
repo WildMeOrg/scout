@@ -52,7 +52,7 @@ module.exports.routes = {
   'GET /uploads/:imageid' : { action: 'static-uploads' },
   'GET /csvs/:csvid' : { action: 'csv-files' },
   'POST /api/tags' : { action: 'api-tags-post' },
-  //'DELETE /api/tags' : { action: 'api-labels-delete' },
+  'DELETE /api/tags/:id' : { action: 'api-tags-delete' },
   'GET /:unknown' : { action: 'error-404' }
 
 };
