@@ -636,8 +636,6 @@ window.simpleBoxes._.methods = {
       handle.canvas.ctx.fillStyle = 'rgba(255, 136, 46, 0.35)';
     }
 
-    var rect = document.querySelector("#annotationOuterWrapper").getBoundingClientRect();
-
     let reverseRatio =  handle.image.currentDimensions.w / handle.image.actualDimensions.w;
     
     let copy = Object.assign({}, box);
