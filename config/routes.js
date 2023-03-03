@@ -51,6 +51,8 @@ module.exports.routes = {
   'PUT /api/sequenced-pairs/:sequencedpairid' : { action: 'api-sequencedpairs-put' },
   'GET /uploads/:imageid' : { action: 'static-uploads' },
   'GET /csvs/:csvid' : { action: 'csv-files' },
+  'POST /api/tags' : { action: 'api-tags-post' },
+  //'DELETE /api/tags' : { action: 'api-labels-delete' },
   'GET /:unknown' : { action: 'error-404' }
 
 };
