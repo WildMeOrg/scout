@@ -772,7 +772,7 @@ const imageSelectionFormChange = async () => {
 
   window.tagsList.forEach(data => {
     if(data.hotKey) {
-      let hotKey = `<span class = "hotKeySpan">${data.name} <i>${data.hotKey}</i></span>`;
+      let hotKey = `<span class = "hotKeySpan">${data.name.length>13 ? data.name.slice(0,12)+"..." : data.name} <i>${data.hotKey}</i></span>`;
       $('#hotKeyBox').append(hotKey)
     }      
   })  
