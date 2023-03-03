@@ -53,6 +53,7 @@ module.exports = {
     return imagesWithLabels;
   },
 
+
     deleteCascade: async function(id) {
         let image = await Images.findOne({id: id});
         if (!image) return;
@@ -65,7 +66,6 @@ module.exports = {
         await LineDivisions.deleteForImage(id);
         await SequencedPairs.deleteForImage(id);
 
-<<<<<<< HEAD
         console.info('deleting actual image id=%s', id);
         let deletedImage = await Images.destroyOne({id: id});
 
@@ -80,36 +80,6 @@ module.exports = {
             await sails.helpers.recalculatePercentages('ld',taskId);
         }
         return image;
-    },
-
-    filterByWic: async function(imageList, wicMin, wicMax) {
-      // return imageList;
-      if (wicMin === -99999 && wicMax === 99999) return imageList;    
-      let result = [];    
-      for (const image of imageList) {
-      let imagesWithWic = await Annotations.find({
-        imageId : image.id,
-      });
-      imagesWithWic = imagesWithWic || [];
-      if (!imagesWithWic.length) continue;
-  
-      for(const wic of imagesWithWic) {
-        if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
-          result.push(image);
-        }
-      }  
-    }
-      return result;
-    }
-=======
-    for(const wic of imagesWithWic) {
-      if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
-        result.push(image);
-      }
-    }  
-  }
-    return result;
-  }
->>>>>>> c6a20ee (sct-17 filter by wic score)
+    },   
 
 };
