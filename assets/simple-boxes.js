@@ -253,6 +253,8 @@ window.simpleBoxes._.methods = {
 
     const myX = e.clientX - $(el).offset().left;
     const myY = e.clientY - $(el).offset().top;
+    // console.log(window.scrollX, myX, e.clientX - $(el).offset().left);
+    
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
     if(overWhichBox.box){
       state.activeBox = overWhichBox.box;
@@ -303,8 +305,8 @@ window.simpleBoxes._.methods = {
     const ctx = handle.canvas.ctx;
     const state = handle.canvas.state;
     // Figure out where cursor is
-    const myX = e.clientX - $(el).offset().left;
-    const myY = e.clientY - $(el).offset().top;
+    const myX = e.clientX - $(el).offset().left + window.scrollX;
+    const myY = e.clientY - $(el).offset().top + window.scrollY;
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
@@ -384,8 +386,8 @@ window.simpleBoxes._.methods = {
           let newBoxId = 'box-'+Date.now();
           state.activeBox = {
             id : newBoxId,
-            x : e.clientX - $(el).offset().left,
-            y : e.clientY - $(el).offset().top,
+            x : e.clientX - $(el).offset().left + window.scrollX,
+            y : e.clientY - $(el).offset().top + window.scrollY,
             w : 0,
             h : 0,
             label : null
@@ -631,8 +633,10 @@ window.simpleBoxes._.methods = {
       handle.canvas.ctx.fillStyle = 'rgba(255, 136, 46, 0.35)';
     }
 
-    let reverseRatio =  handle.image.currentDimensions.w / handle.image.actualDimensions.w;
+    var rect = document.querySelector("#annotationOuterWrapper").getBoundingClientRect();
 
+    let reverseRatio =  handle.image.currentDimensions.w / handle.image.actualDimensions.w;
+    
     let copy = Object.assign({}, box);
 
     copy.x = copy.x * reverseRatio;
@@ -640,7 +644,6 @@ window.simpleBoxes._.methods = {
     copy.w = copy.w * reverseRatio;
     copy.h = copy.h * reverseRatio;
     handle.canvas.ctx.fillRect(copy.x, copy.y, copy.w, copy.h);
-
 
     // //Draw the box which user can select and use DEL to delete
     let divX = copy.w > 0 ? copy.x : copy.x + copy.w;
