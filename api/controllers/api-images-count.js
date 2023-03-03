@@ -136,6 +136,23 @@ module.exports = {
 
     }
 
+    if(!inputs.wicMin && inputs.wicMin !== 0){
+      inputs.wicMin = -99999;
+    }
+
+    if(!inputs.wicMax && inputs.wicMax !== 0){
+      inputs.wicMax = 99999;
+    }
+
+    if(inputs.wicMin || inputs.wicMin === 0){
+      inputs.wicMin = parseFloat(inputs.wicMin);
+    }
+
+    if(inputs.wicMax || inputs.wicMax === 0){
+      inputs.wicMax = parseFloat(inputs.wicMax);
+    }
+    
+
     imageCount = 0;
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);

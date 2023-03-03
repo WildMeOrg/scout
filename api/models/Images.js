@@ -55,7 +55,7 @@ module.exports = {
 
   filterByWic: async function(imageList, wicMin, wicMax) {
     // return imageList;
-    if (!wicMin && !wicMax) return imageList;    
+    if (wicMin === -99999 && wicMax === 99999) return imageList;    
     let result = [];    
     for (const image of imageList) {
     let imagesWithWic = await Annotations.find({
@@ -63,9 +63,6 @@ module.exports = {
     });
     imagesWithWic = imagesWithWic || [];
     if (!imagesWithWic.length) continue;
-
-    wicMin = wicMin || 0;
-    wicMax = wicMax || 1;
 
     for(const wic of imagesWithWic) {
       if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
