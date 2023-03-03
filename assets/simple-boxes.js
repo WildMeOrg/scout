@@ -252,9 +252,8 @@ window.simpleBoxes._.methods = {
     // Set dragtype and dragcorner
 
     const myX = e.clientX - $(el).offset().left;
-    const myY = e.clientY - $(el).offset().top;
-    // console.log(window.scrollX, myX, e.clientX - $(el).offset().left);
-    
+    const myY = e.clientY - $(el).offset().top;   
+
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
     if(overWhichBox.box){
       state.activeBox = overWhichBox.box;
@@ -590,8 +589,7 @@ window.simpleBoxes._.methods = {
     if(latestAnnotation) {      
       const elementRect = latestAnnotation.getBoundingClientRect();
       const parentRect = document.querySelector("#annotationOuterWrapper").getBoundingClientRect();
-      // console.log(elementRect);
-      // console.log(parentRect.left);
+      //If the latest annotation is out of the boundary of the container, de-focus
       if (elementRect.left < parentRect.left + 10 ||
         elementRect.right > parentRect.right - 10||
         elementRect.top < parentRect.top + 10||
@@ -632,8 +630,6 @@ window.simpleBoxes._.methods = {
     if(isHover){
       handle.canvas.ctx.fillStyle = 'rgba(255, 136, 46, 0.35)';
     }
-
-    var rect = document.querySelector("#annotationOuterWrapper").getBoundingClientRect();
 
     let reverseRatio =  handle.image.currentDimensions.w / handle.image.actualDimensions.w;
     
