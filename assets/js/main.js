@@ -410,11 +410,11 @@ let getTaskRow = async (task) => {
 
     let tagDiv = '<div class="task-tags"><b>Tags:</b> ';
 
-    tagDiv += '<div class="task-tag">fake tag</div>';
-    tagDiv += '<div class="task-tag">tag2</div>';
+    tagDiv += '<div data-id="001" class="task-tag">fake tag</div>';
+    tagDiv += '<div data-id="002" class="task-tag">tag2</div>';
 
   let template = `
-  <tr style="position: relative; height: 5em;">
+  <tr id="task-row-${task.id}" style="position: relative; height: 5em;">
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
     <td>${task.randomized == false ? 'seq' : 'rnd'}</td>
@@ -449,7 +449,7 @@ let getTaskRow = async (task) => {
         `;
 
         //tagDiv += '<button class="btn btn-sm btn-outline-secondary">New Tag</button>';
-        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return window.openEditTag(this);"><i class="bi-pencil"></i></button>';
+        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
     }
 
     tagDiv += '</div>';
@@ -462,14 +462,6 @@ ${tagDiv}
   return template;
 };
 
-window.openEditTag = function(el) {
-    $('.tag-edit-div').hide();
-    let isOpen = el.dataset.open;
-    $('.tag-edit-button').each(function() { delete this.dataset.open; });
-    if (isOpen) return;
-    el.dataset.open = true;
-    $(el).parent().find('.tag-edit-div').css('display', 'inline-block');
-};
 
 $('button#taskResetButton').on('click', async (e) =>{
   e.preventDefault();
@@ -556,6 +548,36 @@ $('#deletionConfirmButton').on('click', async (e) => {
   }
 });
 
+
+//const removeTagFromTaskClick = async (el) => {
+const removeTagFromTask = async (tagId, taskId) => {
+    console.log('taskId=%o tagId=%o', taskId, tagId);
+    return true;
+}
+
+window.openEditTag = function(el) {
+    $('.tag-edit-div').hide();
+    $('i.bi-x').remove();
+    let isOpen = el.dataset.open;
+    $('.tag-edit-button').each(function() { delete this.dataset.open; });
+    if (isOpen) return;
+    el.dataset.open = true;
+    $(el).parent().find('.tag-edit-div').css('display', 'inline-block');
+    $(el).parent().find('.task-tag').each(function() {
+        let rmButton = $('<i class="bi-x task-tag-rm"></i>');
+        rmButton.on('click', async (ev) => {
+            let tagId = ev.currentTarget.parentElement.dataset.id;
+            let taskId = ev.currentTarget.parentElement.parentElement.parentElement.parentElement.id.substring(9);
+            const success = await removeTagFromTask(tagId, taskId);
+            if (success) {
+                ev.currentTarget.parentElement.remove();
+            } else {
+                alert('error removing tag');
+            }
+        });
+        rmButton.appendTo(this);
+    });
+}
 
 const populateTaskNamesDataList = async () => {
   let query = $('input#taskNamesDataList').val();
