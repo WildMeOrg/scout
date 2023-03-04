@@ -449,7 +449,7 @@ let getTaskRow = async (task) => {
         `;
 
         //tagDiv += '<button class="btn btn-sm btn-outline-secondary">New Tag</button>';
-        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
+        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="tag-save-button btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
     }
 
     tagDiv += '</div>';
@@ -549,10 +549,17 @@ $('#deletionConfirmButton').on('click', async (e) => {
 });
 
 
-//const removeTagFromTaskClick = async (el) => {
 const removeTagFromTask = async (tagId, taskId) => {
     console.log('taskId=%o tagId=%o', taskId, tagId);
     return true;
+}
+
+const addTagToTask = async (tag, taskId) => {
+    console.log('taskId=%o tag=%o', taskId, tag);
+    return {
+        success: true,
+        id: 'abcdefg'
+    };
 }
 
 window.openEditTag = function(el) {
@@ -1666,8 +1673,20 @@ if(window.data.pageName == 'export'){
 };
 
 
-
-
+    $('.tag-save-button').on('click', async (ev) => {
+        let el = ev.currentTarget;
+        let val = $(el.parentElement).find('input').val();
+        let taskId = el.parentElement.parentElement.parentElement.parentElement.id.substring(9);
+        if (val == '') return;
+        const res = await addTagToTask(val, taskId);
+        if (res.success) {
+            $('.tag-edit-div input').val('');
+            window.openEditTag($(el.parentElement.parentElement).find('i')[0]);  //closes edit div
+            $(el.parentElement).before('<div data-id="' + res.id + '" class="task-tag">' + val + '</div>');
+        } else {
+            alert(res.error);
+        }
+    });
 
 
 });
