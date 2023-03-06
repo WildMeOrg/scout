@@ -52,6 +52,7 @@ module.exports = {
       lastTaskName = lastTasks[0].displayName;
     }
 
+    let availableTags = await Tags.find();
     let serverData = {
       ingestionActive : ingestionActive,
       secondaryNav : 'tasks',
@@ -60,6 +61,7 @@ module.exports = {
     };
 
     let clientData = {
+      availableTags: availableTags,
       pageName : 'taskList'
     };
     let data = await sails.helpers.viewData(this.req,serverData,clientData);

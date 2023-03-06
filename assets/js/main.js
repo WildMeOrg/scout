@@ -448,8 +448,11 @@ let getTaskRow = async (task) => {
         </button>
         `;
 
-        //tagDiv += '<button class="btn btn-sm btn-outline-secondary">New Tag</button>';
-        tagDiv += ' <div class="tag-edit-div"><input placeholder="Enter tag" /><button class="tag-save-button btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
+        let tagOptions = '';
+        for (const tag of window.data.availableTags) {
+            tagOptions += '<option value="' + tag.id + '">' + tag.name + '</option>';
+        }
+        tagDiv += ' <div class="tag-edit-div"><select><option value="">Choose tag</option>' + tagOptions + '</select><input placeholder="Enter new tag" /><button class="tag-save-button btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
     }
 
     tagDiv += '</div>';
@@ -554,10 +557,19 @@ const removeTagFromTask = async (tagId, taskId) => {
     return true;
 }
 
-const addTagToTask = async (tag, taskId) => {
-    console.log('taskId=%o tag=%o', taskId, tag);
+const addTagIdToTask = async (tagId, taskId) => {
+    console.log('taskId=%o tagId=%o', taskId, tagId);
     return {
         success: true,
+        name: 'fubar?',
+        id: tagId
+    };
+}
+const addNewTagToTask = async (newTagName, taskId) => {
+    console.log('taskId=%o newTagName=%o', taskId, newTagName);
+    return {
+        success: true,
+        name: newTagName,
         id: 'abcdefg'
     };
 }
@@ -1675,14 +1687,23 @@ if(window.data.pageName == 'export'){
 
     $('.tag-save-button').on('click', async (ev) => {
         let el = ev.currentTarget;
-        let val = $(el.parentElement).find('input').val();
         let taskId = el.parentElement.parentElement.parentElement.parentElement.id.substring(9);
-        if (val == '') return;
-        const res = await addTagToTask(val, taskId);
+        let addNewValue = $(el.parentElement).find('input').val();
+        let addTagId = $(el.parentElement).find('select').val();
+console.log('addNewVal = %o | addTagId = %o', addNewValue, addTagId);
+        if (!addNewValue && !addTagId) return;
+        let res = null;
+        if (addNewValue) {
+            res = await addNewTagToTask(addNewValue, taskId);
+        } else {
+            res = await addTagIdToTask(addTagId, taskId);
+        }
+console.log('res => %o', res);
         if (res.success) {
             $('.tag-edit-div input').val('');
+            $('.tag-edit-div select').val('');
             window.openEditTag($(el.parentElement.parentElement).find('i')[0]);  //closes edit div
-            $(el.parentElement).before('<div data-id="' + res.id + '" class="task-tag">' + val + '</div>');
+            $(el.parentElement).before('<div data-id="' + res.id + '" class="task-tag">' + res.name + '</div>');
         } else {
             alert(res.error);
         }
