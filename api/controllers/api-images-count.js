@@ -137,11 +137,11 @@ module.exports = {
     }
 
     if(!inputs.wicMin && inputs.wicMin !== 0){
-      inputs.wicMin = -Number.MAX_SAFE_INTEGER;
+      inputs.wicMin = -99999999;
     }
 
     if(!inputs.wicMax && inputs.wicMax !== 0){
-      inputs.wicMax = Number.MAX_SAFE_INTEGER;
+      inputs.wicMax = 99999999;
     }
 
     if(inputs.wicMin || inputs.wicMin === 0){
