@@ -80,6 +80,30 @@ module.exports = {
             await sails.helpers.recalculatePercentages('ld',taskId);
         }
         return image;
-    },   
+    },  
+    
+    
+  filterByWic: async function(imageList, wicMin, wicMax) {
+    if (wicMin === -99999999 && wicMax === 99999999) return imageList;    
+    let result = [];  
+    const set = new Set();
+    for (const image of imageList) {       
+      let imagesWithWic = await Annotations.find({
+        imageId : image.id,
+      });
+      imagesWithWic = imagesWithWic || [];
+      if (!imagesWithWic.length) continue;  
+      for(const wic of imagesWithWic) {
+        if (wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
+            if(!set.has(image.id)) {
+              result.push(image);
+              set.add(image.id);
+            }
+            break;        
+          }     
+        }   
+      }
+    return result;
+  }
 
 };
