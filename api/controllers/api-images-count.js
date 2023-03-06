@@ -136,6 +136,8 @@ module.exports = {
 
     }
 
+    //If user didn't enter any wicMin/wicMax, set it to -99999999/99999999 
+    //because Infinity/Number.MAX_VALUE will cause some errors here
     if(!inputs.wicMin && inputs.wicMin !== 0){
       inputs.wicMin = -99999999;
     }
