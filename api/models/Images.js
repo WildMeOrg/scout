@@ -105,6 +105,9 @@ module.exports = {
       }
     return result;
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2eb961adda9a651fbc8c3fc109874ff6cbcad663
 
 };
