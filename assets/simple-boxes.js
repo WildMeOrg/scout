@@ -250,9 +250,9 @@ window.simpleBoxes._.methods = {
     // Clicked on something, determine if it's center or one of the corners
     // Move the correct item into state.activebox, or set activebox to false
     // Set dragtype and dragcorner
-
-    const myX = e.clientX - $(el).offset().left;
-    const myY = e.clientY - $(el).offset().top;   
+     
+    const myX = e.clientX - $(el).offset().left + window.scrollX;
+    const myY = e.clientY - $(el).offset().top + window.scrollY;   
 
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
     if(overWhichBox.box){
@@ -303,7 +303,7 @@ window.simpleBoxes._.methods = {
     const el = handle.canvas.element;
     const ctx = handle.canvas.ctx;
     const state = handle.canvas.state;
-    // Figure out where cursor is
+    // Figure out where cursor is    
     const myX = e.clientX - $(el).offset().left + window.scrollX;
     const myY = e.clientY - $(el).offset().top + window.scrollY;
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
@@ -384,7 +384,7 @@ window.simpleBoxes._.methods = {
           // console.log("I am dragging on nothing, so now we create a box so I can drag it's corner")
           let newBoxId = 'box-'+Date.now();
           state.activeBox = {
-            id : newBoxId,
+            id : newBoxId,            
             x : e.clientX - $(el).offset().left + window.scrollX,
             y : e.clientY - $(el).offset().top + window.scrollY,
             w : 0,
