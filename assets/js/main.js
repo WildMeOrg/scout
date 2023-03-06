@@ -457,11 +457,7 @@ let getTaskRow = async (task) => {
         </button>
         `;
 
-        let tagOptions = '';
-        for (const tag of window.data.availableTags) {
-            tagOptions += '<option value="' + tag.id + '">' + tag.name + '</option>';
-        }
-        tagDiv += ' <div class="tag-edit-div"><select><option value="">Choose tag</option>' + tagOptions + '</select><input placeholder="Enter new tag" /><button class="tag-save-button btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
+        tagDiv += ' <div class="tag-edit-div"><select></select><input placeholder="Enter new tag" /><button class="tag-save-button btn btn-sm btn-secondary">Save</button></div><button class="tag-edit-button btn btn-sm btn-secondary" onClick="return openEditTag(this);"><i class="bi-pencil"></i></button>';
     }
 
     tagDiv += '</div>';
@@ -581,10 +577,18 @@ const addTagIdToTask = async (tagId, taskId) => {
 }
 const addNewTagToTask = async (newTagName, taskId) => {
     console.log('taskId=%o newTagName=%o', taskId, newTagName);
+let fakeId = 'zzz123';
+let fakeAll = JSON.parse(JSON.stringify(window.data.availableTags));
+fakeAll.push({id: fakeId, name: newTagName});
+    const response = {
+        id: 'zzzzz123',
+        allTags: fakeAll
+    };
+    window.data.availableTags = response.allTags;
     return {
         success: true,
         name: newTagName,
-        id: 'abcdefg'
+        id: fakeId
     };
 }
 
@@ -595,6 +599,13 @@ window.openEditTag = function(el) {
     $('.tag-edit-button').each(function() { delete this.dataset.open; });
     if (isOpen) return;
     el.dataset.open = true;
+
+    let tagOptions = '<option value="">Choose tag</option>';
+    for (const tag of window.data.availableTags) {
+        tagOptions += '<option value="' + tag.id + '">' + tag.name + '</option>';
+    }
+    $(el).parent().find('.tag-edit-div select').html(tagOptions);
+
     $(el).parent().find('.tag-edit-div').css('display', 'inline-block');
     $(el).parent().find('.task-tag').each(function() {
         let rmButton = $('<i class="bi-x task-tag-rm"></i>');
