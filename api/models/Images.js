@@ -84,7 +84,7 @@ module.exports = {
     
     
   filterByWic: async function(imageList, wicMin, wicMax) {
-    if (wicMin === -Number.MAX_SAFE_INTEGER && wicMax === Number.MAX_SAFE_INTEGER) return imageList;    
+    if (wicMin === -99999999 && wicMax === 99999999) return imageList;    
     let result = [];  
     const set = new Set();
     for (const image of imageList) {       

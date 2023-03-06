@@ -151,11 +151,11 @@ module.exports = {
       }
 
       if(!inputs.filterWicMin.length){
-        imageFilters.filterWicMin = -Number.MAX_SAFE_INTEGER;
+        imageFilters.filterWicMin = -99999999;
       }
 
       if(!inputs.filterWicMax.length){
-        imageFilters.filterWicMax = Number.MAX_SAFE_INTEGER;
+        imageFilters.filterWicMax = 99999999;
       }
 
       if(inputs.filterWicMin.length){
