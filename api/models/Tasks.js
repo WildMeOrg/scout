@@ -12,6 +12,7 @@ module.exports = {
     sequencingComplete : {type: 'boolean', defaultsTo : false},
     randomized : {type: 'boolean', defaultsTo : true},
     imageCount: { type: 'number', defaultsTo : 0},
+    tagIds: { type: 'json', columnType : "array" },
     createdByUserId: { type: 'string', required: true }
   }
 };
