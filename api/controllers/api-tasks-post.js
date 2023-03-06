@@ -152,17 +152,13 @@ module.exports = {
 
       if(!inputs.filterWicMin.length){
         imageFilters.filterWicMin = -99999999;
+      } else {
+        imageFilters.filterWicMin = parseFloat(inputs.filterWicMin);
       }
 
       if(!inputs.filterWicMax.length){
         imageFilters.filterWicMax = 99999999;
-      }
-
-      if(inputs.filterWicMin.length){
-        imageFilters.filterWicMin = parseFloat(inputs.filterWicMin);
-      }
-
-      if(inputs.filterWicMax.length){
+      } else {
         imageFilters.filterWicMax = parseFloat(inputs.filterWicMax);
       }
       
