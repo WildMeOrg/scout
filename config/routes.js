@@ -41,6 +41,7 @@ module.exports.routes = {
   'DELETE /api/images' : { action: 'api-images-delete' },
   'POST /api/tasks' : { action: 'api-tasks-post' },
   'GET /api/tasks' : { action: 'api-tasks-get' },
+  'PUT /api/tasks' : { action: 'api-tasks-put' },
   'POST /api/annotations' : { action: 'api-annotations-post' },
   'POST /api/ground-truths' : { action: 'api-ground-truths-post' },
   'POST /api/line-divisions' : { action: 'api-line-divisions-post' },
