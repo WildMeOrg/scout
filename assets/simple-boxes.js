@@ -253,9 +253,6 @@ window.simpleBoxes._.methods = {
      
     const myX = e.clientX - $(el).offset().left + window.scrollX;
     const myY = e.clientY - $(el).offset().top + window.scrollY;   
-   
-    // console.log(window.scrollX, myX, e.clientX - $(el).offset().left);
-    
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
     if(overWhichBox.box){
       state.activeBox = overWhichBox.box;
