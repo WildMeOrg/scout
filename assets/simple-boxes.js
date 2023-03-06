@@ -253,7 +253,6 @@ window.simpleBoxes._.methods = {
      
     const myX = e.clientX - $(el).offset().left + window.scrollX;
     const myY = e.clientY - $(el).offset().top + window.scrollY;   
-
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
     if(overWhichBox.box){
       state.activeBox = overWhichBox.box;
@@ -588,7 +587,8 @@ window.simpleBoxes._.methods = {
     const latestAnnotation = document.querySelectorAll(`[data-box-id = 'box-${sortedId}']`)[3];    
     if(latestAnnotation) {      
       const elementRect = latestAnnotation.getBoundingClientRect();
-      const parentRect = document.querySelector("#annotationOuterWrapper").getBoundingClientRect();
+      const parentDiv = document.querySelector("#annotationOuterWrapper") || document.querySelector("#scrollBoxLeft");
+      const parentRect = parentDiv.getBoundingClientRect();
       //If the latest annotation is out of the boundary of the container, de-focus
       if (elementRect.left < parentRect.left + 10 ||
         elementRect.right > parentRect.right - 10||
@@ -600,6 +600,8 @@ window.simpleBoxes._.methods = {
         latestAnnotation.setAttribute('tabindex', '0');
         latestAnnotation.focus(); 
     }
+     
+      
   }   
     return;
   },
