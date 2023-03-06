@@ -400,6 +400,14 @@ if(window.data.pageName == 'taskList'){
 
 }
 
+window.getTagName = function(tagId) {
+    let tname = 'UNKNOWN TAG';
+    for (const tag of (window.data.availableTags || [])) {
+        if (tag.id == tagId) tname = tag.name;
+    }
+    return tname;
+}
+
 let getTaskRow = async (task) => {
   let disabledAdditions = {
     'annotation': task.iCanAnnotate ? '' : 'disabled',
@@ -410,8 +418,9 @@ let getTaskRow = async (task) => {
 
     let tagDiv = '<div class="task-tags"><b>Tags:</b> ';
 
-    tagDiv += '<div data-id="001" class="task-tag">fake tag</div>';
-    tagDiv += '<div data-id="002" class="task-tag">tag2</div>';
+    for (const tagId of (task.tagIds || [])) {
+        tagDiv += '<div data-id="' + tagId + '" class="task-tag">' + window.getTagName(tagId) + '</div>';
+    }
 
   let template = `
   <tr id="task-row-${task.id}" style="position: relative; height: 5em;">
@@ -559,9 +568,14 @@ const removeTagFromTask = async (tagId, taskId) => {
 
 const addTagIdToTask = async (tagId, taskId) => {
     console.log('taskId=%o tagId=%o', taskId, tagId);
+    const response = await fetch('/api/tasks', {
+        method: 'PUT',
+        body: JSON.stringify({taskId: taskId, tagId: tagId}),
+        headers: { 'Content-Type': 'application/json' },
+    });
     return {
         success: true,
-        name: 'fubar?',
+        name: window.getTagName(tagId),
         id: tagId
     };
 }
