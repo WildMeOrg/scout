@@ -95,6 +95,7 @@ module.exports = {
     for(const wic of imagesWithWic) {
       if(wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
         result.push(image);
+        break;
       }
     }  
   }
