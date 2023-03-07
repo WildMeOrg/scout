@@ -28,6 +28,10 @@ module.exports = {
       description : 'left or right',
       required : true
     },
+    tagIds : {
+      type : [ 'string' ],
+      description : 'tags (ids)'
+    },
     filterLabels : {
       type : ['string'],
       description : ''
@@ -108,6 +112,7 @@ module.exports = {
         taskType : mlAssignees.hasOwnProperty(inputs.assignee) ? 'ml' : 'user',
         assignee : inputs.assignee,
         orientation : inputs.orientation,
+        tagIds : inputs.tagIds,
         randomized : inputs.randomized,
         createdByUserId : this.req.session.userId
       }

@@ -44,6 +44,17 @@
           <label for="assignee">Assignee</label>
         </div>
 
+<% if (allTags.length) { %>
+        <div class="form-floating">
+	  <select size="5" style="height: 7em;" class="form-select form-control" multiple name="tagIds" id="tagIds" aria-label="multiple select">
+		  <% for (const tag of allTags) { %>
+		    <option value="<%=tag.id%>"><%=tag.name%></option>
+		  <% } %>
+          </select>
+          <label for="tagIds">Tags</label>
+        </div>
+<% } %>
+
         <div class="form-floating">
           <select required class="form-select form-control" name="randomized" id="randomized">
             <option value="false">Sequential</option>

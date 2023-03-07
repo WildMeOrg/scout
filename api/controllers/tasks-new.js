@@ -59,12 +59,14 @@ module.exports = {
     }
 
     let tasks = await Tasks.find({where : {}, limit: 10, sort: 'name ASC'});
+    let allTags = await Tags.find({where : {}, sort: 'name ASC'});
 
     let serverData = {
       users: users,
       imageCountTotal : imageCount,
       ingestionActive : ingestionActive,
       allLabelNames : allLabelNames,
+      allTags: allTags,
       tasks : tasks
     };
     let clientData = {
