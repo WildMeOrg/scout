@@ -14,5 +14,26 @@ module.exports = {
     imageCount: { type: 'number', defaultsTo : 0},
     tagIds: { type: 'json', columnType : "array" },
     createdByUserId: { type: 'string', required: true }
-  }
+  },
+
+    addTagId: async function(task, tagId) {
+        let tagIds = task.tagIds || [];
+        if (tagIds.indexOf(tagId)) {
+            tagIds.push(tagId);
+            let updatedTask = await Tasks.updateOne({ id: task.id }).set({tagIds: tagIds});
+            if (!updatedTask) throw Error('unknown error');
+        }
+        return tagIds;
+    },
+
+    removeTagId: async function(task, tagId) {
+        let tagIds = task.tagIds || [];
+        let ind = tagIds.indexOf(tagId);
+        if (ind >= 0) {
+            tagIds.splice(ind, 1);
+            let updatedTask = await Tasks.updateOne({ id: task.id }).set({tagIds: tagIds});
+            if (!updatedTask) throw Error('unknown error');
+        }
+        return tagIds;
+    }
 };

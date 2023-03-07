@@ -5,6 +5,9 @@ module.exports = {
     name: {
       type: 'string',
       required: true
+    },
+    taskId: {
+        type: 'string'
     }
   },
   exits: {
@@ -41,7 +44,17 @@ module.exports = {
       errorsObject.name = "Tag name already exists.";
       return exits.validationFailed({errorsObject : errorsObject});
     }
+
+    let task = null;
+    if (inputs.taskId) {
+        task = await Tasks.findOne({id: inputs.taskId});
+        if (!task) {
+            errorsObject.name = "Invalid task ID";
+            return exits.validationFailed({errorsObject : errorsObject});
+        }
+    }
     newTag = await Tags.create({ name: name }).fetch(); 
+    if (task) await Tasks.addTagId(task, newTag.id);
     return exits.success(newTag);
   }
 
