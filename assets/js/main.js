@@ -716,7 +716,7 @@ const imageSelectionFormChange = async () => {
     let count = 0;
     while(count<10) {
       allOptions.push(count);
-      // allOptions.push("ctrl + "+count);
+      allOptions.push("shft+"+count);
       count++;
     }    
     return allOptions;    
