@@ -652,9 +652,7 @@ window.simpleBoxes._.methods = {
       $(div).insertAfter('#'+handle.canvas.id);
     }
 
-    // Draw the corners
-
-    if ($("#toggle-switch").is(":checked")) {
+    // Draw the corners    
       
     // Draw the trash can
     let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
@@ -683,14 +681,29 @@ window.simpleBoxes._.methods = {
     let labelContentY = labelY;
     let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
     let labelContentString = `
-    <i class="bi labelContent tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelContentY}px; left: ${labelContentX}px">${labelTest == null ? "" :labelTest }</i>    
+    <i class="bi labelContent tagIcon" 
+      data-handle-id="${handle.id}" 
+      data-box-id="${copy.id}" 
+      style="
+      top: ${labelContentY}px; 
+      left: ${labelContentX}px; 
+      width: ${(labelTest || "").length * 10}px !important
+      ">
+      ${labelTest == null ? "" :labelTest }
+      </i>    
     `;
-    //${labelTest == null ? "" :labelTest }
+
     $(labelContentString).insertAfter('#'+handle.canvas.id);
 
+    if ($("#toggle-switch").is(":checked")) {
+      $('i.labelContent').css("display", "block");
+      $('i.labelBoxTrigger').css("display", "block");
+      $('i.deleteBoxTrigger ').css("display", "block");
+    } else {
+      $('i.labelContent').css("display", "none");
+      $('i.labelBoxTrigger').css("display", "none");  
+      $('i.deleteBoxTrigger ').css("display", "none");   
     }
-    
-
 
     return;
   },
@@ -833,23 +846,27 @@ $( document ).ready(function() {
     }
   });       
 
-  const boxKeyDownEvent = async (keycode, handleId, boxId) => {
+  const boxKeyDownEvent = async (e, handleId, boxId) => {
     const pair = [];
     [0,1,2,3,4,5,6,7,8,9].forEach(data => {
       pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
     });
 
+    const isShiftPressed = e.shiftKey;
+    const keycode = e.keyCode;
+    let label = "";
     for(let i = 0; i < pair.length; i++) {          
       // Detect keys pressed down
-      if (keycode === pair[i].keyCode) {
-        const label = window.tagsList.find(l => l.hotKey === pair[i].key);
-        if(label) {
-          window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
-          // Remove the event listener after the label has been updated
-          await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-        }            
-        break;
+      if (isShiftPressed && keycode === pair[i].keyCode) {
+        label = window.tagsList.find(l => l.hotKey === `shft+${pair[i].key}`);         
+      }else if (keycode === pair[i].keyCode) {
+        label = window.tagsList.find(l => l.hotKey === pair[i].key);
       }
+      if(label) {
+        window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
+        await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
+        break;
+      }  
     }
   }
   $('body').on('click', 'i.delHotKeyBox', async (e) => {
@@ -862,7 +879,7 @@ $( document ).ready(function() {
     let handleId = $(e.target).attr('data-handle-id');
     // console.log("focusing is the same as clicking, ", e.target);
     if($(e.target).attr('tabindex') === '0') {
-      await boxKeyDownEvent(e.keyCode, handleId, boxId);
+      await boxKeyDownEvent(e, handleId, boxId);
     }
   });
 
@@ -891,7 +908,6 @@ $( document ).ready(function() {
       $('i.labelContent').css("display", "none");
       $('i.labelBoxTrigger').css("display", "none");  
       $('i.deleteBoxTrigger ').css("display", "none");   
-
     }
   });
 
