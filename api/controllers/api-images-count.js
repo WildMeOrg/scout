@@ -36,7 +36,15 @@ module.exports = {
     subsetEnd : {
       type : 'number',
       description : 'End of subset'
-    }
+    },
+    wicMin : {
+      type : 'number',
+      description : 'wic minimum'
+    },
+    wicMax : {
+      type : 'number',
+      description : 'wic maximum'
+    },
   },
 
   exits: {
@@ -128,12 +136,29 @@ module.exports = {
 
     }
 
+    //If user didn't enter any wicMin/wicMax, set it to -99999999/99999999 
+    //because Infinity/Number.MAX_VALUE will cause some errors here
+    if(!inputs.wicMin && inputs.wicMin !== 0){
+      inputs.wicMin = -99999999;
+    }
 
+    if(!inputs.wicMax && inputs.wicMax !== 0){
+      inputs.wicMax = 99999999;
+    }
+
+    if(inputs.wicMin || inputs.wicMin === 0){
+      inputs.wicMin = parseFloat(inputs.wicMin);
+    }
+
+    if(inputs.wicMax || inputs.wicMax === 0){
+      inputs.wicMax = parseFloat(inputs.wicMax);
+    }
 
     imageCount = 0;
     if(!overrideToZero){
       let imagesFound = await Images.find(cmd);
       imagesFound = await Images.filterByLabels(imagesFound, labels);
+      imagesFound = await Images.filterByWic(imagesFound, inputs.wicMin, inputs.wicMax);
       imageCount = imagesFound.length;
     }
 

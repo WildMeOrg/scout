@@ -56,6 +56,14 @@ module.exports = {
       type : 'string',
       description : ''
     },
+    filterWicMin : {
+      type : 'string',
+      description : ''
+    },
+    filterWicMax : {
+      type : 'string',
+      description : ''
+    },
     filteredImageCount : {
       type : 'string',
       description : ''
@@ -125,6 +133,8 @@ module.exports = {
         filterSource: inputs.filterSource,
         filterDateStart: inputs.filterDateStart,
         filterDateEnd: inputs.filterDateEnd,
+        filterWicMin: inputs.filterWicMin,
+        filterWicMax: inputs.filterWicMax,
         taskId : newTask.id
       };
 
@@ -139,6 +149,21 @@ module.exports = {
       if(inputs.filteredImageCount.length){
         imageFilters.filteredImageCount = parseInt(inputs.filteredImageCount);
       }
+
+      //If user didn't enter any wicMin/wicMax, set it to -99999999/99999999 
+      //because Infinity/Number.MAX_VALUE will cause some errors here
+      if(!inputs.filterWicMin.length){
+        imageFilters.filterWicMin = -99999999;
+      } else {
+        imageFilters.filterWicMin = parseFloat(inputs.filterWicMin);
+      }
+
+      if(!inputs.filterWicMax.length){
+        imageFilters.filterWicMax = 99999999;
+      } else {
+        imageFilters.filterWicMax = parseFloat(inputs.filterWicMax);
+      }
+
 
       let newUnQueuedTask = await UnQueuedTasks.create(imageFilters).fetch();
       if(!newTask){
