@@ -87,6 +87,9 @@ $('form.handleable').each(function(index) {
     for (const pair of formData.entries()) {
         if (pair[0] == 'filterLabels') {
           formValues.filterLabels = (pair[1].length && pair[1].split(',')) || [];
+        } else if (pair[0] == 'tagIds') {
+          if (!formValues.tagIds) formValues.tagIds = [];
+          formValues.tagIds.push(pair[1]);
         } else {
           formValues[pair[0]] = pair[1];
         }
