@@ -7,6 +7,8 @@ module.exports = {
     filterDateEnd: { type: 'string'},
     filterSubsetStart: { type: 'number'},
     filterSubsetEnd: { type: 'number'},
+    filterWicMin: { type: 'number'},
+    filterWicMax: { type: 'number'},
     filteredImageCount: { type: 'number', required: true },
     taskId: { type: 'string', required: true }
   }

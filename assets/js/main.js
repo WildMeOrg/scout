@@ -910,6 +910,8 @@ $('#imageSelectionModalTrigger').on('click',(e) =>{
   $('#subsetStart').val($('#filterSubsetStart').val());
   $('#subsetEnd').val($('#filterSubsetEnd').val());
   $('#labels').val($('#filterLabels').val().split(','));
+  $('#wicMin').val($('#filterWicMin').val());
+  $('#wicMax').val($('#filterWicMax').val());
   $('#filteredImageCountModal').text($('#filteredImageCount').val());
 
 });
@@ -929,6 +931,8 @@ $('#imageSelectionFormSubmit').on('click',(e) => {
   $('#filterSubsetStart').val(window.imageSelectionFormSavedInputs.subsetStart || '');
   $('#filterSubsetEnd').val(window.imageSelectionFormSavedInputs.subsetEnd || '');
   $('#filterLabels').val(window.imageSelectionFormSavedInputs.labels || '');
+  $('#filterWicMin').val(window.imageSelectionFormSavedInputs.wicMin || '');
+  $('#filterWicMax').val(window.imageSelectionFormSavedInputs.wicMax || '');
   // Set filtered count value
   $('#totalFilteredImages').text(window.imageSelectionFormSavedCount || 0);
   $('#filteredImageCount').val(window.imageSelectionFormSavedCount || 0);

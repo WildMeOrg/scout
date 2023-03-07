@@ -113,6 +113,8 @@
       <input type="hidden" id="filterSubsetStart" name="filterSubsetStart" value="">
       <input type="hidden" id="filterSubsetEnd" name="filterSubsetEnd" value="">
       <input type="hidden" id="filterLabels" name="filterLabels" value="">
+      <input type="hidden" id="filterWicMin" name="filterWicMin" value="">
+      <input type="hidden" id="filterWicMax" name="filterWicMax" value="">
       <input type="hidden" id="filteredImageCount" name="filteredImageCount" value="<%=imageCountTotal%>">
       <button
         class=" btn btn-lg btn-primary mt-3"
@@ -219,6 +221,33 @@
                       placeholder="50"
                     />
                     <label for="floatingInput">To</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="form-floating">
+              <fieldset>
+                <p class="mt-4">WIC Score (inclusive)</p>
+                <div class="row gx-3">
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="wicMin"
+                      id="wicMin"
+                      placeholder=0
+                    />
+                    <label for="floatingInput">Minimum</label>
+                  </div>
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="wicMax"
+                      id="wicMax"
+                      placeholder=1
+                    />
+                    <label for="floatingInput">Maximum</label>
                   </div>
                 </div>
               </fieldset>
