@@ -557,9 +557,14 @@ $('#deletionConfirmButton').on('click', async (e) => {
 });
 
 
-const removeTagFromTask = async (tagId, taskId) => {
+const removeTagIdFromTask = async (tagId, taskId) => {
     console.log('taskId=%o tagId=%o', taskId, tagId);
-    return true;
+    const response = await fetch('/api/tasks', {
+        method: 'PUT',
+        body: JSON.stringify({taskId: taskId, tagId: tagId, remove: true}),
+        headers: { 'Content-Type': 'application/json' },
+    });
+    return response.ok;
 }
 
 const addTagIdToTask = async (tagId, taskId) => {
@@ -569,6 +574,7 @@ const addTagIdToTask = async (tagId, taskId) => {
         body: JSON.stringify({taskId: taskId, tagId: tagId}),
         headers: { 'Content-Type': 'application/json' },
     });
+    if (!response.ok) return {success: false};
     return {
         success: true,
         name: window.getTagName(tagId),
@@ -576,19 +582,19 @@ const addTagIdToTask = async (tagId, taskId) => {
     };
 }
 const addNewTagToTask = async (newTagName, taskId) => {
-    console.log('taskId=%o newTagName=%o', taskId, newTagName);
-let fakeId = 'zzz123';
-let fakeAll = JSON.parse(JSON.stringify(window.data.availableTags));
-fakeAll.push({id: fakeId, name: newTagName});
-    const response = {
-        id: 'zzzzz123',
-        allTags: fakeAll
-    };
-    window.data.availableTags = response.allTags;
+    const response = await fetch('/api/tags', {
+        method: 'POST',
+        body: JSON.stringify({taskId: taskId, name: newTagName}),
+        headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) return {success: false};
+    let res = await response.json();
+    console.log('taskId=%o newTagName=%o => %o', taskId, newTagName, res);
+    window.data.availableTags.push(res);
     return {
         success: true,
         name: newTagName,
-        id: fakeId
+        id: res.id
     };
 }
 
@@ -600,27 +606,38 @@ window.openEditTag = function(el) {
     if (isOpen) return;
     el.dataset.open = true;
 
-    let tagOptions = '<option value="">Choose tag</option>';
-    for (const tag of window.data.availableTags) {
-        tagOptions += '<option value="' + tag.id + '">' + tag.name + '</option>';
-    }
-    $(el).parent().find('.tag-edit-div select').html(tagOptions);
-
     $(el).parent().find('.tag-edit-div').css('display', 'inline-block');
+    let hasTags = [];
     $(el).parent().find('.task-tag').each(function() {
+        hasTags.push(this.dataset.id);
         let rmButton = $('<i class="bi-x task-tag-rm"></i>');
         rmButton.on('click', async (ev) => {
             let tagId = ev.currentTarget.parentElement.dataset.id;
             let taskId = ev.currentTarget.parentElement.parentElement.parentElement.parentElement.id.substring(9);
-            const success = await removeTagFromTask(tagId, taskId);
+            const success = await removeTagIdFromTask(tagId, taskId);
             if (success) {
                 ev.currentTarget.parentElement.remove();
+                window.openEditTag($(el.parentElement.parentElement).find('i')[0]);  //closes edit div
             } else {
                 alert('error removing tag');
             }
         });
         rmButton.appendTo(this);
     });
+
+    let tagOptions = '<option value="">Choose tag</option>';
+    let numOptions = 0;
+    for (const tag of window.data.availableTags) {
+        if (hasTags.indexOf(tag.id) > -1) continue;
+        numOptions++;
+        tagOptions += '<option value="' + tag.id + '">' + tag.name + '</option>';
+    }
+    if (numOptions) {
+        $(el).parent().find('.tag-edit-div select').show().html(tagOptions);
+    } else {
+        $(el).parent().find('.tag-edit-div select').hide();
+    }
+
 }
 
 const populateTaskNamesDataList = async () => {

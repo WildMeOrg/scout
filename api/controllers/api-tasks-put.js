@@ -13,6 +13,9 @@ module.exports = {
       description : 'Task ID',
       required : true
     },
+    remove: {
+        type: 'boolean'
+    },
     tagId : {
       type : 'string',
       required : true
@@ -46,12 +49,11 @@ module.exports = {
     if (!task) return exits.notFound({description: 'unknown task'});
     let tag = await Tags.findOne({id: inputs.tagId});
     if (!tag) return exits.notFound({description: 'unknown tag'});
-    let tagIds = task.tagIds || [];
-//console.log('got task=%o tag=%o tagIds=%o', task, tag, tagIds);
-    if (tagIds.indexOf(tag.id)) {
-        tagIds.push(tag.id);
-        let updatedTask = await Tasks.updateOne({ id: task.id }).set({tagIds: tagIds});
-        if (!updatedTask) throw Error('unknown error');
+    let tagIds = null;
+    if (inputs.remove) {
+        tagIds = await Tasks.removeTagId(task, inputs.tagId);
+    } else {
+        tagIds = await Tasks.addTagId(task, inputs.tagId);
     }
     return exits.success({tagIds: tagIds});
   }
