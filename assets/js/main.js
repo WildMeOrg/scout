@@ -1741,7 +1741,6 @@ if(window.data.pageName == 'export'){
         let taskId = el.parentElement.parentElement.parentElement.parentElement.id.substring(9);
         let addNewValue = $(el.parentElement).find('input').val();
         let addTagId = $(el.parentElement).find('select').val();
-console.log('addNewVal = %o | addTagId = %o', addNewValue, addTagId);
         if (!addNewValue && !addTagId) return;
         let res = null;
         if (addNewValue) {
@@ -1749,7 +1748,6 @@ console.log('addNewVal = %o | addTagId = %o', addNewValue, addTagId);
         } else {
             res = await addTagIdToTask(addTagId, taskId);
         }
-console.log('res => %o', res);
         if (res.success) {
             $('.tag-edit-div input').val('');
             $('.tag-edit-div select').val('');
