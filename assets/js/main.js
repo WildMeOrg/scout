@@ -328,7 +328,7 @@ const getTaskFilters = () => {
   }
 
     let tagsValue = $('#tags').val();
-    if (tagsValue.length) {
+    if (tagsValue && tagsValue.length) {
         filters.tags = tagsValue;
     }
 
@@ -1756,7 +1756,7 @@ console.log('res => %o', res);
             window.openEditTag($(el.parentElement.parentElement).find('i')[0]);  //closes edit div
             $(el.parentElement).before('<div data-id="' + res.id + '" class="task-tag">' + res.name + '</div>');
         } else {
-            alert(res.error);
+            alert(res.error || 'Problem saving tag');
         }
     });
 
