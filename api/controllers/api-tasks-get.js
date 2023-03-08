@@ -30,6 +30,9 @@ module.exports = {
     assignee : {
       type : 'string'
     },
+    tags: {
+        type: 'string'
+    },
     randomized : {
       type : 'boolean'
     },
@@ -172,6 +175,29 @@ module.exports = {
     let page = inputs.page || 1;
     const itemsPerPage = 50;
     let skip = (page - 1) * itemsPerPage;
+
+    if (inputs.tags) {
+        let tagIds = inputs.tags.split(',');
+        if (tagIds.length == 1) {
+            query.tagIds = { contains: tagIds[0] };
+        } else if (tagIds.length > 1) {
+            if (query.or) {
+                query.and = [ { or: JSON.parse(JSON.stringify(query.or)) } ];
+                delete query.or;
+                let tagOr = { or: [] };
+                for (const tagId of tagIds) {
+                    tagOr.or.push({ tagIds: { contains: tagId } });
+                }
+                query.and.push(tagOr);
+            } else {
+                query.or = [];
+                for (const tagId of tagIds) {
+                    query.or.push({ tagIds: { contains: tagId } });
+                }
+            }
+        }
+    }
+    //console.dir(query, {depth: null});
 
     let tasks = await Tasks.find({where : query, limit: itemsPerPage, skip : skip, sort: 'name ASC'});
     for (const task of tasks) {
