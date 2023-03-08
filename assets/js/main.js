@@ -327,6 +327,11 @@ const getTaskFilters = () => {
     filters.page = pageValue.trim();
   }
 
+    let tagsValue = $('#tags').val();
+    if (tagsValue.length) {
+        filters.tags = tagsValue;
+    }
+
   return filters;
 };
 
@@ -484,6 +489,7 @@ $('button#taskResetButton').on('click', async (e) =>{
   $('#assigneeInput').val(null);
   $('#phaseInput').val(null);
   $('#randomized').val(null);
+  $('#tags').val(null);
 
   // Reset pageNumber to 1
   $('#pageNumber').val(1);

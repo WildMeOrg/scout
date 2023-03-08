@@ -77,7 +77,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-4">
+  <div class="col-3">
     Assignee
     <select class="form-select" size="4" id="assigneeInput" name="assignee" multiple aria-label="multiple select">
 
@@ -98,7 +98,7 @@
 
     </select>
   </div>
-  <div class="col-4">
+  <div class="col-3">
     Stage
     <select id="phaseInput" class="form-select" size="4" multiple aria-label="multiple select">
       <option value="ns">Not started</option>
@@ -110,7 +110,7 @@
       <option value="df">Division: complete</option>
     </select>
   </div>
-  <div class="col-4">
+  <div class="col-3">
     Ordering type
     <select id="randomized" class="form-select" aria-label="select">
       <option value="">Any</option>
@@ -118,6 +118,16 @@
       <option value="true">Random</option>
     </select>
   </div>
+<% if (availableTags.length) { %>
+  <div class="col-3">
+    Tags
+    <select id="tags" class="form-select" size="4" multiple aria-label="multiple select">
+	  <% for (const tag of availableTags) { %>
+	    <option value="<%=tag.id%>"><%=tag.name%></option>
+	  <% } %>
+    </select>
+  </div>
+<% } %>
 </div>
 </div>
 

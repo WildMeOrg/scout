@@ -52,11 +52,12 @@ module.exports = {
       lastTaskName = lastTasks[0].displayName;
     }
 
-    let availableTags = await Tags.find();
+    let availableTags = await Tags.find({where : {}, sort: 'name ASC'});
     let serverData = {
       ingestionActive : ingestionActive,
       secondaryNav : 'tasks',
       users : users,
+      availableTags: availableTags,
       lastTaskName : lastTaskName
     };
 
