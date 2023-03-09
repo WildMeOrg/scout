@@ -34,6 +34,13 @@ module.exports = {
             let updatedTask = await Tasks.updateOne({ id: task.id }).set({tagIds: tagIds});
             if (!updatedTask) throw Error('unknown error');
         }
-        return tagIds;
+        let rtn = { tagIds: tagIds };
+        let stillTagged = await Tasks.find({ tagIds: { contains: tagId } });
+        if (stillTagged && !stillTagged.length) {
+            let deletedTag = await Tags.destroyOne({id: tagId});
+            console.info('deleted unused tag %o', deletedTag);
+            if (deletedTag) rtn.destroyedTagId = tagId;
+        }
+        return rtn;
     }
 };
