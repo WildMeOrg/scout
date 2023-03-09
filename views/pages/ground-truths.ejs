@@ -3,13 +3,16 @@
 
   <div>
     
-    <div class = "labelBanner">
-      <p>Hot key Use keyboard shortcuts to switch to the desired label.</p>
+    <div class = "labelBanner">        
+      <p>Use keyboard shortcuts to switch to the desired label.</p>
+      <div>Current active label is: </div>
+      <p id="activeLabel">None</p>
+      <div>Please press hot keys to set or change.</div>
     </div>
-    <div class = "hotKeyBox" id="hotKeyBox">
-      <p>Shortcut Keys</p>      
-    </div>
-    <div class="switch">
+    <div class = "hotKeyBox" id = "hotKeyBox">
+      <p>Shortcut Keys</p>        
+    </div>      
+    <div class="toggle-switch">
       <input type="checkbox" id="toggle-switch" checked>
       <label for="toggle-switch">Show Labels</label>
     </div>
