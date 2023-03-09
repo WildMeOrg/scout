@@ -619,7 +619,7 @@ window.simpleBoxes._.methods = {
     for(const label of labelContent) {
       label.remove();
     }
-    let divs = $('i.delHotKeyBox');
+    let divs = $('i.annotationBox');
     for(const div of divs) {
       div.remove();
     }
@@ -646,7 +646,7 @@ window.simpleBoxes._.methods = {
     // //Draw the box which user can select and use DEL to delete
     let divX = copy.w > 0 ? copy.x : copy.x + copy.w;
     let divY = copy.h > 0 ? copy.y : copy.y + copy.h;
-    let div = `<i class="delHotKeyBox tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${divY}px; left: ${divX}px; width: ${copy.w}px; height: ${copy.h}px"></i>`;
+    let div = `<i class="annotationBox tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${divY}px; left: ${divX}px; width: ${copy.w}px; height: ${copy.h}px"></i>`;
 
     if(!handle.readOnly){
       $(div).insertAfter('#'+handle.canvas.id);
@@ -679,7 +679,17 @@ window.simpleBoxes._.methods = {
     //Draw the label
     let labelContentX = labelX + 25;
     let labelContentY = labelY;
-    let labelTest = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
+    let currentLabel = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
+    let finalLabel = "";
+    const activeLabel = sessionStorage.getItem("active-label");
+    if(currentLabel) {
+      finalLabel = currentLabel;
+    }else {
+      if(activeLabel) {
+        finalLabel = activeLabel;
+        window.simpleBoxes._.handles[handle.id].boxes[copy.id].label = activeLabel;
+      }
+    }
     let labelContentString = `
     <i class="bi labelContent tagIcon" 
       data-handle-id="${handle.id}" 
@@ -687,9 +697,8 @@ window.simpleBoxes._.methods = {
       style="
       top: ${labelContentY}px; 
       left: ${labelContentX}px; 
-      width: ${(labelTest || "").length * 10}px !important
-      ">
-      ${labelTest == null ? "" :labelTest }
+      width: ${(currentLabel || activeLabel).length * 10}px !important
+      ">${finalLabel }
       </i>    
     `;
 
@@ -836,7 +845,7 @@ $( document ).ready(function() {
   // When press down DEL button, delete the focused annotation
   document.addEventListener('keydown', async function() {
     if (event.keyCode === 46) {
-      const focusedBox = document.querySelector('.delHotKeyBox:focus');
+      const focusedBox = document.querySelector('.annotationBox:focus');
       if(focusedBox) {
         let handleId = focusedBox.getAttribute('data-handle-id');
         let boxId = focusedBox.getAttribute('data-box-id');
@@ -869,12 +878,12 @@ $( document ).ready(function() {
       }  
     }
   }
-  $('body').on('click', 'i.delHotKeyBox', async (e) => {
+  $('body').on('click', 'i.annotationBox', async (e) => {
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
   });
 
-  $('body').on('keydown', 'i.delHotKeyBox', async (e) => {
+  $('body').on('keydown', 'i.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     // console.log("focusing is the same as clicking, ", e.target);

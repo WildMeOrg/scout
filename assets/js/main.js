@@ -710,6 +710,41 @@ const imageSelectionFormChange = async () => {
 
 }
 
+document.addEventListener("keydown", async (e) => {
+  const pair = [];
+  [0,1,2,3,4,5,6,7,8,9].forEach(data => {
+    pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
+  });
+  // console.log("pairing");
+  const isShiftPressed = e.shiftKey;
+  const keycode = e.keyCode;
+  let activeLabel = "";
+  for(let i = 0; i < pair.length; i++) {   
+    // console.log("key down, ", e.key);       
+    // Detect keys pressed down
+    if (isShiftPressed && keycode === pair[i].keyCode) {
+      activeLabel = window.tagsList.find(l => l.hotKey === `shft+${pair[i].key}`);         
+    }else if (keycode === pair[i].keyCode) {
+      activeLabel = window.tagsList.find(l => l.hotKey === pair[i].key);
+    }
+    if(activeLabel && document.querySelector("#activeLabel")) {    
+      // console.log("label is ", activeLabel);       
+      document.querySelector("#activeLabel").innerHTML = activeLabel.name;
+      sessionStorage.setItem("active-label", activeLabel.name);
+      break;
+    }  
+  }
+})
+
+if(!document.querySelector("#activeLabel")) {
+  sessionStorage.setItem("active-label", "");
+}else {
+  const activeLabel = sessionStorage.getItem("active-label");
+  if(activeLabel) {
+    $('#activeLabel').html(activeLabel);
+  }
+}
+
   //Get all labels from database
   const getAllLabels = async () => {
     let action = '/api/labels?';
@@ -724,7 +759,7 @@ const imageSelectionFormChange = async () => {
       return;
     }
     let res = await responseLL.json();
-    window.tagsList = res;
+    // window.tagsList = res;
     return res;
   }
 
