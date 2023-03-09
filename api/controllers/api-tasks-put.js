@@ -49,13 +49,14 @@ module.exports = {
     if (!task) return exits.notFound({description: 'unknown task'});
     let tag = await Tags.findOne({id: inputs.tagId});
     if (!tag) return exits.notFound({description: 'unknown tag'});
-    let tagIds = null;
+    let rtn = {};
     if (inputs.remove) {
-        tagIds = await Tasks.removeTagId(task, inputs.tagId);
+        // rtn can include .destroyedTagId
+        rtn = await Tasks.removeTagId(task, inputs.tagId);
     } else {
-        tagIds = await Tasks.addTagId(task, inputs.tagId);
+        rtn.tagIds = await Tasks.addTagId(task, inputs.tagId);
     }
-    return exits.success({tagIds: tagIds});
+    return exits.success(rtn);
   }
 
 

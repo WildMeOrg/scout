@@ -573,7 +573,7 @@ const removeTagIdFromTask = async (tagId, taskId) => {
         body: JSON.stringify({taskId: taskId, tagId: tagId, remove: true}),
         headers: { 'Content-Type': 'application/json' },
     });
-    return response.ok;
+    return response;
 }
 
 const addTagIdToTask = async (tagId, taskId) => {
@@ -600,6 +600,7 @@ const addNewTagToTask = async (newTagName, taskId) => {
     let res = await response.json();
     console.log('taskId=%o newTagName=%o => %o', taskId, newTagName, res);
     window.data.availableTags.push(res);
+    window.tagListUpdated();
     return {
         success: true,
         name: newTagName,
@@ -623,8 +624,16 @@ window.openEditTag = function(el) {
         rmButton.on('click', async (ev) => {
             let tagId = ev.currentTarget.parentElement.dataset.id;
             let taskId = ev.currentTarget.parentElement.parentElement.parentElement.parentElement.id.substring(9);
-            const success = await removeTagIdFromTask(tagId, taskId);
-            if (success) {
+            const response = await removeTagIdFromTask(tagId, taskId);
+            if (response.ok) {
+                let res = await response.json();
+                if (res.destroyedTagId) {
+                    let i = window.data.availableTags.length;
+                    while (i--) {
+                        if (window.data.availableTags[i].id == res.destroyedTagId) window.data.availableTags.splice(i, 1);
+                    }
+                }
+                window.tagListUpdated();
                 ev.currentTarget.parentElement.remove();
                 window.openEditTag($(el.parentElement.parentElement).find('i')[0]);  //closes edit div
             } else {
@@ -647,6 +656,15 @@ window.openEditTag = function(el) {
         $(el).parent().find('.tag-edit-div select').hide();
     }
 
+}
+
+window.tagListUpdated = function() {
+    let el = $('select#tags');
+    if (!el.length) return;
+    el.html('');
+    for (const tag of window.data.availableTags) {
+        el.append('<option value="' + tag.id + '">' + tag.name + '</option>');
+    }
 }
 
 const populateTaskNamesDataList = async () => {
