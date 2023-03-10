@@ -363,14 +363,14 @@ window.simpleBoxes._.methods = {
 
           }
 
-          if(state.dragTypeOverride == 'center'){
-            let xAdjustment = myX - state.dragStartX;
-            let yAdjustment = myY - state.dragStartY;
-            state.activeBox.x+=xAdjustment;
-            state.activeBox.y+=yAdjustment;
-            state.dragStartX = myX;
-            state.dragStartY = myY;
-          }
+          // if(state.dragTypeOverride == 'center'){
+          //   let xAdjustment = myX - state.dragStartX;
+          //   let yAdjustment = myY - state.dragStartY;
+          //   state.activeBox.x+=xAdjustment;
+          //   state.activeBox.y+=yAdjustment;
+          //   state.dragStartX = myX;
+          //   state.dragStartY = myY;
+          // }
 
         }
 
@@ -416,7 +416,7 @@ window.simpleBoxes._.methods = {
               $('#'+handle.id).css('cursor','grab');
 
             } else {
-              $('#'+handle.id).css('cursor','move');
+              // $('#'+handle.id).css('cursor','move');
             }
           }
 
@@ -643,11 +643,18 @@ window.simpleBoxes._.methods = {
     copy.h = copy.h * reverseRatio;
     handle.canvas.ctx.fillRect(copy.x, copy.y, copy.w, copy.h);
 
-    // //Draw the box which user can select and use DEL to delete
-    let divX = copy.w > 0 ? copy.x : copy.x + copy.w;
-    let divY = copy.h > 0 ? copy.y : copy.y + copy.h;
-    let div = `<i class="annotationBox tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${divY}px; left: ${divX}px; width: ${copy.w}px; height: ${copy.h}px"></i>`;
-
+    //Draw annotation box which user can select and use hot key to change label or delete
+    let div = `<i 
+      class="annotationBox tagIcon" 
+      data-handle-id="${handle.id}" 
+      data-box-id="${copy.id}" 
+      style="
+      top: ${copy.h > 0 ? copy.y +2: copy.y + copy.h +2}px; 
+      left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
+      width: ${Math.abs(copy.w)-4}px; 
+      height: ${Math.abs(copy.h)-4}px">
+        </i>`;
+    
     if(!handle.readOnly){
       $(div).insertAfter('#'+handle.canvas.id);
     }
@@ -843,7 +850,7 @@ $( document ).ready(function() {
     }   
 
   // When press down DEL button, delete the focused annotation
-  document.addEventListener('keydown', async function() {
+  document.addEventListener('keydown', async function(event) {
     if (event.keyCode === 46) {
       const focusedBox = document.querySelector('.annotationBox:focus');
       if(focusedBox) {
@@ -852,15 +859,18 @@ $( document ).ready(function() {
         await window.simpleBoxes._.methods.removeBox(handleId,boxId);
         await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);    
       }        
-    }
-  });       
-
-  const boxKeyDownEvent = async (e, handleId, boxId) => {
-    const pair = [];
+    } else {
+      await boxKeyDownEvent(event);
+    }    
+  });   
+  
+  const pair = [];
     [0,1,2,3,4,5,6,7,8,9].forEach(data => {
       pair.push({key: data.toString(), keyCode: data.toString().charCodeAt(0)});      
     });
 
+  const boxKeyDownEvent = async (e, handleId, boxId) => {
+        
     const isShiftPressed = e.shiftKey;
     const keycode = e.keyCode;
     let label = "";
@@ -871,13 +881,19 @@ $( document ).ready(function() {
       }else if (keycode === pair[i].keyCode) {
         label = window.tagsList.find(l => l.hotKey === pair[i].key);
       }
-      if(label) {
+      if(label && document.querySelector("#activeLabel")) {    
+        document.querySelector("#activeLabel").innerHTML = label.name;
+        sessionStorage.setItem("active-label", label.name);
+        //  break;
+            } 
+      if(label && handleId && boxId) {
         window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
         await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-        break;
+        // break;
       }  
     }
   }
+
   $('body').on('click', 'i.annotationBox', async (e) => {
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
