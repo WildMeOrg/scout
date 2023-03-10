@@ -900,6 +900,7 @@ $( document ).ready(function() {
       }  
     }
   }
+
   $('body').on('click', 'i.annotationBox', async (e) => {
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
