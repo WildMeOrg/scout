@@ -1141,7 +1141,7 @@ $('#annotationDoneButton').on('click',async (e)=>{
   // Get all the annotations
 
   let annotationsArray = [];
-  if (window.sbHandleLeft) {
+  if (window.sbHandle1) {
     const annotationsObject = await simpleBoxes.getAllBoxes(window.sbHandle1.id);
     for(index in annotationsObject){
       annotationsArray.push(annotationsObject[index]);
