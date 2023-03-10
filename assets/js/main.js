@@ -710,9 +710,11 @@ const imageSelectionFormChange = async () => {
 
 }
 
+//If leave annotation/ground truth page, reset active label to none
 if(!document.querySelector("#activeLabel")) {
   sessionStorage.setItem("active-label", "");
 }else {
+  //In the same task, get active label from session and display
   const activeLabel = sessionStorage.getItem("active-label");
   if(activeLabel) {
     $('#activeLabel').html(activeLabel);
