@@ -363,6 +363,8 @@ window.simpleBoxes._.methods = {
 
           }
 
+          //Disable "drag-to-move" feature for now.
+
           // if(state.dragTypeOverride == 'center'){
           //   let xAdjustment = myX - state.dragStartX;
           //   let yAdjustment = myY - state.dragStartY;
@@ -415,9 +417,11 @@ window.simpleBoxes._.methods = {
             if(overWhichBox.dragType == 'corner'){
               $('#'+handle.id).css('cursor','grab');
 
-            } else {
+            } 
+            //Disable "drag-to-move" feature for now.
+            // else {
               // $('#'+handle.id).css('cursor','move');
-            }
+            // }
           }
 
         }
@@ -644,6 +648,7 @@ window.simpleBoxes._.methods = {
     handle.canvas.ctx.fillRect(copy.x, copy.y, copy.w, copy.h);
 
     //Draw annotation box which user can select and use hot key to change label or delete
+    //AnnotationBox's left and top coordinates have to be "later" than the mouse move(coly.x and copy.y), so add 2px here.
     let div = `<i 
       class="annotationBox tagIcon" 
       data-handle-id="${handle.id}" 
@@ -688,12 +693,14 @@ window.simpleBoxes._.methods = {
     let labelContentY = labelY;
     let currentLabel = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
     let finalLabel = "";
+    //Get active label from session
     const activeLabel = sessionStorage.getItem("active-label");
     if(currentLabel) {
       finalLabel = currentLabel;
     }else {
       if(activeLabel) {
         finalLabel = activeLabel;
+        //Save the label
         window.simpleBoxes._.handles[handle.id].boxes[copy.id].label = activeLabel;
       }
     }
@@ -881,15 +888,15 @@ $( document ).ready(function() {
       }else if (keycode === pair[i].keyCode) {
         label = window.tagsList.find(l => l.hotKey === pair[i].key);
       }
+      //Get active label from session and update page
       if(label && document.querySelector("#activeLabel")) {    
         document.querySelector("#activeLabel").innerHTML = label.name;
         sessionStorage.setItem("active-label", label.name);
-        //  break;
             } 
+      //Update focused annotation's label
       if(label && handleId && boxId) {
         window.simpleBoxes._.handles[handleId].boxes[boxId].label = label.name;        
         await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
-        // break;
       }  
     }
   }
