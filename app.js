@@ -1034,7 +1034,10 @@ const invokeMl = async (fullPath,configName) => {
        if(box.l == 'elephant_savanna'){
          box.l = 'elephant'
        }
+       const randomNumber = Math.floor(Math.random() * 1000) + 1;
+       const formattedNumber = randomNumber.toString();
        let newBox = {
+         id : "box-"+Date.now()+formattedNumber,
          x : box.x,
          y : box.y,
          w : box.w,
