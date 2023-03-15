@@ -664,7 +664,7 @@ window.simpleBoxes._.methods = {
       $(div).insertAfter('#'+handle.canvas.id);
     }
 
-    // Draw the corners    
+    // Draw the corners
       
     // Draw the trash can
     let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
@@ -686,9 +686,13 @@ window.simpleBoxes._.methods = {
     let labelString = `
 <i class="bi bi-tag-fill labelBoxTrigger tagIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${labelY}px; left: ${labelX}px"></i>
 `;
-    $(labelString).insertAfter('#'+handle.canvas.id);           
+
+    if(!handle.readOnly){
+      $(labelString).insertAfter('#'+handle.canvas.id);   
+    } 
 
     //Draw the label
+ 
     let labelContentX = labelX + 25;
     let labelContentY = labelY;
     let currentLabel = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
@@ -704,17 +708,37 @@ window.simpleBoxes._.methods = {
         window.simpleBoxes._.handles[handle.id].boxes[copy.id].label = activeLabel;
       }
     }
-    let labelContentString = `
+
+    let labelContentString = "";
+    const offsetLeft = document.querySelector("#scrollBoxLeft").scrollLeft;
+    const offsetTop = document.querySelector("#scrollBoxLeft").scrollTop;
+ 
+    if(handle.readOnly){
+      labelContentString = `
     <i class="bi labelContent tagIcon" 
       data-handle-id="${handle.id}" 
       data-box-id="${copy.id}" 
       style="
-      top: ${labelContentY}px; 
-      left: ${labelContentX}px; 
+      top: ${labelContentY - offsetTop }px; 
+      left: ${copy.x - offsetLeft}px; 
       width: ${(currentLabel || activeLabel).length * 10}px !important
       ">${finalLabel }
       </i>    
-    `;
+    `; 
+    } else {
+      labelContentString = `
+      <i class="bi labelContent tagIcon" 
+        data-handle-id="${handle.id}" 
+        data-box-id="${copy.id}" 
+        style="
+        top: ${labelContentY}px;
+        left: ${labelContentX}px;
+        width: ${(currentLabel || activeLabel).length * 10}px !important
+        ">${finalLabel }
+        </i>    
+      `;
+    }
+ 
 
     $(labelContentString).insertAfter('#'+handle.canvas.id);
 
