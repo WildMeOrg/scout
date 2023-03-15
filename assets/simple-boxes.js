@@ -710,22 +710,22 @@ window.simpleBoxes._.methods = {
     }
 
     let labelContentString = "";
-    const offsetLeft = document.querySelector("#scrollBoxLeft").scrollLeft;
-    const offsetTop = document.querySelector("#scrollBoxLeft").scrollTop;
- 
-    if(handle.readOnly){
+    if(document.querySelector("#scrollBoxLeft") && handle.readOnly) {
+      const offsetLeft = document.querySelector("#scrollBoxLeft").scrollLeft;
+      const offsetTop = document.querySelector("#scrollBoxLeft").scrollTop;
+
       labelContentString = `
-    <i class="bi labelContent tagIcon" 
-      data-handle-id="${handle.id}" 
-      data-box-id="${copy.id}" 
-      style="
-      top: ${labelContentY - offsetTop }px; 
-      left: ${copy.x - offsetLeft}px; 
-      width: ${(currentLabel || activeLabel).length * 10}px !important
-      ">${finalLabel }
-      </i>    
-    `; 
-    } else {
+      <i class="bi labelContent tagIcon" 
+        data-handle-id="${handle.id}" 
+        data-box-id="${copy.id}" 
+        style="
+        top: ${labelContentY - offsetTop }px; 
+        left: ${copy.x - offsetLeft}px; 
+        width: ${(currentLabel || activeLabel).length * 10}px !important
+        ">${finalLabel }
+        </i>    
+      `; 
+    }else {
       labelContentString = `
       <i class="bi labelContent tagIcon" 
         data-handle-id="${handle.id}" 
