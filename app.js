@@ -20,6 +20,7 @@ const csvString = require("csv-string")
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const moment = require('moment');
+const uuid = require('uuid');
 
 
 // Config
@@ -1034,10 +1035,9 @@ const invokeMl = async (fullPath,configName) => {
        if(box.l == 'elephant_savanna'){
          box.l = 'elephant'
        }
-       const randomNumber = Math.floor(Math.random() * 1000) + 1;
-       const formattedNumber = randomNumber.toString();
+
        let newBox = {
-         id : "box-"+Date.now()+formattedNumber,
+        id : "box-"+uuid.v4(),
          x : box.x,
          y : box.y,
          w : box.w,
