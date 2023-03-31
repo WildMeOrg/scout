@@ -5,7 +5,7 @@ Scout is a software application designed to support annotators and lab leads pro
 With Scout, you can:
 
 * Ingest high volumes of .ARW and .JPG images collected from survey cameras
-* Group images as “Tasks” that can be assigned to other users (e.g., image annotators) or machine learning (ML) models for bounding box creation and species labeling
+* Group images as "Tasks" that can be assigned to other users (e.g., image annotators) or machine learning (ML) models for bounding box creation and species labeling
 * Review and ground truth annotated images for accuracy
 * Draw division lines for overlapping image sequences with annotations
 * Export CSV data files for statistical analysis
@@ -17,16 +17,17 @@ With Scout, you can:
 
 * A fast and stable internet connection.
 * An 8GB-minimum thumbdrive.
-* A dedicated, powerful laptop with a graphics processing unit (GPU) to run solely as the Scout server: see [Scout Server Laptop](https://docs.wildme.org/product-docs/en/scout/system-administrators/system-requirements/#scout-server-laptop) documentation. **NOTE**: Installation will remove all data and Windows from the Scout Server laptop, and install Ubuntu Linux as the operating system.
+* A dedicated, powerful laptop with a graphics processing unit (GPU) to run solely as the Scout server: see [Scout Server Laptop](https://docs.wildme.org/product-docs/en/scout/system-administrators/system-requirements/#scout-server-laptop) documentation. 
 * Laptops with the Chrome web browser to connect to the Scout server for lab leads and annotators.
-
 
 ## Installation
 
 For installation and first-time configuration steps, follow our [System Installation](https://docs.wildme.org/product-docs/en/scout/system-administrators/system-installation/#system-installation) documentation guide. 
 
+**NOTE**: Installation will remove all data and any operating system from the Scout Server laptop. Ubuntu Linux will be installed as the operating system.
 
-## Important Links & Docs
+
+## Important Links & Documentation
 
 Use our [Help Documentation](https://docs.wildme.org/product-docs/en/scout/) to learn how to use Scout.
 
@@ -36,9 +37,6 @@ Visit [Wild Me Professional Services](https://www.wildme.org/services) to view t
 ## Support
 
 For technical support from the Wild Me team, please visit our [Community page](https://community.wildme.org).
-
-
-For direct help, email the Wild Me engineering staff at support@wildme.org.
 
 
 ## Usage
@@ -60,7 +58,7 @@ Annotators and ML models use bounding boxes, species labels, and annotation labe
 
 ## Techstack and Features
 
-Scout uses Javascript and integrated machine learning. 
+Scout uses Javascript (Sails.js) and integrated machine learning provided by [Scoutbot](https://github.com/WildMeOrg/scoutbot). 
 
 
 ## License
