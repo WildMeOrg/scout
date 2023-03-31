@@ -51,11 +51,11 @@ Scout supports three user roles:
 
 Lab leads view, filter, manage, and export Tasks using the Task table:
 
-![Task Table](uploads/screencapture-localhost-1337-tasks-2023-03-28-08_41_12.png-233192332){width="" height=""}
+[![Task Table](uploads/assets/images/Screenshot-TaskTable-ReadMe.png)]
 
 Annotators and ML models use bounding boxes, species labels, and annotation labels to indicate animals in images:
 
-![Annotation](uploads/Screenshot - Annotation, ReadMe.png-233192227){width="" height=""} 
+[![Annotation](assets/images/Screenshot-Annotation-ReadMe.png)]
 
 
 ## Techstack and Features
