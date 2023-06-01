@@ -578,7 +578,7 @@ init();
        fields['Box X'] = typeof(box.x) !== 'undefined' ? box.x : '';
        fields['Box Y'] = typeof(box.y) !== 'undefined' ? box.y : '';
        fields['Box W'] = typeof(box.w) !== 'undefined' ? box.w : '';
-       fields['Box H'] = typeof(box.h) !== 'undefined' ? box.y : '';
+       fields['Box H'] = typeof(box.h) !== 'undefined' ? box.h : '';
        fields['Label'] = typeof(box.label) !== 'undefined' ? box.label : '';
        fields['Label Confidence'] = typeof(box.labelConfidence) !== 'undefined' ? box.labelConfidence : '';
 
@@ -600,7 +600,7 @@ init();
    let x = typeof(box.x) !== 'undefined' ? parseFloat(box.x): false;
    let y = typeof(box.y) !== 'undefined' ? parseFloat(box.y) : false;
    let w = typeof(box.w) !== 'undefined' ? parseFloat(box.w) : false;
-   let h = typeof(box.h) !== 'undefined' ? parseFloat(box.y) : false;
+   let h = typeof(box.h) !== 'undefined' ? parseFloat(box.h) : false;
    if(x === false || y === false || w === false || h == false){
      return '';
    }
