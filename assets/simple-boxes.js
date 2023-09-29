@@ -840,35 +840,14 @@ $( document ).ready(function() {
     await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
   });
 
-  $('body').on('mousemove','i.deleteBoxTrigger', async (e) => {    
+ $('body').on('mousemove mouseup', 'i.deleteBoxTrigger, i.labelBoxTrigger, i.labelContent', async (e) => {
     let handleId = $(e.target).attr('data-handle-id');
-    await mousemove(e, handleId);
-  });
-
-  $('body').on('mouseup','i.deleteBoxTrigger', async (e) => {
-    let handleId = $(e.target).attr('data-handle-id');
-    await mouseup(e, handleId);
-  });
-
-  $('body').on('mousemove','i.labelBoxTrigger', async (e) => {
-    let handleId = $(e.target).attr('data-handle-id');
-    await mousemove(e, handleId);
-  });
-
-  $('body').on('mouseup','i.labelBoxTrigger', async (e) => {
-    let handleId = $(e.target).attr('data-handle-id');
-    await mouseup(e, handleId);
-  });
-
-  $('body').on('mousemove','i.labelContent', async (e) => {
-    let handleId = $(e.target).attr('data-handle-id');
-    await mousemove(e, handleId);
-  });
-
-  $('body').on('mouseup','i.labelContent', async (e) => {
-    let handleId = $(e.target).attr('data-handle-id');
-    await mouseup(e, handleId);
-  });
+    if (e.type === 'mousemove') {
+        await mousemove(e, handleId);
+    } else if (e.type === 'mouseup') {
+        await mouseup(e, handleId);
+    } 
+});
 
 
   // Labeler
