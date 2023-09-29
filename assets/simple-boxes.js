@@ -226,8 +226,6 @@ window.simpleBoxes.zoom = async (handleId,boxes) => {
 window.simpleBoxes._.methods = {
 
   handleMouseDown : async (e) => {
-
-    // console.log("mousedown",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const el = handle.canvas.element;
@@ -243,8 +241,6 @@ window.simpleBoxes._.methods = {
       state.selectOpen = false;
       return;
     }
-
-
 
     state.mouseDown = true;
     // Clicked on something, determine if it's center or one of the corners
@@ -272,7 +268,6 @@ window.simpleBoxes._.methods = {
 
   },
   handleMouseUp : async (e) => {
-    // console.log("mouseup",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const ctx = handle.canvas.ctx;
@@ -281,7 +276,6 @@ window.simpleBoxes._.methods = {
     if(handle.readOnly){
       return;
     }
-
 
     state.activeBox = false;
     state.dragTypeOverride = false;
@@ -296,7 +290,6 @@ window.simpleBoxes._.methods = {
     await window.simpleBoxes._.methods.redrawBoxes(handle);
   },
   handleMouseMove : async (e) => {
-    // console.log("mousemove",e.target.id,e.clientX,e.clientY);
     const sb = window.simpleBoxes._;
     const handle = sb.handles[e.target.id];
     const el = handle.canvas.element;
@@ -308,7 +301,6 @@ window.simpleBoxes._.methods = {
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
-      // console.log("Dragging");
       state.drag = true;
       if(overWhichBox.box){
         state.dragType = overWhichBox.dragType;
@@ -819,8 +811,28 @@ window.simpleBoxes._.methods = {
 
 $( document ).ready(function() {
 
+  const mousemove = async (e, handleId) => {
+    e.preventDefault();
+    const fakeEvent = {
+      target: {id: handleId},
+      clientX: e.clientX,
+      clientY: e.clientY
+    }
+    await window.simpleBoxes._.methods.handleMouseMove(fakeEvent);
+  }
+
+  const mouseup = async (e, handleId) => {
+    e.preventDefault();
+    const fakeEvent = {
+      target: {id: handleId},
+      clientX: e.clientX,
+      clientY: e.clientY
+    }
+    await window.simpleBoxes._.methods.handleMouseUp(fakeEvent);
+  }
+
   // Trash cans
-  $('body').on('click','i.deleteBoxTrigger', async (e) => {
+  $('body').on('mousedown','i.deleteBoxTrigger', async (e) => {
     e.preventDefault();
     let handleId = $(e.target).attr('data-handle-id');
     let boxId = $(e.target).attr('data-box-id');
@@ -828,8 +840,39 @@ $( document ).ready(function() {
     await window.simpleBoxes._.methods.redrawBoxes(window.simpleBoxes._.handles[handleId]);
   });
 
+  $('body').on('mousemove','i.deleteBoxTrigger', async (e) => {    
+    let handleId = $(e.target).attr('data-handle-id');
+    await mousemove(e, handleId);
+  });
+
+  $('body').on('mouseup','i.deleteBoxTrigger', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mouseup(e, handleId);
+  });
+
+  $('body').on('mousemove','i.labelBoxTrigger', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mousemove(e, handleId);
+  });
+
+  $('body').on('mouseup','i.labelBoxTrigger', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mouseup(e, handleId);
+  });
+
+  $('body').on('mousemove','i.labelContent', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mousemove(e, handleId);
+  });
+
+  $('body').on('mouseup','i.labelContent', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mouseup(e, handleId);
+  });
+
+
   // Labeler
-  $('body').on('click','i.labelBoxTrigger', async (e) => {
+  $('body').on('mousedown','i.labelBoxTrigger', async (e) => {
     e.preventDefault();
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
@@ -925,18 +968,37 @@ $( document ).ready(function() {
     }
   }
 
-  $('body').on('click', 'i.annotationBox', async (e) => {
+  $('body').on('mousedown', 'i.annotationBox', async (e) => {
+    // let boxId = $(e.target).attr('data-box-id');
+    // let handleId = $(e.target).attr('data-handle-id');
+    // const currentBox = document.querySelectorAll(`[data-box-id = ${boxId}]`)[3];  
+    // currentBox.setAttribute('tabindex', '0');
+    // currentBox.focus();
     e.target.setAttribute('tabindex', '0');
     e.target.focus();
   });
 
+  $('body').on('mousemove', 'i.annotationBox', async (e) => {
+    let handleId = $(e.target).attr('data-handle-id');
+    await mousemove(e, handleId);
+  });
+
+  $('body').on('mouseup', 'i.annotationBox', async (e) => {
+    let boxId = $(e.target).attr('data-box-id');
+    let handleId = $(e.target).attr('data-handle-id');
+    await mouseup(e, handleId);
+    const currentBox = document.querySelectorAll(`[data-box-id = ${boxId}]`)[3];  
+    currentBox.setAttribute('tabindex', '0');
+    currentBox.focus();
+  });
+
+
   $('body').on('keydown', 'i.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
-    // console.log("focusing is the same as clicking, ", e.target);
     if($(e.target).attr('tabindex') === '0') {
       await boxKeyDownEvent(e, handleId, boxId);
-    }
+       }    
   });
 
 
