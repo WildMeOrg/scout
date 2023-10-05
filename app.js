@@ -624,14 +624,18 @@ init();
 
 
    // Get the image height and width
-  try {
-    var dimensions = await sizeOf(imageData.fullPath);      
-  }catch(e) {
-    console.log("error with image: ", e);
-  }finally {       
-    var imgWidth = (dimensions && dimensions.width) || '';
-    var imgHeight = (dimensions && dimensions.height) || '';
-  }
+   let dimensions;
+   let imgWidth;
+   let imgHeight;
+      
+   try {
+     dimensions = await sizeOf(imageData.fullPath);
+   } catch (e) {
+     console.log("error with image: ", e);
+   } finally {
+     imgWidth = (dimensions && dimensions.width) || '';
+     imgHeight = (dimensions && dimensions.height) || '';
+   } 
 
    let isExcluded = isExcludedCalculation(imgWidth,imgHeight,x,y,w,h,topX,bottomX);
    return isExcluded ? 'TRUE' : 'FALSE';
@@ -696,14 +700,18 @@ init();
   for(const image of images){
 
     // Get image height and width
+    let dimensions;
+    let imgWidth;
+    let imgHeight;
+        
     try {
-      var dimensions = await sizeOf(image.fullPath);      
-    }catch(e) {
+      dimensions = await sizeOf(image.fullPath);
+    } catch (e) {
       console.log("error with image: ", e);
-    }finally {       
-      var imgWidth = (dimensions && dimensions.width) || '';
-      var imgHeight = (dimensions && dimensions.height) || '';
-    }
+    } finally {
+      imgWidth = (dimensions && dimensions.width) || '';
+      imgHeight = (dimensions && dimensions.height) || '';
+    } 
 
     fields = Object.assign({}, sampleFields);
 
