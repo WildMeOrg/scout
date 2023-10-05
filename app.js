@@ -713,8 +713,8 @@ init();
 
     fields['Image Filename'] = image.originalFilename+'.'+image.originalExtension;
     fields['Image ID'] = image.id;
-    fields['Image Height'] = imgWidth;
-    fields['Image Width'] = imgHeight;
+    fields['Image Height'] = imgHeight;
+    fields['Image Width'] = imgWidth;
     
 
     if(taskData.taskType == 'ml'){
