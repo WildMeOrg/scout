@@ -624,7 +624,7 @@ init();
 
 
    // Get the image height and width
-   try {
+  try {
     var dimensions = await sizeOf(imageData.fullPath);      
   }catch(e) {
     console.log("error with image: ", e);
@@ -697,8 +697,7 @@ init();
 
     // Get image height and width
     try {
-      // var dimensions = await sizeOf(image.fullPath);
-      var dimensions = await sizeOf('/na/123.jpg');      
+      var dimensions = await sizeOf(image.fullPath);      
     }catch(e) {
       console.log("error with image: ", e);
     }finally {       
