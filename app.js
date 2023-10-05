@@ -624,9 +624,14 @@ init();
 
 
    // Get the image height and width
-   const dimensions = await sizeOf(imageData.fullPath);
-   let imgWidth = dimensions.width;
-   let imgHeight = dimensions.height;
+   try {
+    var dimensions = await sizeOf(imageData.fullPath);      
+  }catch(e) {
+    console.log("error with image: ", e);
+  }finally {       
+    var imgWidth = (dimensions && dimensions.width) || '';
+    var imgHeight = (dimensions && dimensions.height) || '';
+  }
 
    let isExcluded = isExcludedCalculation(imgWidth,imgHeight,x,y,w,h,topX,bottomX);
    return isExcluded ? 'TRUE' : 'FALSE';
@@ -691,9 +696,15 @@ init();
   for(const image of images){
 
     // Get image height and width
-    const dimensions = await sizeOf(image.fullPath);
-    let imgWidth = dimensions.width || '';
-    let imgHeight = dimensions.height || '';
+    try {
+      // var dimensions = await sizeOf(image.fullPath);
+      var dimensions = await sizeOf('/na/123.jpg');      
+    }catch(e) {
+      console.log("error with image: ", e);
+    }finally {       
+      var imgWidth = (dimensions && dimensions.width) || '';
+      var imgHeight = (dimensions && dimensions.height) || '';
+    }
 
     fields = Object.assign({}, sampleFields);
 
