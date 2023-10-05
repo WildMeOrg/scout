@@ -673,6 +673,8 @@ init();
     'Task ID' : '',
     'Image Filename' : '',
     'Image ID' : '',
+    'Image Height' : '',
+    'Image Width' : '',
     'WIC Confidence' : '',
     'Ground Truth Status' : '',
     'Exclusion Side' : 'right',
@@ -688,6 +690,11 @@ init();
   let images = await Images.find({taskIds : [taskData.id]});
   for(const image of images){
 
+    // Get image height and width
+    const dimensions = await sizeOf(image.fullPath);
+    let imgWidth = dimensions.width || '';
+    let imgHeight = dimensions.height || '';
+
     fields = Object.assign({}, sampleFields);
 
     fields['Task Name'] = taskData.displayName;
@@ -696,6 +703,9 @@ init();
 
     fields['Image Filename'] = image.originalFilename+'.'+image.originalExtension;
     fields['Image ID'] = image.id;
+    fields['Image Height'] = imgWidth;
+    fields['Image Width'] = imgHeight;
+    
 
     if(taskData.taskType == 'ml'){
       // Look up the annotation for that image in that task
