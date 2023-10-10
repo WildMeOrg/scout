@@ -422,6 +422,11 @@ init();
       query.assignee = exportData.filters.assignee;
     }
 
+    // Tags (multiselect)
+    if(exportData.filters.tags && exportData.filters.tags.length){
+      query.tagIds = exportData.filters.tags;
+    }
+   
     // Phase (multiselect)
     if(exportData.filters.phase && exportData.filters.phase.length){
         let arr = exportData.filters.phase
