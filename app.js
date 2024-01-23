@@ -988,12 +988,9 @@ const invokeMl = async (fullPath,configName) => {
   //let jsonFileName = 'package';
   let pathToJson = pathToDir+'json/'+jsonFileName+'.json';
   let command;
-  if(configName=='v3'){
-    command = 'scoutbot pipeline_v3 --config="'+configName+'" "'+fullPath+'" --output="'+pathToJson+'"';
-  }
-  else{
-    command = 'scoutbot pipeline --config="'+configName+'" "'+fullPath+'" --output="'+pathToJson+'"';
-  }
+
+  command = 'scoutbot pipeline --config="'+configName+'" "'+fullPath+'" --output="'+pathToJson+'"';
+
   
   try {
     const { stdout, stderr } = await exec(command);
