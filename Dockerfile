@@ -22,6 +22,7 @@ RUN pip3 install onnxruntime-gpu
 RUN scoutbot fetch --config phase1
 RUN scoutbot fetch --config mvp
 RUN scoutbot fetch --config v3
+RUN scoutbot fetch --config v3-cls
 
 # END SCOUTBOT SETUP
 
