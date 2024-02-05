@@ -43,7 +43,9 @@ window.tagsList = [
   'waterbuck',
   'white_bones',
   'wildebeest',
-  'zebra'
+  'zebra',
+  'baboon',
+  'object'
 ];
 
 const minimumImageHeight = 650;

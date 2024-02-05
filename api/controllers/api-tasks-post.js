@@ -93,7 +93,8 @@ module.exports = {
     let mlAssignees = {
       'ml-v1' : 'ML Config: V1 Classifier',
       'ml-v2' :  'ML Config: V2 Classifier',
-      'ml-v3' :  'ML Config: V3 Classifier',
+      'ml-v3' :  'ML Config: V3 Detector',
+      'ml-v3-cls' :  'ML Config: V3 Classifier',
       'ml-dummy' :  'ML Config: Random Nonsense'
     }
     // Check to see if that name exists

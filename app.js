@@ -988,9 +988,7 @@ const invokeMl = async (fullPath,configName) => {
   //let jsonFileName = 'package';
   let pathToJson = pathToDir+'json/'+jsonFileName+'.json';
   let command;
-
   command = 'scoutbot pipeline --config="'+configName+'" "'+fullPath+'" --output="'+pathToJson+'"';
-
   
   try {
     const { stdout, stderr } = await exec(command);
@@ -1016,7 +1014,7 @@ const invokeMl = async (fullPath,configName) => {
    let foundTasks = await Tasks.find({
      where : {
        taskType : 'ml',
-       assignee : ['ml-v1','ml-v2', 'ml-v3'],
+       assignee : ['ml-v1','ml-v2', 'ml-v3', 'ml-v3-cls'],
        progressAnnotation : {
          '<' : 1
        }
@@ -1059,6 +1057,8 @@ const invokeMl = async (fullPath,configName) => {
         configInvocationName = 'mvp';
     } else if (taskData.assignee == 'ml-v3') {
         configInvocationName = 'v3';
+    } else if (taskData.assignee == 'ml-v3-cls') {
+        configInvocationName = 'v3-cls';
     }
 
    let annotationsArr = await invokeMl(imageData.fullPath,configInvocationName);
