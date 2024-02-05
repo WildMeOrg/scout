@@ -13,11 +13,15 @@ RUN set -ex \
  && rm -rf /var/cache/apt \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install scoutbot==0.1.17
+RUN apt-get -y update
+RUN apt-get -y install git
+RUN pip install git+https://github.com/WildMeOrg/scoutbot.git@pipeline-v3
+
 RUN pip3 uninstall -y onnxruntime
 RUN pip3 install onnxruntime-gpu
 RUN scoutbot fetch --config phase1
 RUN scoutbot fetch --config mvp
+RUN scoutbot fetch --config v3
 
 # END SCOUTBOT SETUP
 
@@ -31,7 +35,11 @@ RUN apt-get install nodejs -y
 RUN apt-get install wget -y
 RUN apt-get install gnupg -y
 RUN apt-get install mongodb -y
+
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get install graphicsmagick -y
+ENV DEBIAN_FRONTEND newt
+
 RUN apt-get install dcraw -y
 
 WORKDIR /usr/src/app
