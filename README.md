@@ -17,12 +17,12 @@ With Scout, you can:
 
 * A fast and stable internet connection.
 * An 8GB-minimum thumbdrive.
-* A dedicated, powerful laptop with a graphics processing unit (GPU) to run solely as the Scout server: see [Scout Server Laptop](https://docs.wildme.org/product-docs/en/scout/system-administrators/system-requirements/#scout-server-laptop) documentation. 
+* A dedicated, powerful laptop with a graphics processing unit (GPU) to run solely as the Scout server. 
 * Laptops with the Chrome web browser to connect to the Scout server for lab leads and annotators.
 
 ## Installation
 
-For installation and first-time configuration steps, follow our [System Installation](https://docs.wildme.org/product-docs/en/scout/system-administrators/system-installation/#system-installation) documentation guide. 
+For installation and first-time configuration steps, follow our [Server System Setup](https://docs.wildme.org/product-docs/en/scout/system-administrators/server-system-setup/) documentation guide. 
 
 **NOTE**: Installation will remove all data and any operating system from the Scout Server laptop. Ubuntu Linux will be installed as the operating system.
 
@@ -36,7 +36,8 @@ Visit [Wild Me Professional Services](https://www.wildme.org/services) to view t
 
 ## Support
 
-For technical support from the Wild Me team, please visit our [Community page](https://community.wildme.org).
+For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://docs.wildme.org/product-docs/en/scout/system-administrators/server-system-setup/).
+For usage issues and customer support, visit our [Community page](https://community.wildme.org).
 
 
 ## Usage
