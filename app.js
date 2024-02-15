@@ -1346,6 +1346,7 @@ const convertToJpg = async (path,filename) => {
     return new Promise((resolve, reject) => {
        gm(path).write(newPath, (err) => {
          if(err){
+           console.log(`Conversion error: ${err}`);
            reject(err);
          } else {
            resolve(newPath)
@@ -1392,7 +1393,8 @@ const parseExif = async (path) => {
   return new Promise((resolve, reject) => {
      gm(path).identify( async (err,data) => {
        if(err){
-         reject(err);
+         console.log(`Identify error: ${err}`);
+         return resolve({});
        } else {
 
          possibleTimestamps = [];
