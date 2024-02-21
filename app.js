@@ -339,7 +339,7 @@ init();
 
 
   }
-  if(ext == 'jpg'){
+  if ((ext == 'jpg') || (ext == 'jpeg')) {
     // move to tmp directory, adding small .jpg extension, get full path of new file
     tempPath = settingsObject.tmpDirectory+'unprocessedImages/'+filename+'.jpg';
     await fs.promises.copyFile(ingestionDir+'/'+randomElement,tempPath);
