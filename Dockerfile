@@ -15,7 +15,7 @@ RUN set -ex \
 
 RUN apt-get -y update
 RUN apt-get -y install git
-RUN pip install git+https://github.com/WildMeOrg/scoutbot.git
+RUN pip install git+https://github.com/WildMeOrg/scoutbot.git --timeout=100
 
 RUN pip3 uninstall -y onnxruntime
 RUN pip3 install onnxruntime-gpu
