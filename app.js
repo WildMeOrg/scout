@@ -360,7 +360,9 @@ init();
     exifTimestamp : exifData.timestamp,
     fullPath : finalLocation,
     currentExtension : 'jpg',
-    originalExtension : ext
+    originalExtension : ext,
+    gpsLatitude : exifData.gpsLatitude,
+    gpsLongitude : exifData.gpsLongitude
   };
 
   let newImage = await Images.create(imageMeta).fetch();
@@ -686,6 +688,9 @@ init();
     'Task Name' : '',
     'Task ID' : '',
     'Image Filename' : '',
+    'Date Exif' : '',
+    'GPS Lat Exif' : '',
+    'GPS Long Exif' : '',
     'Image ID' : '',
     'Image Height' : '',
     'Image Width' : '',
@@ -725,6 +730,13 @@ init();
     fields['Task ID'] = taskData.id;
 
     fields['Image Filename'] = image.originalFilename+'.'+image.originalExtension;
+
+    fields['Date Exif'] = new Date(image.exifTimestamp).toLocaleDateString();
+
+    if (image.gpsLatitude && image.gpsLongitude) {
+      fields['GPS Lat Exif'] = image.gpsLatitude;
+      fields['GPS Long Exif'] = image.gpsLongitude;
+    }
     fields['Image ID'] = image.id;
     fields['Image Height'] = imgHeight;
     fields['Image Width'] = imgWidth;
@@ -1389,6 +1401,49 @@ const getPossibleTimestampsRecursive = async (obj) =>{
   return arr;
 }
 
+const parseLocation = (data) => {
+  const latitudeStr = data?.['Profile-EXIF']?.['GPS Latitude'];
+  const longitudeStr = data?.['Profile-EXIF']?.['GPS Longitude'];
+  const longRef = data?.['Profile-EXIF']?.["GPS Longitude Ref"];
+  const latRef = data?.['Profile-EXIF']?.["GPS Latitude Ref"];
+
+  // Missing exif data
+  if (!latitudeStr || !longitudeStr) {
+    return {
+      latitude: undefined,
+      longitude: undefined
+    }
+  }
+
+  // GPS coordinates are formatted as rationals for degrees, minutes, and seconds
+  // E.g. GPS Latitude: '33/1,23/1,4831/100'
+  function stringToDecimal(gpsString) {
+    function fractionToDecimal(fraction) {
+      const [numerator, denominator] = fraction.split('/').map(Number);
+      return numerator / denominator;
+    }
+    const parts = gpsString.split(',');
+    return fractionToDecimal(parts[0]) + // degrees
+      fractionToDecimal(parts[1]) / 60 + // minutes
+      fractionToDecimal(parts[2]) / 3600; //seconds
+  }
+
+  let latDecimal = stringToDecimal(latitudeStr);
+  if (latRef.toLowerCase() === "s") {
+    latDecimal = -1 * latDecimal;
+  }
+
+  let longDecimal = stringToDecimal(longitudeStr);
+
+  if (longRef.toLowerCase() === "w") {
+    latDecimal = -1 * longDecimal;
+  }
+  return {
+    latitude: Number.parseFloat(latDecimal).toFixed(6),
+    longitude: Number.parseFloat(longDecimal).toFixed(6)
+  }
+}
+
 const parseExif = async (path) => {
   return new Promise((resolve, reject) => {
      gm(path).identify( async (err,data) => {
@@ -1413,9 +1468,11 @@ const parseExif = async (path) => {
              }
            }
          }
-
+         const {latitude, longitude} = parseLocation(data);
          let usefulData = {
-           timestamp : timestamp
+           timestamp : timestamp,
+           gpsLatitude : latitude,
+           gpsLongitude : longitude
          };
          resolve(usefulData)
        }

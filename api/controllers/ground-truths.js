@@ -173,9 +173,7 @@ module.exports = {
     }
 
 
-
-
-
+    imageData.imageDate = new Date(imageData.exifTimestamp).toLocaleDateString();
 
     let serverData = {
       backEnabled : backEnabled,

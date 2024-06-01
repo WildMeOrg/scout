@@ -8,7 +8,9 @@ module.exports = {
     exifTimestamp : { type : 'number', required: true },
     fullPath :  { type: 'string', required: true },
     taskIds: { type: 'json', columnType : "array" },
-    gtComplete : { type : 'boolean' , defaultsTo : false}
+    gtComplete : { type : 'boolean' , defaultsTo : false},
+    gpsLatitude: { type: 'number', required: false },
+    gpsLongitude: { type: 'number', required: false },
   },
 
   // definitely would be better done as part of direct query on Images :(
