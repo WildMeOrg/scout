@@ -2,7 +2,6 @@
 <div class="container d-flex justify-content-center">
 
   <div>
-    
     <div class = "labelBanner">        
       <p>Use keyboard shortcuts to switch to the desired label.</p>
       <div>Current active label is: </div>
@@ -11,12 +10,21 @@
     </div>
     <div class = "hotKeyBox" id = "hotKeyBox">
       <p>Shortcut Keys</p>        
-    </div>      
+    </div>
+    <div>
+      <p>
+        <small>
+          Date: <%=imageData.imageDate%><br>
+          Latitude: <% if(imageData.gpsLatitude){ %><%=imageData.gpsLatitude%><% }else{ %>unavailable<% } %><br>
+          Longitude: <% if(imageData.gpsLongitude){ %><%=imageData.gpsLongitude%><% }else{ %>unavailable<% } %>
+        </small>
+      </p>
+    </div>
     <div class="toggle-switch">
       <input type="checkbox" id="toggle-switch" checked>
       <label for="toggle-switch">Show Labels</label>
     </div>
- 
+
 </div>
 
   <div class="sbsRow">
@@ -38,7 +46,6 @@
     </div>
 
     <div style="float: clear">&nbsp;</div>
-
 
   </div>
 
