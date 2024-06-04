@@ -1402,6 +1402,10 @@ const getPossibleTimestampsRecursive = async (obj) =>{
 }
 
 const parseLocation = (data) => {
+  const undefLocation = {
+    latitude: undefined,
+    longitude: undefined
+  }
   const latitudeStr = data?.['Profile-EXIF']?.['GPS Latitude'];
   const longitudeStr = data?.['Profile-EXIF']?.['GPS Longitude'];
   const longRef = data?.['Profile-EXIF']?.["GPS Longitude Ref"];
@@ -1409,10 +1413,7 @@ const parseLocation = (data) => {
 
   // Missing exif data
   if (!latitudeStr || !longitudeStr) {
-    return {
-      latitude: undefined,
-      longitude: undefined
-    }
+    return undefLocation;
   }
 
   // GPS coordinates are formatted as rationals for degrees, minutes, and seconds
@@ -1428,20 +1429,25 @@ const parseLocation = (data) => {
       fractionToDecimal(parts[2]) / 3600; //seconds
   }
 
-  let latDecimal = stringToDecimal(latitudeStr);
-  if (latRef.toLowerCase() === "s") {
-    latDecimal = -1 * latDecimal;
-  }
+  try {
+    let latDecimal = stringToDecimal(latitudeStr);
+    if (latRef.toLowerCase().startsWith("s")) {
+      latDecimal = -1 * latDecimal;
+    }
 
-  let longDecimal = stringToDecimal(longitudeStr);
+    let longDecimal = stringToDecimal(longitudeStr);
 
-  if (longRef.toLowerCase() === "w") {
-    latDecimal = -1 * longDecimal;
-  }
-  return {
-    latitude: Number.parseFloat(latDecimal).toFixed(6),
-    longitude: Number.parseFloat(longDecimal).toFixed(6)
-  }
+    if (longRef.toLowerCase().startsWith("w")) {
+      latDecimal = -1 * longDecimal;
+    }
+    return {
+      latitude: Number.parseFloat(latDecimal).toFixed(6),
+      longitude: Number.parseFloat(longDecimal).toFixed(6)
+    }
+  } catch {
+    console.log("EXIF location data exists but failed to parse")
+  } 
+  return undefLocation;
 }
 
 const parseExif = async (path) => {
