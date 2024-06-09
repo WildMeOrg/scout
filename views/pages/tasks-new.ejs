@@ -122,6 +122,10 @@
       <input type="hidden" id="filterSource" name="filterSource" value="">
       <input type="hidden" id="filterDateStart" name="filterDateStart" value="">
       <input type="hidden" id="filterDateEnd" name="filterDateEnd" value="">
+      <input type="hidden" id="filterLatMin" name="filterLatMin" value="">
+      <input type="hidden" id="filterLatMax" name="filterLatMax" value="">
+      <input type="hidden" id="filterLongMin" name="filterLongMin" value="">
+      <input type="hidden" id="filterLongMax" name="filterLongMax" value="">
       <input type="hidden" id="filterSubsetStart" name="filterSubsetStart" value="">
       <input type="hidden" id="filterSubsetEnd" name="filterSubsetEnd" value="">
       <input type="hidden" id="filterLabels" name="filterLabels" value="">
@@ -196,6 +200,61 @@
                 <label for="endDate">End</label>
               </div>
               <i class="input-group-text bi-calendar input-group-addon"></i>
+            </div>
+
+            <div class="form-floating">
+              <fieldset>
+                <p class="mt-4">Latitude (decimal degree)</p>
+                <div class="row gx-3">
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="latMin"
+                      id="latMin"
+                      placeholder="-90"
+                    />
+                    <label for="floatingInput">From</label>
+                  </div>
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="latMax"
+                      id="latMax"
+                      placeholder="90"
+                    />
+                    <label for="floatingInput">To</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="form-floating">
+              <fieldset>
+                <p class="mt-4">Longitude (decimal degree)</p>
+                <div class="row gx-3">
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="longMin"
+                      id="longMin"
+                      placeholder="-180"
+                    />
+                    <label for="floatingInput">From</label>
+                  </div>
+                  <div class="form-floating col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="longMax"
+                      id="longMax"
+                      placeholder="180"
+                    />
+                    <label for="floatingInput">To</label>
+                  </div>
+                </div>
+              </fieldset>
             </div>
 
             <p class="mt-4">Labels used in Images</p>

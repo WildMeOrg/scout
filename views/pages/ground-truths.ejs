@@ -15,8 +15,8 @@
       <p>
         <small>
           Date: <%=imageData.imageDate%><br>
-          Latitude: <% if(imageData.gpsLatitude){ %><%=imageData.gpsLatitude%><% }else{ %>unavailable<% } %><br>
-          Longitude: <% if(imageData.gpsLongitude){ %><%=imageData.gpsLongitude%><% }else{ %>unavailable<% } %>
+          Latitude: <% if(imageData.hasGpsLocation){ %><%=imageData.gpsLatitude%><% }else{ %>unavailable<% } %><br>
+          Longitude: <% if(imageData.hasGpsLocation){ %><%=imageData.gpsLongitude%><% }else{ %>unavailable<% } %>
         </small>
       </p>
     </div>

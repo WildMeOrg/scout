@@ -29,6 +29,23 @@ module.exports = {
       type : 'string',
       description : 'Date to'
     },
+    // Lat+Long are strings otherwise validation throws errors when typing negatives
+    latMin : {
+      type : 'string',
+      description : 'latitude minimum'
+    },
+    latMax : {
+      type : 'string',
+      description : 'latitude maximum'
+    },
+    longMin : {
+      type : 'string',
+      description : 'longitude minimum'
+    },
+    longMax : {
+      type : 'string',
+      description : 'longitude maximum'
+    },
     subsetStart : {
       type : 'number',
       description : 'End of subset'
@@ -58,8 +75,7 @@ module.exports = {
     }
   },
 
-  fn: async function (inputs,exits) {    
-
+  fn: async function (inputs,exits) {
     if(!this.req.session.userId){
       return exits.forbidden();
     }
@@ -118,6 +134,9 @@ module.exports = {
       }
       query.exifTimestamp['<='] = end;
     }
+
+    const {latMin, latMax, longMin, longMax} = inputs;
+    Images.addGpsQueryFilter(latMin, latMax, longMin, longMax, query);
 
     let cmd = {
       where : query,

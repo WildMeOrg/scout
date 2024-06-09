@@ -174,6 +174,7 @@ module.exports = {
 
 
     imageData.imageDate = new Date(imageData.exifTimestamp).toLocaleDateString();
+    imageData.hasGpsLocation = Images.hasGpsLocation(imageData);
 
     let serverData = {
       backEnabled : backEnabled,

@@ -1051,6 +1051,10 @@ $('#imageSelectionModalTrigger').on('click',(e) =>{
   $('#startDate').val($('#filterDateStart').val());
   $('#endDate').val($('#filterDateEnd').val());
   $('#subsetStart').val($('#filterSubsetStart').val());
+  $('#latMin').val($('#filterLatMin').val());
+  $('#latMax').val($('#filterLatMax').val());
+  $('#longMin').val($('#filterLongMin').val());
+  $('#longMax').val($('#filterLongMax').val());
   $('#subsetEnd').val($('#filterSubsetEnd').val());
   $('#labels').val($('#filterLabels').val().split(','));
   $('#wicMin').val($('#filterWicMin').val());
@@ -1071,6 +1075,10 @@ $('#imageSelectionFormSubmit').on('click',(e) => {
   $('#filterSource').val(window.imageSelectionFormSavedInputs.sourceTask || '');
   $('#filterDateStart').val(window.imageSelectionFormSavedInputs.startDate || '');
   $('#filterDateEnd').val(window.imageSelectionFormSavedInputs.endDate || '');
+  $('#filterLatMin').val(window.imageSelectionFormSavedInputs.latMin || '');
+  $('#filterLatMax').val(window.imageSelectionFormSavedInputs.latMax || '');
+  $('#filterLongMin').val(window.imageSelectionFormSavedInputs.longMin || '');
+  $('#filterLongMax').val(window.imageSelectionFormSavedInputs.longMax || '');
   $('#filterSubsetStart').val(window.imageSelectionFormSavedInputs.subsetStart || '');
   $('#filterSubsetEnd').val(window.imageSelectionFormSavedInputs.subsetEnd || '');
   $('#filterLabels').val(window.imageSelectionFormSavedInputs.labels || '');
