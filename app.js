@@ -364,7 +364,6 @@ init();
     gpsLatitude : exifData.gpsLatitude,
     gpsLongitude : exifData.gpsLongitude
   };
-
   let newImage = await Images.create(imageMeta).fetch();
   if(!newImage){
     throw Error('Unknown error occured');
@@ -733,7 +732,7 @@ init();
 
     fields['Date Exif'] = new Date(image.exifTimestamp).toLocaleDateString();
 
-    if (image.gpsLatitude && image.gpsLongitude) {
+    if (Images.hasGpsLocation(image)) {
       fields['GPS Lat Exif'] = image.gpsLatitude;
       fields['GPS Long Exif'] = image.gpsLongitude;
     }
@@ -1187,6 +1186,14 @@ const invokeMl = async (fullPath,configName) => {
       }
       query.exifTimestamp = { '<=': end };
     }
+
+    const {
+      filterLatMin: latMin,
+      filterLatMax: latMax,
+      filterLongMin: longMin,
+      filterLongMax: longMax
+    } = taskData;
+    Images.addGpsQueryFilter(latMin, latMax, longMin, longMax, query);
 
     let cmd = {
       where : query,

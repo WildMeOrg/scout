@@ -52,6 +52,22 @@ module.exports = {
       type : 'string',
       description : ''
     },
+    filterLatMin : {
+      type : 'string',
+      description : 'latitude minimum'
+    },
+    filterLatMax : {
+      type : 'string',
+      description : 'latitude maximum'
+    },
+    filterLongMin : {
+      type : 'string',
+      description : 'longitude minimum'
+    },
+    filterLongMax : {
+      type : 'string',
+      description : 'longitude maximum'
+    },
     filterSubsetStart : {
       type : 'string',
       description : ''
@@ -142,6 +158,10 @@ module.exports = {
         filterDateEnd: inputs.filterDateEnd,
         filterWicMin: inputs.filterWicMin,
         filterWicMax: inputs.filterWicMax,
+        filterLatMin: inputs.filterLatMin,
+        filterLatMax: inputs.filterLatMax,
+        filterLongMin: inputs.filterLongMin,
+        filterLongMax: inputs.filterLongMax,
         taskId : newTask.id
       };
 
