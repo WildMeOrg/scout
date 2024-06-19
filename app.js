@@ -271,7 +271,6 @@ const init = async () => {
     await startWorkers();
   }
 
-
 };
 
 init();
