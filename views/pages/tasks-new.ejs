@@ -208,21 +208,25 @@
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       name="latMin"
                       id="latMin"
                       placeholder="-90"
+                      min=-90
+                      max=90
                     />
                     <label for="floatingInput">From</label>
                   </div>
                   <div class="form-floating col-6">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       name="latMax"
                       id="latMax"
                       placeholder="90"
+                      min=-90
+                      max=90
                     />
                     <label for="floatingInput">To</label>
                   </div>
@@ -235,21 +239,25 @@
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       name="longMin"
                       id="longMin"
                       placeholder="-180"
+                      min=-180
+                      max=180
                     />
                     <label for="floatingInput">From</label>
                   </div>
                   <div class="form-floating col-6">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       name="longMax"
                       id="longMax"
                       placeholder="180"
+                      min=-180
+                      max=180
                     />
                     <label for="floatingInput">To</label>
                   </div>
@@ -261,7 +269,7 @@
             <div
               class="input-group mb-3" >
               <div class="form-floating">
-                <select size="5" required class="form-select form-control" multiple name="labels" id="labels" aria-label="multiple select">
+                <select size="5" class="form-select form-control" multiple name="labels" id="labels" aria-label="multiple select">
                   <% for (const labelName of allLabelNames) { %>
                     <option><%=labelName%></option>
                   <% } %>
