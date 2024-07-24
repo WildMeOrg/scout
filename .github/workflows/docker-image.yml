@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'push'
         with:
           ref: git-build
 
