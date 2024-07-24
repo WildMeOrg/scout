@@ -22,20 +22,11 @@ jobs:
         with:
           ref: git-build
 
-      - name: Free Disk space
-        run: |
-             sudo swapoff -a
-             sudo rm -f /swapfile
-             sudo rm -rf /opt/hostedtoolcache
-             sudo apt clean
-             docker rmi $(docker image ls -aq)
-             df -h
-            
       # Build images
       - name: Build images
         run: |
           # Build Image
-          bash ./build.sh ${{ matrix.images }}
+          bash build.sh ${{ matrix.images }}
         env:
           # The wildbook-ia image is built at the same time as wbia, it is an alias
           BUILD_IMAGES: ${{ matrix.images }}
@@ -58,7 +49,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
-          bash ./publish.sh -t latest ${PUBLISH_IMAGES}
+          bash publish.sh -t latest ${PUBLISH_IMAGES}
         env:
           PUBLISH_IMAGES: ${{ matrix.images }} scout
 
