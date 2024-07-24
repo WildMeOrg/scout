@@ -11,7 +11,8 @@ while [ $# -ge 1 ]; do
         docker build \
             --compress \
             -t wildme/scout:latest \
-            --no-cache
+            --no-cache \
+            .
     else
         echo "Image $1 not found"
         exit 1
