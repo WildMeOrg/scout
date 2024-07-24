@@ -1,0 +1,89 @@
+name: Build and upload Docker
+
+on:
+  push:
+     branches:
+      - git-build
+     tags:
+      - v*
+  schedule:
+    - cron: '0 0 * * *' # Every day at midnight
+
+jobs:
+  devops:
+    name: Docker image build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        images:
+          - scout
+
+    steps:
+      - uses: actions/checkout@v2
+        if: github.event_name == 'schedule'
+        with:
+          ref: git-build
+
+      - uses: actions/checkout@v2
+        if: github.event_name != 'schedule'
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.8
+          
+      - name: Free Disk space
+        run: |
+             sudo swapoff -a
+             sudo rm -f /swapfile
+             sudo rm -rf /opt/hostedtoolcache
+             sudo apt clean
+             docker rmi $(docker image ls -aq)
+             df -h
+            
+      # Build images
+      - name: Build images
+        run: |
+          # Build Image
+          cd devops/
+          bash build.sh ${{ matrix.images }}
+        env:
+          # The wildbook-ia image is built at the same time as wbia, it is an alias
+          BUILD_IMAGES: ${{ matrix.images }}
+
+      # Log into image registries
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: wildmeorg
+          password: ${{ secrets.WBIA_WILDMEBOT_DOCKER_HUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Push to Docker Hub (Latest)
+        if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
+        run: |
+          VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
+          bash devops/publish.sh -t ${VERSION} ${PUBLISH_IMAGES}
+          bash devops/publish.sh -t latest ${PUBLISH_IMAGES}
+        env:
+          PUBLISH_IMAGES: ${{ matrix.images }} wildbook-ia
+
+      # Push containers out to container registries
+      - name: Push to GitHub Packages (Latest)
+        if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
+        run: |
+          VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
+          bash devops/publish.sh -t ${VERSION} -r ghcr.io/wildmeorg/wildbook-ia ${PUBLISH_IMAGES}
+          bash devops/publish.sh -t latest -r ghcr.io/wildmeorg/wildbook-ia ${PUBLISH_IMAGES}
+        env:
+          PUBLISH_IMAGES: ${{ matrix.images }} wildbook-ia
+
+ 
