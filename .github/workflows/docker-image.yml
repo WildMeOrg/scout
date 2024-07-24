@@ -4,10 +4,6 @@ on:
   push:
      branches:
       - git-build
-     tags:
-      - v*
-  schedule:
-    - cron: '0 0 * * *' # Every day at midnight
 
 jobs:
   devops:
@@ -26,14 +22,6 @@ jobs:
         with:
           ref: git-build
 
-      - uses: actions/checkout@v2
-        if: github.event_name != 'schedule'
-
-      - uses: actions/setup-python@v2
-        name: Install Python
-        with:
-          python-version: 3.8
-          
       - name: Free Disk space
         run: |
              sudo swapoff -a
@@ -47,7 +35,6 @@ jobs:
       - name: Build images
         run: |
           # Build Image
-          cd devops/
           bash build.sh ${{ matrix.images }}
         env:
           # The wildbook-ia image is built at the same time as wbia, it is an alias
@@ -68,22 +55,13 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Push to Docker Hub (Latest)
-        if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
+        if: ${{ github.event_name == 'push' }}
         run: |
           VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
-          bash devops/publish.sh -t ${VERSION} ${PUBLISH_IMAGES}
-          bash devops/publish.sh -t latest ${PUBLISH_IMAGES}
+          bash publish.sh -t ${VERSION} ${PUBLISH_IMAGES}
+          bash publish.sh -t latest ${PUBLISH_IMAGES}
         env:
-          PUBLISH_IMAGES: ${{ matrix.images }} wildbook-ia
+          PUBLISH_IMAGES: ${{ matrix.images }} scout
 
-      # Push containers out to container registries
-      - name: Push to GitHub Packages (Latest)
-        if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
-        run: |
-          VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
-          bash devops/publish.sh -t ${VERSION} -r ghcr.io/wildmeorg/wildbook-ia ${PUBLISH_IMAGES}
-          bash devops/publish.sh -t latest -r ghcr.io/wildmeorg/wildbook-ia ${PUBLISH_IMAGES}
-        env:
-          PUBLISH_IMAGES: ${{ matrix.images }} wildbook-ia
 
  
