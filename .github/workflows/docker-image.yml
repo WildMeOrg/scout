@@ -22,6 +22,15 @@ jobs:
         with:
           ref: git-build
 
+      - name: Free Disk space
+        run: |
+             sudo swapoff -a
+             sudo rm -f /swapfile
+             sudo rm -rf /opt/hostedtoolcache
+             sudo apt clean
+             docker rmi $(docker image ls -aq)
+             df -h
+             
       # Build images
       - name: Build images
         run: |
