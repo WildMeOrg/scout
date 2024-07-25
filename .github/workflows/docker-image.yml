@@ -3,7 +3,7 @@ name: Build and upload Docker for Scout
 on:
   push:
      branches:
-      - git-build
+      - main
 
 jobs:
   devops:
@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         images:
-          - scout
+          - main
 
     steps:
       - uses: actions/checkout@v2
