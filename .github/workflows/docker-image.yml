@@ -26,10 +26,7 @@ jobs:
       - name: Build images
         run: |
           # Build Image
-          bash build.sh ${{ matrix.images }}
-        env:
-          # The wildbook-ia image is built at the same time as wbia, it is an alias
-          BUILD_IMAGES: ${{ matrix.images }}
+          bash ./build.sh ${{ matrix.images }}
 
       # Log into image registries
       - name: Login to DockerHub
@@ -49,7 +46,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           VERSION=$(echo ${GITHUB_REF} | sed 's#.*/v##')
-          bash publish.sh -t latest ${PUBLISH_IMAGES}
+          bash ./publish.sh -t latest ${PUBLISH_IMAGES}
         env:
           PUBLISH_IMAGES: ${{ matrix.images }} scout
 
