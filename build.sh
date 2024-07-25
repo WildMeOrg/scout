@@ -8,8 +8,7 @@ cd ${ROOT_LOC}
 # Build the images in dependence order
 while [ $# -ge 1 ]; do
     if [ "$1" == "scout" ]; then
-        echo "PWD::"
-        echo pwd  
+        echo "Current working directory: $PWD"
         docker build \
             --compress \
             -t wildme/scout:latest \
