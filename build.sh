@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+# See https://stackoverflow.com/a/246128/176882
+export ROOT_LOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 export DOCKER_BUILDKIT=1
 
 export DOCKER_CLI_EXPERIMENTAL=enabled
