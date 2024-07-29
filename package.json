@@ -15,7 +15,7 @@
     "image-size": "^1.0.2",
     "moment": "^2.29.4",
     "readline-sync": "1.4.10",
-    "sails": "1.5.3",
+    "sails": "1.5.7",
     "sails-hook-grunt": "5.0.0",
     "sails-hook-orm": "4.0.0",
     "sails-hook-sockets": "2.0.0",
