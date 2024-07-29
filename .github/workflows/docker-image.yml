@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
         if: github.event_name == 'push'
         with:
-          ref: git-build
+          ref: main
 
       - name: Free Disk space
         run: |
