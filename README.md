@@ -36,7 +36,7 @@ Visit [Wild Me Professional Services](https://www.wildme.org/services) to view t
 
 ## Support
 
-For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://docs.wildme.org/product-docs/en/scout/system-administrators/server-system-setup/).
+For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://discord.gg/zw4tr3RE4R).
 For usage issues and customer support, visit our [Community page](https://community.wildme.org).
 
 
