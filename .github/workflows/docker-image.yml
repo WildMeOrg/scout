@@ -39,7 +39,7 @@ jobs:
 
       # Log into image registries
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: wildmeorg
           password: ${{ secrets.WBIA_WILDMEBOT_DOCKER_HUB_TOKEN }}
