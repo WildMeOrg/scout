@@ -3,7 +3,7 @@ name: Build and upload Docker for Scout
 on:
   push:
      branches:
-      - main
+      - scoutbot-install-issue
 
 jobs:
   devops:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
         if: github.event_name == 'push'
         with:
-          ref: main
+          ref: scoutbot-install-issue
 
       - name: Free Disk space
         run: |
