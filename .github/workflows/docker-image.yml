@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' or github.event_name =='repository_dispatch'
         with:
           ref: main
 
