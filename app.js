@@ -173,7 +173,7 @@ const validateSettings = async () => {
      console.log('Ok, your previous settings have been deleted. Please restart Scout now.');
      process.exit(0);
    } else {
-     console.log('Ok, please check to make sure your image store properly mounted, then restart Scout. The application will now exit.');
+     console.log('Ok, please check to make sure your image store is properly mounted, then restart Scout. The application will now exit.');
      process.exit(0);
    }
   }
