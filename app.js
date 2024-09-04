@@ -57,7 +57,7 @@ const repl = async () => {
   console.log('Welcome to Scout');
   console.log(lineSeparator);
 
-  const imageDirectoryQuestion = `Please create a directory on your image store where you would like to upload your images. Then, enter the absolute path to that directory here. If you are uploading images to several sub-directories, please only list the parent folder. Eg: /nas/images/ or /nas/\n`;
+  const imageDirectoryQuestion = `Please create a directory on your image store where you would like to upload your images. Then, enter the absolute path to that directory here. If you are uploading images to several sub-directories, please only list the parent folder. Eg: /data/scout/images/\n`;
   settings.imageDirectory = readlineSync.question(imageDirectoryQuestion);
   console.log(lineSeparator);
   return;
