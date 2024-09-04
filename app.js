@@ -57,7 +57,7 @@ const repl = async () => {
   console.log('Welcome to Scout');
   console.log(lineSeparator);
 
-  const imageDirectoryQuestion = `Please create a directory on your NAS where you would like to upload your images. Then, enter the absolute path to that directory here. If you are uploading images to several sub-directories, please only list the parent folder. Eg: /nas/images/ or /nas/\n`;
+  const imageDirectoryQuestion = `Please create a directory on your image store where you would like to upload your images. Then, enter the absolute path to that directory here. If you are uploading images to several sub-directories, please only list the parent folder. Eg: /nas/images/ or /nas/\n`;
   settings.imageDirectory = readlineSync.question(imageDirectoryQuestion);
   console.log(lineSeparator);
   return;
@@ -137,7 +137,7 @@ const validateSettings = async () => {
   }
 
 
-  // Try to reach NAS directory
+  // Try to reach image store directory
   try {
    let pathToImageDir = resolve(settingsObject.imageDirectory);
    let pathToHiddenDir = resolve(settingsObject.imageDirectory+'/'+settingsObject.hiddenDirectory);
@@ -173,7 +173,7 @@ const validateSettings = async () => {
      console.log('Ok, your previous settings have been deleted. Please restart Scout now.');
      process.exit(0);
    } else {
-     console.log('Ok, please check to make sure your NAS is plugged in and properly mounted, then restart Scout. The application will now exit.');
+     console.log('Ok, please check to make sure your image store properly mounted, then restart Scout. The application will now exit.');
      process.exit(0);
    }
   }
@@ -183,6 +183,10 @@ const validateSettings = async () => {
 
 
 const suppressLogs = async () =>{
+  if (process.env.DEBUG == '1') {
+    console.log('DEBUG: console messages enabled');
+    return;
+  }
 
   // If an IP hasn't been set, then keep logs running
   if(typeof(process.env.ENV_IP) == 'undefined'){
@@ -331,7 +335,7 @@ init();
     // Transform to jpg, move to tmp directory, get full path of new file
     tempPath = await convertToJpg(ingestionDir+'/'+randomElement,filename);
 
-    // Move the old file to unused directory on NAS
+    // Move the old file to unused directory on image store
     let newLocationUnused = resolve(settingsObject.imageDirectory+'/'+settingsObject.hiddenDirectory+'/unused/'+randomElement);
     await fs.promises.copyFile(ingestionDir+'/'+randomElement,newLocationUnused);
     await fs.promises.unlink(ingestionDir+'/'+randomElement);
