@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu20.04
 
 # BEGIN SCOUTBOT SETUP
 
@@ -13,8 +13,9 @@ RUN set -ex \
  && rm -rf /var/cache/apt \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get -y update
-RUN apt-get -y install git
+RUN apt-get -y update && \
+    apt-get -y install git && \
+    apt-get clean  
 RUN pip install git+https://github.com/WildMeOrg/scoutbot.git --timeout=100
 
 RUN pip3 uninstall -y onnxruntime

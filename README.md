@@ -22,21 +22,21 @@ With Scout, you can:
 
 ## Installation
 
-For installation and first-time configuration steps, follow our [Server System Setup](https://docs.wildme.org/product-docs/en/scout/system-administrators/server-system-setup/) documentation guide. 
+For installation and first-time configuration steps, follow our [Server System Setup](https://scout.docs.wildme.org/system-administrators/server-system-setup.html) documentation guide. 
 
-**NOTE**: Installation will remove all data and any operating system from the Scout Server laptop. Ubuntu Linux will be installed as the operating system.
+**NOTE**: Following full installation instructions will remove all data and any operating system from the Scout Server laptop and Ubuntu Linux will be installed as the operating system. Skip Ubuntu installation to run on a different OS.
 
 
 ## Important Links & Documentation
 
-Use our [Help Documentation](https://docs.wildme.org/product-docs/en/scout/) to learn how to use Scout.
+Use our [Help Documentation](https://scout.docs.wildme.org/) to learn how to use Scout.
 
 Visit [Wild Me Professional Services](https://www.wildme.org/services) to view the range of services we can offer. 
 
 
 ## Support
 
-For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://docs.wildme.org/product-docs/en/scout/system-administrators/server-system-setup/).
+For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://discord.gg/zw4tr3RE4R).
 For usage issues and customer support, visit our [Community page](https://community.wildme.org).
 
 

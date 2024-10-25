@@ -11,7 +11,7 @@
     "connect-mongodb-session": "3.1.1",
     "csv-string": "^4.1.0",
     "gm": "^1.25.0",
-    "grunt": "1.0.4",
+    "grunt": "1.5.3",
     "image-size": "^1.0.2",
     "moment": "^2.29.4",
     "readline-sync": "1.4.10",

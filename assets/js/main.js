@@ -862,6 +862,7 @@ if(!document.querySelector("#activeLabel")) {
       allOptions.push("shft+"+count);
       count++;
     }    
+    allOptions.sort();
     return allOptions;    
   }
 
@@ -1065,7 +1066,13 @@ $('#imageSelectionModalTrigger').on('click',(e) =>{
 
 $('#imageSelectionFormSubmit').on('click',(e) => {
   e.preventDefault();
-  
+  const imageSelectionForm = document.getElementById('imageSelectionForm');
+  if (!imageSelectionForm.checkValidity()) {
+    imageSelectionForm.reportValidity();
+    return;
+  }
+
+
   // Save the state of the form and filtered result
   window.imageSelectionFormSavedCount = window.imageSelectionFormUnsavedCount;
   window.imageSelectionFormSavedInputs = window.imageSelectionFormUnsavedInputs;
