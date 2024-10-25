@@ -862,6 +862,7 @@ if(!document.querySelector("#activeLabel")) {
       allOptions.push("shft+"+count);
       count++;
     }    
+    allOptions.sort();
     return allOptions;    
   }
 
