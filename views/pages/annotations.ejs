@@ -2,17 +2,17 @@
   <main class="container d-flex">
     <div>      
       <div class = "labelBanner">        
-        <p>Use keyboard shortcuts to switch to the desired label.</p>
-        <div>Current active label is: </div>
-        <p id="activeLabel">None</p>
-        <div>Please press hot keys to set or change.</div>
+        <p><%= ('Desc_KeyboardShortcuts') %></p>
+        <div><%= ('ActiveLabel') %></div>
+        <p id="activeLabel"><%= ('None') %></p>
+        <div><%= ('Desc_HotKeys') %></div>
       </div>
       <div class = "hotKeyBox" id = "hotKeyBox">
-        <p>Shortcut Keys</p>        
+        <p><%= ('ShortcutKeys') %></p>        
       </div>      
       <div class="toggle-switch">
         <input type="checkbox" id="toggle-switch" checked>
-        <label for="toggle-switch">Show Labels</label>
+        <label for="toggle-switch"><%= ('ShowLabels') %></label>
       </div>
    
   </div>

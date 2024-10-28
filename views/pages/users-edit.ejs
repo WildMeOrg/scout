@@ -1,7 +1,7 @@
 <main class="container">
      <div class="mt-5">
        <form data-form-method="PUT" class="d-flex flex-column flex-wrap align-items-center justify-content-center handleable" action="/api/users" data-onSuccessType="redirect" data-onSuccessValue="/users?success=edited">
-         <h1 class="h3 mb-3 fw-normal">Edit User</h1>
+         <h1 class="h3 mb-3 fw-normal"><%= __('EditUser') %></h1>
          <input type="hidden" id="id" name="id" value="<%= userData.id %>">
          <div>
            <div class="form-floating mb-1">
@@ -13,7 +13,7 @@
                placeholder="name@example.com"
                disabled
              />
-             <label for="floatingInput">Username</label>
+             <label for="floatingInput"><%= __('Username') %></label>
            </div>
            <div class="form-floating mb-1">
              <input
@@ -24,7 +24,7 @@
                placeholder="Password"
                required
              />
-             <label for="floatingPassword">New password</label>
+             <label for="floatingPassword"><%= __('NewPassword') %></label>
            </div>
            <div class="form-floating mb-1">
              <input
@@ -35,16 +35,16 @@
                placeholder="Password"
                required
              />
-             <label for="floatingPassword">Confirm new password</label>
+             <label for="floatingPassword"><%= __('ConfirmNewPassword') %></label>
            </div>
            <div class="form-floating mb-1">
              <select class="form-select form-control" id="role" name="role" disabled>
-               <option <% if(userData.role == 'user') { %>selected<% } %> value="annotator">Annotator</option>
-               <option <% if(userData.role == 'admin') { %>selected<% } %> value="labLead">Lab Lead</option>
+               <option <% if(userData.role == 'user') { %>selected<% } %> value="annotator"><%= __('Role_User') %></option>
+               <option <% if(userData.role == 'admin') { %>selected<% } %> value="labLead"><%= __('Role_Admin') %></option>
              </select>
-             <label for="role">Role</label>
+             <label for="role"><%= __('Role') %></label>
            </div>
-           <p class="mt-4">Provide your password to confirm user creation</p>
+           <p class="mt-4"><%= __('Desc_AdminPasswordNewUser') %></p>
            <div class="form-floating">
              <input
                type="password"
@@ -54,12 +54,12 @@
                placeholder="Password"
                required
              />
-             <label for="adminPassword">Your password</label>
+             <label for="adminPassword"><%= __('YourPassword') %></label>
            </div>
          </div>
          <button
            class="btn btn-lg btn-primary mt-3"
-           type="submit">Submit</button>
+           type="submit"><%= __('Submit') %></button>
 
        </form>
      </div>

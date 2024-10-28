@@ -2,12 +2,11 @@
   <div class="mt-5">
     <form
       class="d-flex flex-column flex-wrap align-items-center justify-content-center handleable" action="/api/tasks" data-onSuccessType="redirect" data-onSuccessValue="/tasks?success=new" id="create-task-form">
-      <h1 class="h3 mb-3 fw-normal">New Task</h1>
+      <h1 class="h3 mb-3 fw-normal"><%= ('NewTask') %></h1>
 
       <% if(ingestionActive) { %>
       <div class="alert alert-warning text-center">
-        <i class="bi-exclamation-triangle"></i> Image ingestion in
-        progress. Some images may not be available for task creation.
+        <i class="bi-exclamation-triangle"></i><%= __('Alert_ImageIngestion') %>
       </div>
      <% } %>
 
@@ -21,28 +20,28 @@
             placeholder="My Task Name"
             required
           />
-          <label for="name">Task Name</label>
+          <label for="name"><%= __('TaskName') %></label>
         </div>
 
         <div class="form-floating">
           <select required class="form-select form-control" name="assignee" id="assignee">
 
             <option></option>
-            <option disabled>--- USERS ---</option>
+            <option disabled><%= __('FilterBlockUser') %></option>
             <% for (const user of users) { %>
 
               <option value="<%=user.id%>"><%=user.username%></option>
 
             <% } %>
 
-            <option disabled>--- MACHINE LEARNING ---</option>
+            <option disabled><%= __('FilterBlockML') %></option>
             <option value="ml-v1">ML Config: V1 Classifier</option>
             <option value="ml-v2">ML Config: V2 Classifier</option>
             <option value="ml-v3">ML Config: V3 Detector</option>
             <option value="ml-v3-cls">ML Config: V3 Classifier</option>
 
           </select>
-          <label for="assignee">Assignee</label>
+          <label for="assignee"><%= __('Assignee') %></label>
         </div>
 
 <% if (allTags.length) { %>
@@ -52,21 +51,21 @@
 		    <option value="<%=tag.id%>"><%=tag.name%></option>
 		  <% } %>
           </select>
-          <label for="tagIds">Tags</label>
+          <label for="tagIds"><%= __('Tags') %></label>
         </div>
 <% } %>
 
         <div class="form-floating">
           <select required class="form-select form-control" name="randomized" id="randomized">
-            <option value="false">Sequential</option>
-            <option value="true">Random</option>
+            <option value="false"><%= __('Sequential') %></option>
+            <option value="true"><%= __('Random') %></option>
           </select>
-          <label for="randomized">Image ordering</label>
+          <label for="randomized"><%= __('OrderType') %></label>
         </div>
 
         <div class="form-floating">
           <fieldset>
-            <p class="mt-4">Camera Side</p>
+            <p class="mt-4"><%= __('CameraSide') %></p>
             <div class="row gx-3">
               <div class="col-6">
                 <input
@@ -79,7 +78,7 @@
                 <label
                   class="btn-primary btn w-100"
                   for="left">
-                  Left
+                  <%= __('Left') %>
                 </label>
               </div>
               <div class="col-6">
@@ -93,15 +92,14 @@
                 <label
                   class="btn btn-primary w-100"
                   for="right">
-                  Right
+                  <%= __('Right') %>
                 </label>
               </div>
             </div>
           </fieldset>
         </div>
         <p class="mt-1">
-          To leverage Division Lines, only select images from one side of the
-          plane
+          <%= __('Desc_DLPrepSingleSide') %>
         </p>
 
         <div class="mt-4">
@@ -113,7 +111,7 @@
               <span id="totalImageCount"><%=imageCountTotal%></span>
             </p>
             <button class="btn btn-primary btn-sm ms-5" type="button"  id="imageSelectionModalTrigger">
-              Select Images
+              <%= ('SelectImages') %>
             </button>
           </div>
         </div>
@@ -134,7 +132,7 @@
       <input type="hidden" id="filteredImageCount" name="filteredImageCount" value="<%=imageCountTotal%>">
       <button
         class=" btn btn-lg btn-primary mt-3"
-        type="submit">Submit</button>
+        type="submit"><%= ('Submit') %></button>
     </form>
 
 <!-- BEGIN MODAL -->
@@ -142,7 +140,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Select Images</h5>
+            <h5 class="modal-title"><%= ('SelectImages') %></h5>
             <button
               type="button"
               class="btn-close"
@@ -156,12 +154,12 @@
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input type="text" id="originalFilenameLower" name="originalFilenameLower" class="form-control" />
-                <label for="originalFilenameLower">File Name</label>
+                <label for="originalFilenameLower"><%= ('FileName') %></label>
               </div>
               <i class="input-group-text bi-search"></i>
             </div>
             <div>
-              <p id = "imageSelectBoxNote">Note: Enter a string in the filename field to get exact matching results. Use an asterisk (*) in place of any unknown characters to get matching results. </p>
+              <p id = "imageSelectBoxNote"><%= ('Desc_ImageSelectBoxNote') %></p>
             </div>
             <div class="form-floating mb-1">
               <input
@@ -171,7 +169,7 @@
                 id="taskNamesDataList"
                 class="form-control"
               />
-              <label for="sourceTask">Duplicate From Existing Task</label>
+              <label for="sourceTask"><%= ('DupExistingTask') %></label>
               <datalist id="sourceTask">
                 <% for (const task of tasks) { %>
 
@@ -183,13 +181,13 @@
               </datalist>
             </div>
 
-            <p class="mt-4">Time Image Was Taken</p>
+            <p class="mt-4"><%= ('TimeImageTaken') %></p>
             <div
               class="input-group date bootstrap-datepicker mb-1"
               id="datepicker1">
               <div class="form-floating">
                 <input type="text" id="startDate" name="startDate" class="form-control" />
-                <label for="startDate">Start</label>
+                <label for="startDate"><%= ('Start') %></label>
               </div>
               <i class="input-group-text  bi-calendar input-group-addon"></i>
             </div>
@@ -197,14 +195,14 @@
             <div class="input-group date bootstrap-datepicker" id="datepicker2">
               <div class="form-floating">
                 <input type="text" id="endDate" name="endDate" class="form-control" />
-                <label for="endDate">End</label>
+                <label for="endDate"><%= ('End') %></label>
               </div>
               <i class="input-group-text bi-calendar input-group-addon"></i>
             </div>
 
             <div class="form-floating">
               <fieldset>
-                <p class="mt-4">Latitude (decimal degree)</p>
+                <p class="mt-4"><%= ('LatitudeUnit') %></p>
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
@@ -216,7 +214,7 @@
                       min=-90
                       max=90
                     />
-                    <label for="floatingInput">From</label>
+                    <label for="floatingInput"><%= ('From') %></label>
                   </div>
                   <div class="form-floating col-6">
                     <input
@@ -228,14 +226,14 @@
                       min=-90
                       max=90
                     />
-                    <label for="floatingInput">To</label>
+                    <label for="floatingInput"><%= ('To') %></label>
                   </div>
                 </div>
               </fieldset>
             </div>
             <div class="form-floating">
               <fieldset>
-                <p class="mt-4">Longitude (decimal degree)</p>
+                <p class="mt-4"><%= ('LongitudeUnit') %></p>
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
@@ -247,7 +245,7 @@
                       min=-180
                       max=180
                     />
-                    <label for="floatingInput">From</label>
+                    <label for="floatingInput"><%= ('From') %></label>
                   </div>
                   <div class="form-floating col-6">
                     <input
@@ -259,13 +257,13 @@
                       min=-180
                       max=180
                     />
-                    <label for="floatingInput">To</label>
+                    <label for="floatingInput"><%= ('To') %></label>
                   </div>
                 </div>
               </fieldset>
             </div>
 
-            <p class="mt-4">Labels used in Images</p>
+            <p class="mt-4"><%= ('LabelsUsed') %></p>
             <div
               class="input-group mb-3" >
               <div class="form-floating">
@@ -279,7 +277,7 @@
 
             <div class="form-floating">
               <fieldset>
-                <p class="mt-4">Subset Range (inclusive)</p>
+                <p class="mt-4"><%= ('Subset') %></p>
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
@@ -289,7 +287,7 @@
                       id="subsetStart"
                       placeholder="20"
                     />
-                    <label for="floatingInput">From</label>
+                    <label for="floatingInput"><%= ('From') %></label>
                   </div>
                   <div class="form-floating col-6">
                     <input
@@ -299,14 +297,14 @@
                       id="subsetEnd"
                       placeholder="50"
                     />
-                    <label for="floatingInput">To</label>
+                    <label for="floatingInput"><%= ('To') %></label>
                   </div>
                 </div>
               </fieldset>
             </div>
             <div class="form-floating">
               <fieldset>
-                <p class="mt-4">WIC Score (inclusive)</p>
+                <p class="mt-4"><%= ('WIC') %></p>
                 <div class="row gx-3">
                   <div class="form-floating col-6">
                     <input
@@ -316,7 +314,7 @@
                       id="wicMin"
                       placeholder=0
                     />
-                    <label for="floatingInput">Minimum</label>
+                    <label for="floatingInput"><%= ('Minimum') %></label>
                   </div>
                   <div class="form-floating col-6">
                     <input
@@ -326,7 +324,7 @@
                       id="wicMax"
                       placeholder=1
                     />
-                    <label for="floatingInput">Maximum</label>
+                    <label for="floatingInput"><%= ('Maximum') %></label>
                   </div>
                 </div>
               </fieldset>
@@ -334,10 +332,10 @@
           </div>
           </form>
           <div class="modal-footer d-flex justify-content-between">
-            <em><span id="filteredImageCountModal"><%=imageCountTotal%></span> matching images</em>
+            <em><span id="filteredImageCountModal"><%=imageCountTotal%></span><%= ('FilteredImageCount') %></em>
             <button
               type="submit"
-              class="btn btn-primary" id="imageSelectionFormSubmit">Submit</button>
+              class="btn btn-primary" id="imageSelectionFormSubmit"><%= ('Submit') %></button>
           </div>
         </div>
       </div>

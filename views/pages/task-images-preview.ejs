@@ -3,10 +3,10 @@
   <div id="taskOuter" class="mt-5">
 	<div class="row" id="meta">
 		<div class="col-2">
-			<p><b>Task Name:</b></p>
-			<p><b>Side:</b></p>
-			<p><b>Sequence:</b></p>
-			<p><b>Assignee:</b></p>
+			<p><b><%= ('TaskName') %>:</b></p>
+			<p><b><%= ('Side') %>:</b></p>
+			<p><b><%= ('Order') %>:</b></p>
+			<p><b><%= ('Assignee') %>:</b></p>
 		</div>
 		<div class="col-4">
 			<p><%=taskData.displayName%></p>
@@ -15,10 +15,10 @@
 			<p><%=taskData.assigneeDiplayName%></p>
 		</div>
 		<div class="col-2">
-			<p><b>Date Created:</b></p>
-			<p><b>Annotate %:</b></p>
-			<p><b>Ground Truth %:</b></p>
-			<p><b>Div Line %:</b></p>
+			<p><b><%= ('DateCreated') %>:</b></p>
+			<p><b><%= ('AnnoPercent') %>:</b></p>
+			<p><b><%= ('GTPercent') %>:</b></p>
+			<p><b><%= ('DLPercent') %>:</b></p>
 		</div>
 		<div class="col-4">
 			<p><%=new Date(taskData.createdAt).toISOString().split('T')[0]%></p>
@@ -30,24 +30,24 @@
 
 	<div class="row">
 		<div class="col-2">
-			<p><b>Sort by:</b></p>
+			<p><b><%= ('Sort by') %>:</b></p>
 		</div>
 		<div class="col-3">
 			<select onChange="window.location = window.location.pathname + '?sortby=' + this.value;" class="form-select form-select-sm form-control" id="sortby" aria-label="select">
-				<option <%=(sortBy=='originalFilenameLower'?'selected':'')%> value="originalFilenameLower">File name</option>
-				<option <%=(sortBy=='exifTimestamp'?'selected':'')%> value="exifTimestamp">Image time/date</option>
-				<option <%=(sortBy=='createdAt'?'selected':'')%> value="createdAt">Time created</option>
+				<option <%=(sortBy=='originalFilenameLower'?'selected':'')%> value="originalFilenameLower"><%= ('FileName') %></option>
+				<option <%=(sortBy=='exifTimestamp'?'selected':'')%> value="exifTimestamp"><%= ('ImageDateTime') %></option>
+				<option <%=(sortBy=='createdAt'?'selected':'')%> value="createdAt"><%= ('TimeCreated') %></option>
 			</select>
 		</div>
 		<div class="col-1"></div>
 		<div class="col-2">
             <button class="btn btn-secondary btn-sm ms-5" type="button" id="imagesPreviewSelectAll">
-              Select All
+				<%= ('SelectAll') %>
             </button>
 		</div>
 		<div class="col-2">
             <button class="btn btn-secondary btn-sm ms-5" type="button" id="imagesPreviewDelete" disabled>
-              Delete Images
+				<%= ('DeleteImages') %>
             </button>
 		</div>
 	</div>
@@ -66,7 +66,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Image Preview</h5>
+            <h5 class="modal-title"><%= ('ImagePreview') %></h5>
             <button
               type="button"
               class="btn-close"
@@ -77,8 +77,8 @@
           <div class="modal-body">
 		<img style="width: 100%;" />
 		<div style="text-align: center; padding-top: 10px;">
-		    <button onClick="imagePreviewModalSelect()" class="btn btn-secondary btn-sm ms-5" type="button">Select</button>
-		    <button onClick="imagePreviewModalDelete()" class="btn btn-secondary btn-sm ms-5" type="button">Delete</button>
+		    <button onClick="imagePreviewModalSelect()" class="btn btn-secondary btn-sm ms-5" type="button"><%= ('Select') %></button>
+		    <button onClick="imagePreviewModalDelete()" class="btn btn-secondary btn-sm ms-5" type="button"><%= ('Delete') %></button>
 		</div>
           </div>
         </div>

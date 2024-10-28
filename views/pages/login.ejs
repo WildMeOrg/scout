@@ -3,10 +3,10 @@
     <form  action="/api/sessions" data-onSuccessType="redirect" data-onSuccessValue="/tasks"
       class="handleable d-flex flex-column flex-wrap align-items-center justify-content-center">
       <img class="my-4" src="/images/logo-black-svg.svg" height="57" />
-      <h1 class="h3 mb-3 fw-normal">Login</h1>
+      <h1 class="h3 mb-3 fw-normal"><%= __('Login') %></h1>
 
       <div class="alert alert-danger loginFormError formError">
-          <i class="bi-exclamation-triangle"></i> Login failed; try again.
+          <i class="bi-exclamation-triangle"></i> <%= __('Error_LoginFail') %>
       </div>
 
       <div class="form-floating mb-1 loginFormInput">
@@ -18,7 +18,7 @@
           placeholder="name@example.com"
           required
         />
-        <label for="username">Username</label>
+        <label for="username"><%= __('Username') %></label>
       </div>
       <div class="form-floating loginFormInput">
         <input
@@ -29,10 +29,10 @@
           placeholder="Password"
           required
         />
-        <label for="password">Password</label>
+        <label for="password"><%= __('Password') %></label>
       </div>
       <button class="btn btn-lg btn-primary mt-3" type="submit">
-        Login
+        <%= __('Login') %>
       </button>
     </form>
   </div>

@@ -2,19 +2,19 @@
 
 
       <div class="alert alert-success pageSuccessAlert" data-successType="new" id="newUserAlert" role="alert">
-        <i class="bi-person"></i> New user created successfully
+        <i class="bi-person"></i> <%= __('Success_NewUser') %>
       </div>
 
       <div class="alert alert-success pageSuccessAlert" data-successType="edited" id="editedUserAlert" role="alert">
-        <i class="bi-check"></i> User edited successfully
+        <i class="bi-check"></i> <%= __('Success_EditUser') %>
       </div>
 
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Username</th>
-            <th scope="col">Role</th>
-            <th class="text-end" scope="col">Actions</th>
+            <th scope="col"><%= __('Username') %></th>
+            <th scope="col"><%= __('Role') %></th>
+            <th class="text-end" scope="col"><%= __('Actions') %></th>
           </tr>
         </thead>
         <tbody>
@@ -29,13 +29,13 @@
             <th scope="row"><%=user.displayUsername%></th>
             <td>
               <% if(user.role == 'admin'){ %>
-                Lab Lead
+                <%= __('Role_Admin') %>
               <% } else { %>
-                Annotator
+                <%= __('Role_User') %>
               <% } %>
             </td>
             <td class="text-end">
-              <a href="/users/<%=user.id%>" data-userId="<%=user.id%>" class="<% if(userRole !== 'admin') { %>disabled <% } %>editUserButton btn btn-sm btn-secondary">Edit</a>
+              <a href="/users/<%=user.id%>" data-userId="<%=user.id%>" class="<% if(userRole !== 'admin') { %>disabled <% } %>editUserButton btn btn-sm btn-secondary"><%= __('Edit') %></a>
             </td>
           </tr>
 

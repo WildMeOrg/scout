@@ -2,45 +2,44 @@
 
   <% if(ingestionActive) { %>
   <div class="alert alert-warning text-center">
-    <i class="bi-exclamation-triangle"></i> Image ingestion in
-    progress. Some images may not be available for task creation.
+    <i class="bi-exclamation-triangle"></i> <%= __('Alert_ImageIngestion') %>
   </div>
  <% } %>
 
   <div class="alert alert-success pageSuccessAlert" data-successType="new" id="newTaskAlert" role="alert">
-    <i class="bi-check-circle"></i> Successfully created task <% if(lastTaskName) { %>"<%=lastTaskName%>"<% } %>
+    <i class="bi-check-circle"></i> <%= __('Alert_TaskCreated') %> <% if(lastTaskName) { %>"<%=lastTaskName%>"<% } %>
 
   </div>
 
   <div class="alert alert-success pageSuccessAlert" data-successType="delete" id="deletedTaskAlert" role="alert">
-    <i class="bi-x-circle"></i> Task deleted successfully
+    <i class="bi-x-circle"></i> <%= __('Alert_TaskDeleted') %>
   </div>
 
 <div class="container border p-3 mb-3">
 <div class="row mb-2">  
   <% if(userRole == 'admin'){ %>
   <div class="col-9">
-    <h4>Filters</h4>
+    <h4><%= __('TaskFilters') %></h4>
   </div>
   <div class="col-1">
-    <button id="editLabelButton" type="button" class="btn btn-primary">Labels</button>
+    <button id="editLabelButton" type="button" class="btn btn-primary"><%= __('Labels') %></button>
   </div>
   <div class="col-1">
-    <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
+    <button id="taskFilterButton" type="button" class="btn btn-primary"><%= __('Apply') %></button>
   </div>
   <div class="col-1">
-    <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
+    <button id="taskResetButton" type="button" class="btn btn-secondary"><%= __('Reset') %></button>
   </div>
   <% } %>
   <% if(userRole !== 'admin'){ %>    
     <div class="col-10">
-      <h4>Filters</h4>
+      <h4><%= __('TaskFilters') %></h4>
     </div>
     <div class="col-1">
-      <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
+      <button id="taskFilterButton" type="button" class="btn btn-primary"><%= __('Apply') %></button>
     </div>
     <div class="col-1">
-      <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
+      <button id="taskResetButton" type="button" class="btn btn-secondary"><%= __('Reset') %></button>
     </div>
     <% } %>
 </div>
@@ -78,17 +77,17 @@
 </div>
 <div class="row">
   <div class="col-3">
-    Assignee
+    <%= ('Assignee') %>
     <select class="form-select" size="4" id="assigneeInput" name="assignee" multiple aria-label="multiple select">
 
 
 
-      <option disabled>--- USERS ---</option>
+      <option disabled><%= ('FilterBlockUser') %></option>
       <% for (const user of users) { %>
         <option value="<%=user.id%>"><%=user.username%></option>
       <% } %>
 
-      <option disabled>--- MACHINE LEARNING ---</option>
+      <option disabled><%= ('FilterBlockML') %></option>
       <option value="ml-v1">ML Config: V1 Classifier</option>
       <option value="ml-v2">ML Config: V2 Classifier</option>
       <option value="ml-v3">ML Config: V3 Detector</option>
@@ -97,28 +96,28 @@
     </select>
   </div>
   <div class="col-3">
-    Stage
+    <%= __('Stage') %>
     <select id="phaseInput" class="form-select" size="4" multiple aria-label="multiple select">
-      <option value="ns">Not started</option>
-      <option value="as">Annotation: in-progress</option>
-      <option value="af">Annotation: complete</option>
-      <option value="gs">Ground truth: in-progress</option>
-      <option value="gf">Ground truth: complete</option>
-      <option value="ds">Division: in-progress</option>
-      <option value="df">Division: complete</option>
+      <option value="ns"><%= __('Stage_NotStarted') %></option>
+      <option value="as"><%= __('Stage_Anno_IP') %></option>
+      <option value="af"><%= __('Stage_Anno_Com') %></option>
+      <option value="gs"><%= __('Stage_GT_IP') %></option>
+      <option value="gf"><%= __('Stage_GT_Com') %></option>
+      <option value="ds"><%= __('Stage_DL_IP') %></option>
+      <option value="df"><%= __('Stage_DL_Com') %></option>
     </select>
   </div>
   <div class="col-3">
-    Ordering type
+    <%= __('OrderType') %>
     <select id="randomized" class="form-select" aria-label="select">
-      <option value="">Any</option>
-      <option value="false">Sequential</option>
-      <option value="true">Random</option>
+      <option value=""><%= __('Any') %></option>
+      <option value="false"><%= __('Sequential') %></option>
+      <option value="true"><%= __('Random') %></option>
     </select>
   </div>
 <% if (availableTags.length) { %>
   <div class="col-3">
-    Tags
+    <%= __('Tags') %>
     <select id="tags" class="form-select" size="4" multiple aria-label="multiple select">
 	  <% for (const tag of availableTags) { %>
 	    <option value="<%=tag.id%>"><%=tag.name%></option>
@@ -133,15 +132,15 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Task Name</th>
-        <th scope="col">Side</th>
-        <th scope="col">Order</th>
-        <th scope="col">Assignee</th>
-        <th scope="col">Date Created</th>
+        <th scope="col"><%= __('TaskName') %></th>
+        <th scope="col"><%= __('Side') %></th>
+        <th scope="col"><%= __('Order') %></th>
+        <th scope="col"><%= __('Assignee') %></th>
+        <th scope="col"><%= __('DateCreated') %></th>
         <th scope="col">A%</th>
         <th scope="col">G%</th>
         <th scope="col">D%</th>
-        <th class="text-end" scope="col">Actions</th>
+        <th class="text-end" scope="col"><%= __('Actions') %></th>
       </tr>
     </thead>
     <tbody id="taskTableBody">
@@ -152,9 +151,9 @@
 
   <nav class="d-flex flex-wrap align-items-center justify-content-center">
     <ul class="pagination">
-        <li class="page-item"><button class="btn btn-secondary page-link" id="previousTaskPage">Previous</button></li>
-        <p class="mx-3"><span id="taskList-start">0</span> - <span id="taskList-end">0</span> of <span id="taskList-total">0</span></p>
-        <li class="page-item"><button class="btn btn-secondary page-link" id="nextTaskPage">Next</button></li>
+        <li class="page-item"><button class="btn btn-secondary page-link" id="previousTaskPage"><%= __('Previous') %></button></li>
+        <p class="mx-3"><span id="taskList-start">0</span> - <span id="taskList-end">0</span><%= __('Pagination_Of') %><span id="taskList-total">0</span></p>
+        <li class="page-item"><button class="btn btn-secondary page-link" id="nextTaskPage"><%= __('Next') %></button></li>
     </ul>
     <input type="hidden" id="pageNumber" name="pageNumber" value="1">
   </nav>
@@ -165,7 +164,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 id="modalQuestion" data-modal-taskId="" data-modal-taskDisplayName="" class="modal-title">Confirm deletion of task "<span id="taskDisplayNameBlurb"></span>"?</h5>
+        <h5 id="modalQuestion" data-modal-taskId="" data-modal-taskDisplayName="" class="modal-title"><%= __('Confirm_TaskDelete') %>"<span id="taskDisplayNameBlurb"></span>"?</h5>
         <button
           type="button"
           class="btn-close"
@@ -180,13 +179,13 @@
             id="retypeTaskName"
             class="form-control"
           />
-          <label for="taskName">Retype Task Name</label>
+          <label for="taskName"><%= __('RetypeTask') %></label>
         </div>
       </div>
       <div class="modal-footer">
-        <button id="deletionCancelButton" type="button" data-bs-dismiss="modal" class=" btn btn-primary">Cancel</button>
+        <button id="deletionCancelButton" type="button" data-bs-dismiss="modal" class=" btn btn-primary"><%= __('Cancel') %></button>
 
-        <button id="deletionConfirmButton" type="button" disabled class="btn btn-danger">Apply</button>
+        <button id="deletionConfirmButton" type="button" disabled class="btn btn-danger"><%= __('Apply') %></button>
       </div>
     </div>
   </div>
@@ -200,7 +199,7 @@
               <div class="labelsContainerHeader">
                 <button id="backToTasks" class="btn btn-primary" data-bs-dismiss="modal">
                   <span class="bi bi-arrow-return-left"></span>
-                  Task Table
+                  <%= __('TaskTable') %>
                 </button>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -208,7 +207,7 @@
               <div class="labelsList" id="labelsList">                
               </div>
               <div class="addNewLabel">
-                <button id="addNewLabel" class="btn btn-primary"> + ADD NEW LABELS</button>
+                <button id="addNewLabel" class="btn btn-primary"><%= __('AddLabels') %></button>
               </div>
             </div>
           </div>

@@ -43,13 +43,13 @@
 
             <ul class="nav justify-content-center my-0 text-small">
               <li>
-                <a href="/tasks" class="nav-link text-white"> Tasks </a>
+                <a href="/tasks" class="nav-link text-white"> <%= ('Tasks') %> </a>
               </li>
               <li>
-                <a href="/users" class="nav-link text-white"> Users </a>
+                <a href="/users" class="nav-link text-white"> <%= ('Users') %> </a>
               </li>
               <li>
-                <button id="logoutButton" class="btn btn-link nav-link text-white">Logout</button>
+                <button id="logoutButton" class="btn btn-link nav-link text-white"><%= ('Logout') %></button>
               </li>
             </ul>
           </div>
@@ -63,14 +63,14 @@
     <div class="px-3 py-2 border-bottom mb-3">
         <% if(userRole == 'admin'){ %>
             <div class="container d-flex justify-content-between">
-                <a href="/tasks/new" class="btn btn-primary"><i class="bi-plus"></i> Create Task</a>
+                <a href="/tasks/new" class="btn btn-primary"><i class="bi-plus"></i> <%= ('CreateTask') %></a>
                 <div class="dropdown">
                   <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Export Filtered Results
+                    <%= ('ExportResults') %>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><div id="exportAnnotations" class="dropdown-item">Export Annotations</div></li>
-                    <li><div id="exportImages" class="dropdown-item">Export Images</div></li>
+                    <li><div id="exportAnnotations" class="dropdown-item"><%= ('ExportAnno') %></div></li>
+                    <li><div id="exportImages" class="dropdown-item"><%= ('ExportImages') %></div></li>
                   </ul>
                 </div>
             </div>
@@ -103,7 +103,7 @@
               </button>
 
             </div>
-            <button id="annotationDoneButton" class="btn btn-primary">Done <i class="bi-chevron-right"></i></button>
+            <button id="annotationDoneButton" class="btn btn-primary"><%= ('Done') %> <i class="bi-chevron-right"></i></button>
           </div>
           <div class="text-end"></div>
         </div>
@@ -137,7 +137,7 @@
                 </button>
 
               </div>
-              <button class="gtDoneButton btn btn-primary">Done <i class="bi-chevron-right"></i></button>
+              <button class="gtDoneButton btn btn-primary"><%= ('Done') %> <i class="bi-chevron-right"></i></button>
             </div>
             <div class="text-end"></div>
           </div>
@@ -174,19 +174,19 @@
 
 
               </div>
-              <button class="gtDoneButton btn btn-primary">Done <i class=" bi-chevron-right"></i></a>
+              <button class="gtDoneButton btn btn-primary"><%= ('Done') %> <i class=" bi-chevron-right"></i></a>
             </div>
             <div class="text-end"></div>
           </div>
           <div class="col-6 container d-flex flex-wrap justify-content-end">
             <div class="w-50 form-floating">
               <select class="form-select form-control" name="referenceTask" id="referenceTaskDropdown">
-                <option value="" selected>Select a Reference Task</option>
+                <option value="" selected><%= ('Desc_RefTask') %></option>
                 <% for(const comparisonTask of comparisonTasks) { %>
                 <option value="<%=comparisonTask.id%>"><%=comparisonTask.taskData.displayName%></option>
                 <% } %>
               </select>
-              <label for="referenceTask">Reference Task</label>
+              <label for="referenceTask"><%= ('RefTask') %></label>
             </div>
           </div>
         </div>
@@ -223,7 +223,7 @@
                   </button>
                 </div>
                 <button id="divisionDone" class="btn btn-primary">
-                  Done <i class="bi-chevron-right"></i>
+                  <%= ('Done') %> <i class="bi-chevron-right"></i>
                 </button>
               </div>
               <div class="text-end"></div>
