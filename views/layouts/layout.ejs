@@ -64,15 +64,39 @@
         <% if(userRole == 'admin'){ %>
             <div class="container d-flex justify-content-between">
                 <a href="/tasks/new" class="btn btn-primary"><i class="bi-plus"></i> Create Task</a>
-                <div class="dropdown">
-                  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Export Filtered Results
+                <div>
+                  <button id="editLabelButton" class="btn btn-primary" style="display:inline-block">
+                    Manage Labels
                   </button>
-                  <ul class="dropdown-menu">
-                    <li><div id="exportAnnotations" class="dropdown-item">Export Annotations</div></li>
-                    <li><div id="exportImages" class="dropdown-item">Export Images</div></li>
-                  </ul>
+                  <div class="dropdown" style="display:inline">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Export Filtered Results
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><div id="exportAnnotations" class="dropdown-item">Export Annotations</div></li>
+                      <li><div id="exportImages" class="dropdown-item">Export Images</div></li>
+                    </ul>
+                  </div>
+              </div>
+            </div>
+            <div class="modal fade" id="labelEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="labelsWrapper">
+                    <div class="labelsContainerHeader">
+                      <button id="backToTasks" class="btn btn-primary" data-bs-dismiss="modal">
+                        <span class="bi bi-arrow-return-left"></span>
+                        Task Table
+                      </button>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                   <%/* %> <div class="labelsList" id="labelsList"></div> <% */%>
+                    <div class="addNewLabel">
+                      <button id="addNewLabel" class="btn btn-primary"> + ADD NEW LABELS</button>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
               <% } %>
         </div>
