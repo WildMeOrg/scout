@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  scout:
+    image: fubarr
+    stdin_open: true
+    tty: true
+    volumes:
+      - .dockerfiles/docker-entrypoint.sh:/usr/src/app/docker-entrypoint.sh
+      - .dockerfiles/scout_files:/data/scout
+      - .dockerfiles/mongo_db:/data/db
+      - .dockerfiles/tmp:/tmp/scout-tmp
+
+
+    networks:
+      - intranet
+    ports:
+      # development exposure, not exposed in production
+      - 1337:1337
+    environment:
+      SOMETHING: "foo"
+
+networks:
+  intranet:
+
+#volumes:
+  #db-pgdata-var:
