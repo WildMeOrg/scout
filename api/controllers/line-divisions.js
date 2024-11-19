@@ -38,9 +38,6 @@ module.exports = {
     congrats: {
       responseType: 'redirect',
       description: 'The user is done line-dividing'
-    },
-    removeBack : {
-      responseType: 'redirect'
     }
   },
 
@@ -78,14 +75,8 @@ module.exports = {
         this.req.session.ldHistory[taskData.id].last = this.req.session.ldHistory[taskData.id].current;
       }
     } else {
-      if(typeof(this.req.session.ldHistory[taskData.id].last) == 'string'){
-        this.req.session.ldHistory[taskData.id].current = this.req.session.ldHistory[taskData.id].last;
-        this.req.session.ldHistory[taskData.id].last = false;
-      } else {
-        // They only get here if they try to refresh a page that has a back=true on it
-        throw { removeBack: '/line-divisions/'+taskData.id+'/new'};
-      }
-
+      this.req.session.ldHistory[taskData.id].current = this.req.session.ldHistory[taskData.id].last;
+      this.req.session.ldHistory[taskData.id].last = false;
     }
 
 
