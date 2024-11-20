@@ -39,9 +39,13 @@ COPY . .
 RUN mkdir /tmp/log
 
 RUN mkdir /data
-COPY ./dev-without-scoutbot/example_data/db /data/db
-COPY ./dev-without-scoutbot/example_data/tmp /tmp/scout-tmp
-COPY ./dev-without-scoutbot/example_data/nas /tmp/nas
+COPY ./develop-with-data/example_data/db /data/db
+COPY ./develop-with-data/example_data/tmp /tmp/scout-tmp
+COPY ./develop-with-data/example_data/nas /tmp/nas
+RUN ["chmod", "-R", "a+rwx", "/data/db"]
+RUN ["chmod", "-R", "a+rwx", "/tmp/nas"]
+RUN ["chmod", "-R", "a+rwx", "/tmp/scout-tmp"]
+
 
 RUN npm cache clean --force
 RUN rm -rf node_modules
