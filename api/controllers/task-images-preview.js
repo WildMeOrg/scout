@@ -39,9 +39,6 @@ module.exports = {
     congrats: {
       responseType: 'redirect',
       description: 'The user is done ground-truthing'
-    },
-    removeBack : {
-      responseType: 'redirect'
     }
   },
 

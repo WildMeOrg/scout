@@ -38,9 +38,6 @@ module.exports = {
     congrats: {
       responseType: 'redirect',
       description: 'The user is done ground-truthing'
-    },
-    removeBack : {
-      responseType: 'redirect'
     }
   },
 
@@ -77,14 +74,8 @@ module.exports = {
         this.req.session.gtHistory[taskData.id].last = this.req.session.gtHistory[taskData.id].current;
       }
     } else {
-      if(typeof(this.req.session.gtHistory[taskData.id].last) == 'string'){
-        this.req.session.gtHistory[taskData.id].current = this.req.session.gtHistory[taskData.id].last;
-        this.req.session.gtHistory[taskData.id].last = false;
-      } else {
-        // They only get here if they try to refresh a page that has a back=true on it
-        throw { removeBack: '/ground-truths/'+taskData.id+'/new'};
-      }
-
+      this.req.session.gtHistory[taskData.id].current = this.req.session.gtHistory[taskData.id].last;
+      this.req.session.gtHistory[taskData.id].last = false;
     }
 
 
