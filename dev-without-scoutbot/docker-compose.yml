@@ -3,14 +3,19 @@ version: "3.8"
 services:
 
   scout:
-    image: fubarr
+    image: scout-without-scoutbot
     stdin_open: true
     tty: true
     volumes:
+      # uncomment and alter this line to use "live" code for development/debugging
+      # (replace /home/user/repos/scout with the path to your dev repo)
+      # - /home/user/repos/scout:/usr/src/app
+      #
       - .dockerfiles/docker-entrypoint.sh:/usr/src/app/docker-entrypoint.sh
-      - .dockerfiles/scout_files:/data/scout
-      - .dockerfiles/mongo_db:/data/db
-      - .dockerfiles/tmp:/tmp/scout-tmp
+      # TODO these probably are deprecated and can be remove --- files that make up database/images (including some preinstalled examples)
+      #- .dockerfiles/scout_files:/data/scout
+      #- .dockerfiles/mongo_db:/data/db
+      #- .dockerfiles/tmp:/tmp/scout-tmp
 
 
     networks:
@@ -18,11 +23,7 @@ services:
     ports:
       # development exposure, not exposed in production
       - 1337:1337
-    environment:
-      SOMETHING: "foo"
 
 networks:
   intranet:
 
-#volumes:
-  #db-pgdata-var:
