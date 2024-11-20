@@ -38,6 +38,11 @@ COPY . .
 
 RUN mkdir /tmp/log
 
+RUN mkdir /data
+COPY ./dev-without-scoutbot/example_data/db /data/db
+COPY ./dev-without-scoutbot/example_data/tmp /tmp/scout-tmp
+COPY ./dev-without-scoutbot/example_data/nas /tmp/nas
+
 RUN npm cache clean --force
 RUN rm -rf node_modules
 RUN npm install
