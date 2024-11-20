@@ -436,7 +436,7 @@ let getTaskRow = async (task) => {
   <tr id="task-row-${task.id}" style="position: relative; height: 5em;">
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
-    <td>${task.randomized == false ? 'seq' : 'rnd'}</td>
+    <td>${task.randomized == false ? 'Sequential' : 'Random'}</td>
     <td>${task.assigneeDiplayName}</td>
     <td>${new Date(task.createdAt).toISOString().split('T')[0]}</td>
     <td>${Math.floor(task.progressAnnotation * 100)}</td>
@@ -862,6 +862,7 @@ if(!document.querySelector("#activeLabel")) {
       allOptions.push("shft+"+count);
       count++;
     }    
+    allOptions.sort();
     return allOptions;    
   }
 
