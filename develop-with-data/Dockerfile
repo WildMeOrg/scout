@@ -13,7 +13,6 @@ RUN set -ex \
 RUN apt-get -y update && \
     apt-get -y install git && \
     apt-get clean  
-#RUN pip install git+https://github.com/WildMeOrg/scoutbot.git --timeout=100
 
 
 RUN apt-get update -y
@@ -42,6 +41,7 @@ RUN mkdir /data
 COPY ./develop-with-data/example_data/db /data/db
 COPY ./develop-with-data/example_data/tmp /tmp/scout-tmp
 COPY ./develop-with-data/example_data/nas /tmp/nas
+# permissions are fussy when you run live code
 RUN ["chmod", "-R", "a+rwx", "/data/db"]
 RUN ["chmod", "-R", "a+rwx", "/tmp/nas"]
 RUN ["chmod", "-R", "a+rwx", "/tmp/scout-tmp"]
