@@ -1,8 +1,0 @@
-mongo_db/WiredTiger*
-mongo_db/_mdb_catalog*
-mongo_db/collection*
-mongo_db/index*
-mongo_db/mongod.lock
-mongo_db/sizeStorer.wt
-mongo_db/storage.bson
-tmp/password
