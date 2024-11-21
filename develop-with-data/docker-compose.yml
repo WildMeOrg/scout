@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   scout:
-    image: mumonkan/scout-without-scoutbot
+    image: wildme/scout-with-data
     stdin_open: true
     tty: true
     volumes:
