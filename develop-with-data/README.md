@@ -1,4 +1,4 @@
-## Development
+# Development
 
 This `docker-compose.yml` file can be used to launch an instance of Scout for development purposes.
 It will use the repo root directory (up one level) to run the code "live", which allows for editing and
@@ -9,16 +9,18 @@ This docker image also comes with some **example data** which can be helpful in 
 Also, this version of Scout **does not include scoutbot** and therefore does not require a GPU (and related setup
 overhead) to function. This also means, however, that it cannot process images with ML classifiers.
 
+## One time setup
+From root of the code directory, run `npm install` to make sure all necessary libraries are installed.
+
 ## Usage
 
-Running `docker-compose up` from this directory should be sufficient to fetch that docker image and run Scout.
-There may be a few extra steps needed, depending on how your development is setup:
+1. From this directory (`/develop-with-data`), run `docker-compose up` to fetch that docker image and run Scout.
+1. Once running, use a browser to open http://localhost:1337. Login with `admin`/`admin` as username/password.
 
-- you should first run `npm install` (once) from the repo directory, to make sure all necessary libraries are installed
-- when you break out of scout with ctrl-C, it is best to also do `docker-compose down` to stop the container
+## Troubleshooting
+- If you encounter a docker error `urllib3.exceptions.URLSchemeUnknown: Not supported URL scheme http+docker`, try running `pip install requests=2.31.0`
+- If your process fails, you should run `docker-compose down` to stop the container when you shut down your scout instance (`Ctrl+C`)
 
-Once running, use a browser to open http://localhost:1337. Login with `admin`/`admin` as username/password.
-
-### Notes
+### Credit
 
 - Example images are from the [WAID dataset from Applied Sciences](https://github.com/xiaohuicui/WAID/).
