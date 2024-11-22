@@ -622,7 +622,7 @@ window.simpleBoxes._.methods = {
   drawIndividualBox : async(handle,box,isHover) => {
 
     // Draw the box itself
-    handle.canvas.ctx.fillStyle = 'rgba(255, 0, 26, 0.35)';
+    handle.canvas.ctx.fillStyle = 'rgba(255, 0, 26, 0.01)';
     if(isHover){
       handle.canvas.ctx.fillStyle = 'rgba(255, 136, 46, 0.35)';
     }
@@ -647,7 +647,9 @@ window.simpleBoxes._.methods = {
       top: ${copy.h > 0 ? copy.y +2: copy.y + copy.h +2}px; 
       left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
       width: ${Math.abs(copy.w)-4}px; 
-      height: ${Math.abs(copy.h)-4}px">
+      height: ${Math.abs(copy.h)-4}px;
+      border: 2px solid red;
+      ">
         </i>`;
     
     if(!handle.readOnly){

@@ -1851,9 +1851,9 @@ window.imagePreviewsUpdateButtons = function() {
         $('#imagesPreviewSelectAll').html('Select All');
     }
     if (numSelected) {
-        $('#imagesPreviewDelete').prop('disabled', false).html('Delete ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
+        $('#imagesPreviewDelete').prop('disabled', false).html('Remove ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
     } else {
-        $('#imagesPreviewDelete').prop('disabled', true).html('Delete Images');
+        $('#imagesPreviewDelete').prop('disabled', true).html('Remove Images');
     }
 };
 
@@ -1890,7 +1890,7 @@ $('#imagesPreviewDelete').on('click', async function(ev) {
     }
     const results = await imagesDelete(imageIds);
     if (!results || !results.success) {
-        alert('error deleting');
+        alert('error removing');
         return;
     }
     imagesDeleteComplete(results);
@@ -1908,7 +1908,7 @@ window.imagePreviewModalDelete = async function() {
     if (!imagePreviewModalImageId) return;
     const results = await imagesDelete([imagePreviewModalImageId]);
     if (!results || !results.success) {
-        alert('error deleting');
+        alert('error removing');
         return;
     }
     imagesDeleteComplete(results);
