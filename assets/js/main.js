@@ -731,6 +731,11 @@ const imageSelectionFormChange = async () => {
 }
 
 //If leave annotation/ground truth page, reset active label to none
+
+if(!document.querySelector("#toggle-switch")) {
+  sessionStorage.removeItem("toggle-switch");
+}
+
 if(!document.querySelector("#activeLabel")) {
   sessionStorage.setItem("active-label", "");
 }else {

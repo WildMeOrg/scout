@@ -5,8 +5,6 @@
  * Dependencies: jquery
  *
  */
-
-
 /*
  * API:
  *
@@ -809,7 +807,10 @@ window.simpleBoxes._.methods = {
 
 
 
-$( document ).ready(function() {
+$( document ).ready(function() { 
+
+  const toggleSwitchSession = sessionStorage.getItem("toggle-switch");
+  document.querySelector("#toggle-switch").checked = toggleSwitchSession === "false" ? false : true;
 
   const mousemove = async (e, handleId) => {
     e.preventDefault();
@@ -997,6 +998,7 @@ $( document ).ready(function() {
 
   //Toggle to show/hide labels
   $("body").on("change", "#toggle-switch", async (e) => {
+    sessionStorage.setItem("toggle-switch", e.target.checked);
     if ($("#toggle-switch").is(":checked")) {
       $('i.labelContent').css("display", "block");
       $('i.labelBoxTrigger').css("display", "block");
