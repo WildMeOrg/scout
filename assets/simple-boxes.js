@@ -5,8 +5,6 @@
  * Dependencies: jquery
  *
  */
-
-
 /*
  * API:
  *
@@ -624,7 +622,7 @@ window.simpleBoxes._.methods = {
   drawIndividualBox : async(handle,box,isHover) => {
 
     // Draw the box itself
-    handle.canvas.ctx.fillStyle = 'rgba(255, 0, 26, 0.35)';
+    handle.canvas.ctx.fillStyle = 'rgba(255, 0, 26, 0.01)';
     if(isHover){
       handle.canvas.ctx.fillStyle = 'rgba(255, 136, 46, 0.35)';
     }
@@ -649,7 +647,9 @@ window.simpleBoxes._.methods = {
       top: ${copy.h > 0 ? copy.y +2: copy.y + copy.h +2}px; 
       left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
       width: ${Math.abs(copy.w)-4}px; 
-      height: ${Math.abs(copy.h)-4}px">
+      height: ${Math.abs(copy.h)-4}px;
+      border: 2px solid red;
+      ">
         </i>`;
     
     if(!handle.readOnly){
@@ -809,7 +809,7 @@ window.simpleBoxes._.methods = {
 
 
 
-$( document ).ready(function() {
+$( document ).ready(function() { 
 
   const mousemove = async (e, handleId) => {
     e.preventDefault();
@@ -996,7 +996,7 @@ $( document ).ready(function() {
   });
 
   //Toggle to show/hide labels
-  $("body").on("change", "#toggle-switch", async (e) => {
+  $("body").on("change", "#toggle-switch", async (e) => {    
     if ($("#toggle-switch").is(":checked")) {
       $('i.labelContent').css("display", "block");
       $('i.labelBoxTrigger').css("display", "block");
