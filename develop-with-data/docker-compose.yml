@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+
+  scout:
+    image: wildme/scout-with-data
+    stdin_open: true
+    tty: true
+    volumes:
+      - "$PWD/..:/usr/src/app"
+
+    networks:
+      - intranet
+    ports:
+      # development exposure, not exposed in production
+      - 1337:1337
+
+networks:
+  intranet:
+

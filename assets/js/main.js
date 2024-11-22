@@ -436,7 +436,7 @@ let getTaskRow = async (task) => {
   <tr id="task-row-${task.id}" style="position: relative; height: 5em;">
     <th scope="row">${task.displayName}</th>
     <td style="text-transform: capitalize">${task.orientation}</td>
-    <td>${task.randomized == false ? 'seq' : 'rnd'}</td>
+    <td>${task.randomized == false ? 'Sequential' : 'Random'}</td>
     <td>${task.assigneeDiplayName}</td>
     <td>${new Date(task.createdAt).toISOString().split('T')[0]}</td>
     <td>${Math.floor(task.progressAnnotation * 100)}</td>
@@ -731,6 +731,11 @@ const imageSelectionFormChange = async () => {
 }
 
 //If leave annotation/ground truth page, reset active label to none
+
+if(!document.querySelector("#toggle-switch")) {
+  sessionStorage.removeItem("toggle-switch");
+}
+
 if(!document.querySelector("#activeLabel")) {
   sessionStorage.setItem("active-label", "");
 }else {
@@ -1846,9 +1851,9 @@ window.imagePreviewsUpdateButtons = function() {
         $('#imagesPreviewSelectAll').html('Select All');
     }
     if (numSelected) {
-        $('#imagesPreviewDelete').prop('disabled', false).html('Delete ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
+        $('#imagesPreviewDelete').prop('disabled', false).html('Remove ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
     } else {
-        $('#imagesPreviewDelete').prop('disabled', true).html('Delete Images');
+        $('#imagesPreviewDelete').prop('disabled', true).html('Remove Images');
     }
 };
 
@@ -1885,7 +1890,7 @@ $('#imagesPreviewDelete').on('click', async function(ev) {
     }
     const results = await imagesDelete(imageIds);
     if (!results || !results.success) {
-        alert('error deleting');
+        alert('error removing');
         return;
     }
     imagesDeleteComplete(results);
@@ -1903,7 +1908,7 @@ window.imagePreviewModalDelete = async function() {
     if (!imagePreviewModalImageId) return;
     const results = await imagesDelete([imagePreviewModalImageId]);
     if (!results || !results.success) {
-        alert('error deleting');
+        alert('error removing');
         return;
     }
     imagesDeleteComplete(results);

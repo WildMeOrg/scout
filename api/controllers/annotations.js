@@ -38,9 +38,6 @@ module.exports = {
     congrats: {
       responseType: 'redirect',
       description: 'The user is done annotating'
-    },
-    removeBack : {
-      responseType: 'redirect'
     }
   },
 
@@ -80,14 +77,8 @@ module.exports = {
         this.req.session.annotationHistory[taskData.id].last = this.req.session.annotationHistory[taskData.id].current;
       }
     } else {
-      if(typeof(this.req.session.annotationHistory[taskData.id].last) == 'string'){
-        this.req.session.annotationHistory[taskData.id].current = this.req.session.annotationHistory[taskData.id].last;
-        this.req.session.annotationHistory[taskData.id].last = false;
-      } else {
-        // They only get here if they try to refresh a page that has a back=true on it
-        throw { removeBack: '/annotations/'+taskData.id+'/new'};
-      }
-
+      this.req.session.annotationHistory[taskData.id].current = this.req.session.annotationHistory[taskData.id].last;
+      this.req.session.annotationHistory[taskData.id].last = false;
     }
 
     // Find a random queued image for this task, that is currently not annotated

@@ -17,32 +17,16 @@
   </div>
 
 <div class="container border p-3 mb-3">
-<div class="row mb-2">  
-  <% if(userRole == 'admin'){ %>
-  <div class="col-9">
-    <h4>Filters</h4>
-  </div>
-  <div class="col-1">
-    <button id="editLabelButton" type="button" class="btn btn-primary">Labels</button>
-  </div>
-  <div class="col-1">
-    <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
-  </div>
-  <div class="col-1">
-    <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
-  </div>
-  <% } %>
-  <% if(userRole !== 'admin'){ %>    
+<div class="row mb-2">    
     <div class="col-10">
       <h4>Filters</h4>
     </div>
     <div class="col-1">
-      <button id="taskFilterButton" type="button" class="btn btn-primary">Filter</button>
+      <button id="taskFilterButton" type="button" class="btn btn-primary">Apply</button>
     </div>
     <div class="col-1">
       <button id="taskResetButton" type="button" class="btn btn-secondary">Reset</button>
     </div>
-    <% } %>
 </div>
 <div class="row mb-4">
   <div class="col-6">
@@ -191,28 +175,5 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="labelEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="labelsWrapper">
-              <div class="labelsContainerHeader">
-                <button id="backToTasks" class="btn btn-primary" data-bs-dismiss="modal">
-                  <span class="bi bi-arrow-return-left"></span>
-                  Task Table
-                </button>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-              </div>
-              <div class="labelsList" id="labelsList">                
-              </div>
-              <div class="addNewLabel">
-                <button id="addNewLabel" class="btn btn-primary"> + ADD NEW LABELS</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
 </main>
