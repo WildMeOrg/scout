@@ -733,6 +733,7 @@ const imageSelectionFormChange = async () => {
 //If leave annotation/ground truth page, reset active label to none
 
 if(!document.querySelector("#toggle-switch")) {
+  console.log("Toggle switch not found");
   sessionStorage.removeItem("toggle-switch");
 }
 
@@ -1134,32 +1135,85 @@ if(window.data.pageName == 'annotations'){
   },500);
 
 // Bind zoom in
-$('#annotationZoomIn').on('click',(e) =>{
+// $('#annotationZoomIn').on('click',(e) =>{
+//   e.preventDefault();
+//   let newHeight = window.imageHeight * 1.1;
+//   if(newHeight >= 10000){
+//     newHeight = 10000;
+//     // Disable zoom in button
+//   }
+//   window.imageHeight = newHeight;
+//   $('#imageToAnnotate').css('height',newHeight+'px');
+//   simpleBoxes.zoom(window.sbHandle1.id);
+// });
+
+// // Bind zoom out
+// $('#annotationZoomOut').on('click',(e) =>{
+//   e.preventDefault();
+//   let newHeight = window.imageHeight / 1.1;
+
+//   if(newHeight < minimumImageHeight){
+//     newHeight = minimumImageHeight;
+
+//     // Disable zoom out button
+//   }
+//   window.imageHeight = newHeight;
+//   $('#imageToAnnotate').css('height',newHeight+'px');
+//   simpleBoxes.zoom(window.sbHandle1.id);
+// });
+
+// Zoom In button
+$('#annotationZoomIn').on('click', (e) => {
   e.preventDefault();
-  let newHeight = window.imageHeight * 1.1;
-  if(newHeight >= 10000){
-    newHeight = 10000;
-    // Disable zoom in button
-  }
-  window.imageHeight = newHeight;
-  $('#imageToAnnotate').css('height',newHeight+'px');
-  simpleBoxes.zoom(window.sbHandle1.id);
+  zoomAnnotationImage(1.41); // Zoom in by 10%
 });
 
-// Bind zoom out
-$('#annotationZoomOut').on('click',(e) =>{
+// Zoom Out button
+$('#annotationZoomOut').on('click', (e) => {
   e.preventDefault();
-  let newHeight = window.imageHeight / 1.1;
+  zoomAnnotationImage(1 / 1.41); // Zoom out by 10%
+});
 
-  if(newHeight < minimumImageHeight){
+// Bind scroll (mousewheel) event for zoom in/out
+$('#annotationInnerWrapper').on('wheel', (e) => {
+  e.preventDefault();
+  let zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41; // Scroll up to zoom in, scroll down to zoom out
+  zoomAnnotationImage(zoomFactor);
+});
+
+// Zoom function
+function zoomAnnotationImage(factor) {  
+  let newHeight = window.imageHeight * factor;
+
+  // Set limits for image height
+  const maxImageHeight = 10000;
+  // const minimumImageHeight = 100; // Minimum zoom limit
+
+  if (newHeight > maxImageHeight) {
+    newHeight = maxImageHeight;
+    // Disable zoom in button (optional)
+    $('#annotationZoomIn').prop('disabled', true);
+  } else {
+    $('#annotationZoomIn').prop('disabled', false);
+    console.log('Zooming image by factor:', factor);
+  }
+
+  if (newHeight < minimumImageHeight) {
     newHeight = minimumImageHeight;
-
-    // Disable zoom out button
+    // Disable zoom out button (optional)
+    $('#annotationZoomOut').prop('disabled', true);
+  } else {
+    $('#annotationZoomOut').prop('disabled', false);
   }
+
+  // Update global image height and apply the new height
   window.imageHeight = newHeight;
-  $('#imageToAnnotate').css('height',newHeight+'px');
+  $('#imageToAnnotate').css('height', newHeight + 'px');
+
+  // Trigger additional functionality
   simpleBoxes.zoom(window.sbHandle1.id);
-});
+}
+
 
 // Bind back button
 $('#annotationBackButton').on('click',(e)=>{
@@ -1294,43 +1348,93 @@ setTimeout( async () => {
 
 },500);
 
- // Bind zoom in
- $('.gtZoomIn').on('click',(e) =>{
-   e.preventDefault();
-   let newHeight = window.imageHeight * 1.1;
-   if(newHeight >= 10000){
-     newHeight = 10000;
-     // Disable zoom in button
-   }
-   window.imageHeight = newHeight;
-   $('#imageToGroundTruth').css('height',newHeight+'px');
-   $('#imageComparison').css('height',newHeight+'px');
-   window.syncPan();
-   simpleBoxes.zoom(window.sbHandleLeft.id);
-   if(typeof(window.sbHandleRight) !== 'undefined'){
-     simpleBoxes.zoom(window.sbHandleRight.id);
-   }
+//  Bind zoom in
+//  $('.gtZoomIn').on('click',(e) =>{
+//    e.preventDefault();
+//    let newHeight = window.imageHeight * 1.1;
+//    if(newHeight >= 10000){
+//      newHeight = 10000;
+//      // Disable zoom in button
+//    }
+//    window.imageHeight = newHeight;
+//    $('#imageToGroundTruth').css('height',newHeight+'px');
+//    $('#imageComparison').css('height',newHeight+'px');
+//    window.syncPan();
+//    simpleBoxes.zoom(window.sbHandleLeft.id);
+//    if(typeof(window.sbHandleRight) !== 'undefined'){
+//      simpleBoxes.zoom(window.sbHandleRight.id);
+//    }
 
- });
+//  });
 
- // Bind zoom out
- $('.gtZoomOut').on('click',(e) =>{
-   e.preventDefault();
-   let newHeight = window.imageHeight / 1.1;
+//  // Bind zoom out
+//  $('.gtZoomOut').on('click',(e) =>{
+//    e.preventDefault();
+//    let newHeight = window.imageHeight / 1.1;
 
-   if(newHeight < minimumImageHeight){
-     newHeight = minimumImageHeight;
+//    if(newHeight < minimumImageHeight){
+//      newHeight = minimumImageHeight;
 
-   }
-   window.imageHeight = newHeight;
-   $('#imageToGroundTruth').css('height',newHeight+'px');
-   $('#imageComparison').css('height',newHeight+'px');
-   window.syncPan();
-   simpleBoxes.zoom(window.sbHandleLeft.id);
-   if(typeof(window.sbHandleRight) !== 'undefined'){
-     simpleBoxes.zoom(window.sbHandleRight.id);
-   }
- });
+//    }
+//    window.imageHeight = newHeight;
+//    $('#imageToGroundTruth').css('height',newHeight+'px');
+//    $('#imageComparison').css('height',newHeight+'px');
+//    window.syncPan();
+//    simpleBoxes.zoom(window.sbHandleLeft.id);
+//    if(typeof(window.sbHandleRight) !== 'undefined'){
+//      simpleBoxes.zoom(window.sbHandleRight.id);
+//    }
+//  });
+
+ const zoomGroundTruthImage = (factor) => {
+
+  let newHeight = window.imageHeight * factor;
+  const maxImageHeight = 10000;
+
+  if (newHeight > maxImageHeight) {
+    newHeight = maxImageHeight;
+    $('.gtZoomIn').prop('disabled', true);
+  } else {
+    $('.gtZoomIn').prop('disabled', false);
+  }
+
+  if (newHeight < minimumImageHeight) {
+    newHeight = minimumImageHeight;
+    $('.gtZoomOut').prop('disabled', true);
+  } else {
+    $('.gtZoomOut').prop('disabled', false);
+  }
+
+  window.imageHeight = newHeight;
+  $('#imageToGroundTruth').css('height', newHeight + 'px');
+  $('#imageComparison').css('height', newHeight + 'px');
+  window.syncPan();
+  simpleBoxes.zoom(window.sbHandleLeft.id);
+  if(typeof(window.sbHandleRight) !== 'undefined'){
+    simpleBoxes.zoom(window.sbHandleRight.id);
+  }
+}
+
+// Bind scroll (mousewheel) event for zoom in/out
+$('.sbsRow').on('wheel', (e) => {
+  e.preventDefault();
+  let zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41; // Scroll up to zoom in, scroll down to zoom out
+  zoomGroundTruthImage(zoomFactor);
+});
+
+// Zoom In button
+
+$('.gtZoomIn').on('click', (e) => {
+  e.preventDefault();
+  zoomGroundTruthImage(1.41); // Zoom in by 10%
+});
+
+// Zoom Out button
+$('.gtZoomOut').on('click', (e) => {
+  e.preventDefault();
+  zoomGroundTruthImage(1 / 1.41); // Zoom out by 10%
+});
+
 
  // Bind sidebar open / close
  $('#gtOpenSidebar').on('click',(e) =>{
@@ -1851,9 +1955,9 @@ window.imagePreviewsUpdateButtons = function() {
         $('#imagesPreviewSelectAll').html('Select All');
     }
     if (numSelected) {
-        $('#imagesPreviewDelete').prop('disabled', false).html('Remove ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
+        $('#imagesPreviewDelete').prop('disabled', false).html('Delete ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
     } else {
-        $('#imagesPreviewDelete').prop('disabled', true).html('Remove Images');
+        $('#imagesPreviewDelete').prop('disabled', true).html('Delete Images');
     }
 };
 
@@ -1890,7 +1994,7 @@ $('#imagesPreviewDelete').on('click', async function(ev) {
     }
     const results = await imagesDelete(imageIds);
     if (!results || !results.success) {
-        alert('error removing');
+        alert('error deleting');
         return;
     }
     imagesDeleteComplete(results);
@@ -1908,7 +2012,7 @@ window.imagePreviewModalDelete = async function() {
     if (!imagePreviewModalImageId) return;
     const results = await imagesDelete([imagePreviewModalImageId]);
     if (!results || !results.success) {
-        alert('error removing');
+        alert('error deleting');
         return;
     }
     imagesDeleteComplete(results);
