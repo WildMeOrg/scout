@@ -733,7 +733,6 @@ const imageSelectionFormChange = async () => {
 //If leave annotation/ground truth page, reset active label to none
 
 if(!document.querySelector("#toggle-switch")) {
-  console.log("Toggle switch not found");
   sessionStorage.removeItem("toggle-switch");
 }
 
@@ -1206,6 +1205,9 @@ function zoomAnnotationImage(factor) {
     $('#annotationZoomOut').prop('disabled', false);
   }
 
+  const zoomLevel = Math.round((newHeight / minimumImageHeight) * 100);
+  $('#zoomLevel').text(zoomLevel + '%');
+
   // Update global image height and apply the new height
   window.imageHeight = newHeight;
   $('#imageToAnnotate').css('height', newHeight + 'px');
@@ -1404,6 +1406,10 @@ setTimeout( async () => {
   } else {
     $('.gtZoomOut').prop('disabled', false);
   }
+
+  const zoomLevel = Math.round((newHeight / minimumImageHeight) * 100);
+  $('#zoomLevel').text(zoomLevel + '%');
+  $('#zoomLevelSideBarOpened').text(zoomLevel + '%');
 
   window.imageHeight = newHeight;
   $('#imageToGroundTruth').css('height', newHeight + 'px');
