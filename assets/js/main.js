@@ -1136,13 +1136,13 @@ if(window.data.pageName == 'annotations'){
 // Zoom In button
 $('#annotationZoomIn').on('click', (e) => {
   e.preventDefault();
-  zoomAnnotationImage(1.41); // Zoom in by 10%
+  zoomAnnotationImage(1.41); 
 });
 
 // Zoom Out button
 $('#annotationZoomOut').on('click', (e) => {
   e.preventDefault();
-  zoomAnnotationImage(1 / 1.41); // Zoom out by 10%
+  zoomAnnotationImage(1 / 1.41); 
 });
 
 // Bind scroll (mousewheel) event for zoom in/out
@@ -1155,14 +1155,10 @@ $('#annotationInnerWrapper').on('wheel', (e) => {
 // Zoom function
 function zoomAnnotationImage(factor) {  
   let newHeight = window.imageHeight * factor;
-
-  // Set limits for image height
   const maxImageHeight = 10000;
-  // const minimumImageHeight = 100; // Minimum zoom limit
 
   if (newHeight > maxImageHeight) {
     newHeight = maxImageHeight;
-    // Disable zoom in button (optional)
     $('#annotationZoomIn').prop('disabled', true);
   } else {
     $('#annotationZoomIn').prop('disabled', false);
@@ -1171,7 +1167,6 @@ function zoomAnnotationImage(factor) {
 
   if (newHeight < minimumImageHeight) {
     newHeight = minimumImageHeight;
-    // Disable zoom out button (optional)
     $('#annotationZoomOut').prop('disabled', true);
   } else {
     $('#annotationZoomOut').prop('disabled', false);
@@ -1180,11 +1175,9 @@ function zoomAnnotationImage(factor) {
   const zoomLevel = Math.round((newHeight / minimumImageHeight) * 100);
   $('#zoomLevel').text(zoomLevel + '%');
 
-  // Update global image height and apply the new height
   window.imageHeight = newHeight;
   $('#imageToAnnotate').css('height', newHeight + 'px');
 
-  // Trigger additional functionality
   simpleBoxes.zoom(window.sbHandle1.id);
 }
 
@@ -1894,7 +1887,7 @@ window.imagePreviewsUpdateButtons = function() {
         $('#imagesPreviewSelectAll').html('Select All');
     }
     if (numSelected) {
-        $('#imagesPreviewDelete').prop('disabled', false).html('Remove' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
+        $('#imagesPreviewDelete').prop('disabled', false).html('Remove ' + numSelected + ' Image' + (numSelected == 1 ? '' : 's'));
     } else {
         $('#imagesPreviewDelete').prop('disabled', true).html('Remove Images');
     }
