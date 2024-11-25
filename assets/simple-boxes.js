@@ -811,6 +811,10 @@ window.simpleBoxes._.methods = {
 
 $( document ).ready(function() { 
 
+  if(document.querySelector("#unset-active-hotkey-switch") && sessionStorage.getItem("active-label")) {
+    document.querySelector("#unset-active-hotkey-switch").checked = true;
+  }
+
   const toggleSwitchSession = sessionStorage.getItem("toggle-switch");
   document.querySelector("#toggle-switch").checked = toggleSwitchSession === "false" ? false : true;
 
@@ -933,14 +937,17 @@ $( document ).ready(function() {
     for(let i = 0; i < pair.length; i++) {          
       // Detect keys pressed down
       if (isShiftPressed && keycode === pair[i].keyCode) {
+        document.querySelector("#unset-active-hotkey-switch").checked = true;
         label = window.tagsList.find(l => l.hotKey === `shft+${pair[i].key}`);         
       }else if (keycode === pair[i].keyCode) {
+        document.querySelector("#unset-active-hotkey-switch").checked = true;
         label = window.tagsList.find(l => l.hotKey === pair[i].key);
       }
       //Get active label from session and update page
       if(label && document.querySelector("#activeLabel")) {    
         document.querySelector("#activeLabel").innerHTML = label.name;
         sessionStorage.setItem("active-label", label.name);
+        
             } 
       //Update focused annotation's label
       if(label && handleId && boxId) {
@@ -1009,6 +1016,15 @@ $( document ).ready(function() {
       $('i.labelContent').css("display", "none");
       $('i.labelBoxTrigger').css("display", "none");  
       $('i.deleteBoxTrigger ').css("display", "none");   
+    }
+  });
+
+  // toggle to set/unsset active hotkey
+  $("body").on("change", "#unset-active-hotkey-switch", async (e) => {
+    if ($("#unset-active-hotkey-switch").is(":checked")) {
+    }else {
+      document.querySelector("#activeLabel").innerHTML = "None";
+      sessionStorage.setItem("active-label", "");
     }
   });
 
