@@ -17,9 +17,35 @@
     <!--STYLES END-->
     <link rel="stylesheet" href="/icons/bootstrap-icons.css">
 
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
     <script>
       clientData = '<%-clientData%>';
       window.data = JSON.parse(clientData);
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const startCalendar = flatpickr("#startDate", {
+              enableTime: true,
+              dateFormat: "Y-m-d H:i",
+              time_24hr: true,
+              allowInput: true,
+          });
+          const endCalendar = flatpickr("#endDate", {
+              enableTime: true,
+              dateFormat: "Y-m-d H:i",
+              time_24hr: true 
+          });
+
+          document.getElementById('startCalendarButton').addEventListener('click', function () {
+            startCalendar.open();
+            });
+          document.getElementById('endCalendarButton').addEventListener('click', function () {
+            endCalendar.open();
+          });
+      });
     </script>
 
     <% if(typeof(secondaryNav) != 'undefined' && (secondaryNav == 'annotation' || secondaryNav == 'gt')){ %>
@@ -273,6 +299,8 @@
     <% if(typeof(secondaryNav) != 'undefined' && (secondaryNav == 'annotation' || secondaryNav == 'gt')){ %>
       <script type="text/javascript" src="/simple-boxes.js"></script>
     <% } %>
+
+
 
   </body>
 </html>
