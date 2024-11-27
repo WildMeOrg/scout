@@ -123,12 +123,22 @@ module.exports = {
     }
 
     if(inputs.startDate){
-      let start = Date.parse(inputs.startDate);
+      const isoDate = inputs.startDate.replace(" ", "T");
+      console.log(isoDate);
+      let start = Date.parse(isoDate);
+      console.log(start);
       query.exifTimestamp = { '>=': start };
     }
 
     if(inputs.endDate){
-      let end = Date.parse(inputs.endDate) + (1000 * 60 * 60 * 24);
+      const isoDate = inputs.endDate.replace(" ", "T");
+      let end;
+      if(isoDate.includes("T")){
+        end = Date.parse(isoDate);
+      }else {
+        end = Date.parse(isoDate) + (1000 * 60 * 60 * 24);
+      }
+      console.log("end",end);
       if(typeof(query.exifTimestamp) == 'undefined'){
         query.exifTimestamp = {};
       }
