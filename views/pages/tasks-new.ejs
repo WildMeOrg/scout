@@ -139,7 +139,7 @@
 
 <!-- BEGIN MODAL -->
     <div class="modal fade" id="imageSelectionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Select Images</h5>
@@ -152,7 +152,8 @@
           </div>
 
           <form id="imageSelectionForm">
-          <div class="modal-body">
+          <div class="modal-body d-flex flex-row gap-4 justify-content-between">
+            <div class="w-50" style="margin-right: 50px;">
             <div class="input-group mb-1">
               <div class="form-floating">
                 <input type="text" id="originalFilenameLower" name="originalFilenameLower" class="form-control" />
@@ -264,12 +265,14 @@
                 </div>
               </fieldset>
             </div>
+            </div>
 
-            <p class="mt-4">Labels used in Images</p>
+            <div class="w-50">
+            <p >Labels used in Images</p>
             <div
               class="input-group mb-3" >
               <div class="form-floating">
-                <select size="5" class="form-select form-control" multiple name="labels" id="labels" aria-label="multiple select">
+                <select size="5" class="form-select form-control" multiple name="labels" id="labels" aria-label="multiple select" style="height: auto;">
                   <% for (const labelName of allLabelNames) { %>
                     <option><%=labelName%></option>
                   <% } %>
@@ -331,6 +334,7 @@
                 </div>
               </fieldset>
             </div>
+          </div>
           </div>
           </form>
           <div class="modal-footer d-flex justify-content-between">
