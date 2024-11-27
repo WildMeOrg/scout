@@ -124,9 +124,7 @@ module.exports = {
 
     if(inputs.startDate){
       const isoDate = inputs.startDate.replace(" ", "T");
-      console.log(isoDate);
       let start = Date.parse(isoDate);
-      console.log(start);
       query.exifTimestamp = { '>=': start };
     }
 
@@ -138,7 +136,6 @@ module.exports = {
       }else {
         end = Date.parse(isoDate) + (1000 * 60 * 60 * 24);
       }
-      console.log("end",end);
       if(typeof(query.exifTimestamp) == 'undefined'){
         query.exifTimestamp = {};
       }
