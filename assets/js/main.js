@@ -1149,11 +1149,25 @@ $('#annotationZoomOut').on('click', (e) => {
 $('#annotationInnerWrapper').on('wheel', (e) => {
   e.preventDefault();
   let zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41; // Scroll up to zoom in, scroll down to zoom out
-  zoomAnnotationImage(zoomFactor);
+
+  const mousePageX = e.originalEvent.pageX;
+  const mousePageY = e.originalEvent.pageY;
+
+  const imageOffset = $('#imageToAnnotate').offset();
+
+  const mouseX = mousePageX - imageOffset.left;
+  const mouseY = mousePageY - imageOffset.top;
+
+  zoomAnnotationImage(zoomFactor, mouseX, mouseY);
 });
 
-// Zoom function
-function zoomAnnotationImage(factor) {  
+function zoomAnnotationImage(factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) {
+  const image = $('#imageToAnnotate');
+  const wrapper = $('#annotationInnerWrapper');
+
+  const oldImageWidth = image.width();
+  const oldImageHeight = image.height();
+
   let newHeight = window.imageHeight * factor;
   const maxImageHeight = 10000;
 
@@ -1162,7 +1176,6 @@ function zoomAnnotationImage(factor) {
     $('#annotationZoomIn').prop('disabled', true);
   } else {
     $('#annotationZoomIn').prop('disabled', false);
-    console.log('Zooming image by factor:', factor);
   }
 
   if (newHeight < minimumImageHeight) {
@@ -1172,15 +1185,27 @@ function zoomAnnotationImage(factor) {
     $('#annotationZoomOut').prop('disabled', false);
   }
 
-  const zoomLevel = Math.round((newHeight / minimumImageHeight) * 100);
+  const newWidth = newHeight * (oldImageWidth / oldImageHeight);
+
+  const zoomLevel = Math.round(((newHeight - minimumImageHeight) / (maxImageHeight - minimumImageHeight)) * 100);
   $('#zoomLevel').text(zoomLevel + '%');
 
+  const deltaX = (mouseX / oldImageWidth) * (newWidth - oldImageWidth);
+  const deltaY = (mouseY / oldImageHeight) * (newHeight - oldImageHeight);
+
+  const newScrollLeft = wrapper.scrollLeft() + deltaX;
+  const newScrollTop = wrapper.scrollTop() + deltaY;
+
+  image.css({
+    height: newHeight + 'px',
+    width: newWidth + 'px'
+  });
+
+  wrapper.scrollLeft(newScrollLeft);
+  wrapper.scrollTop(newScrollTop);
+
   window.imageHeight = newHeight;
-  $('#imageToAnnotate').css('height', newHeight + 'px');
-
-  simpleBoxes.zoom(window.sbHandle1.id);
 }
-
 
 // Bind back button
 $('#annotationBackButton').on('click',(e)=>{
@@ -1315,7 +1340,12 @@ setTimeout( async () => {
 
 },500);
 
- const zoomGroundTruthImage = (factor) => {
+const zoomGroundTruthImage = (factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) => {
+  const image = $('#imageToGroundTruth');
+  const wrapper = $('#scrollBoxLeft'); // Wrapper for scroll handling
+
+  const oldImageWidth = image.width();
+  const oldImageHeight = image.height();
 
   let newHeight = window.imageHeight * factor;
   const maxImageHeight = 10000;
@@ -1334,25 +1364,53 @@ setTimeout( async () => {
     $('.gtZoomOut').prop('disabled', false);
   }
 
-  const zoomLevel = Math.round((newHeight / minimumImageHeight) * 100);
+  const newWidth = (newHeight / oldImageHeight) * oldImageWidth;
+
+  const zoomLevel = Math.round(((newHeight - minimumImageHeight) / (maxImageHeight - minimumImageHeight)) * 100);
   $('#zoomLevel').text(zoomLevel + '%');
   $('#zoomLevelSideBarOpened').text(zoomLevel + '%');
 
+    const deltaX = (mouseX / oldImageWidth) * (newWidth - oldImageWidth);
+    const deltaY = (mouseY / oldImageHeight) * (newHeight - oldImageHeight);
+
+    const newScrollLeft = wrapper.scrollLeft() + deltaX;
+    const newScrollTop = wrapper.scrollTop() + deltaY;
+
+    image.css({
+      height: newHeight + 'px',
+      width: newWidth + 'px'
+    });
+
+    wrapper.scrollLeft(newScrollLeft);
+    wrapper.scrollTop(newScrollTop);
+  // }
+
   window.imageHeight = newHeight;
-  $('#imageToGroundTruth').css('height', newHeight + 'px');
+  // image.css('height', newHeight + 'px');
   $('#imageComparison').css('height', newHeight + 'px');
+
   window.syncPan();
   simpleBoxes.zoom(window.sbHandleLeft.id);
-  if(typeof(window.sbHandleRight) !== 'undefined'){
+  if (typeof window.sbHandleRight !== 'undefined') {
     simpleBoxes.zoom(window.sbHandleRight.id);
   }
-}
+};
+
 
 // Bind scroll (mousewheel) event for zoom in/out
-$('.sbsRow').on('wheel', (e) => {
+$('#scrollBoxLeft').on('wheel', (e) => {
   e.preventDefault();
-  let zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41; // Scroll up to zoom in, scroll down to zoom out
-  zoomGroundTruthImage(zoomFactor);
+  const zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41;
+
+  const mousePageX = e.originalEvent.pageX;
+  const mousePageY = e.originalEvent.pageY;
+
+  const imageOffset = $('#imageToGroundTruth').offset();
+
+  const mouseX = mousePageX - imageOffset.left;
+  const mouseY = mousePageY - imageOffset.top;
+
+  zoomGroundTruthImage(zoomFactor, mouseX, mouseY);
 });
 
 // Zoom In button
@@ -1393,7 +1451,7 @@ $('.gtZoomOut').on('click', (e) => {
    $('#sidebar-opened').hide();
    $('#sidebar-closed').show();
    $('#gtColumnRight').hide();
-    $('#gtColumnLeft').css('width','100%').css('float','clear').css('text-align','center');
+   $('#gtColumnLeft').css('width','100%').css('float','clear').css('text-align','center');
 
     //When clicking at the button, toggle the height of images
     $('#imageToGroundTruth').removeClass("imageToGroundTruthCompare");
