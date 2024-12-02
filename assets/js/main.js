@@ -1133,33 +1133,79 @@ if(window.data.pageName == 'annotations'){
 
   },500);
 
-// Bind zoom in
-$('#annotationZoomIn').on('click',(e) =>{
+// Zoom In button
+$('#annotationZoomIn').on('click', (e) => {
   e.preventDefault();
-  let newHeight = window.imageHeight * 1.1;
-  if(newHeight >= 10000){
-    newHeight = 10000;
-    // Disable zoom in button
-  }
-  window.imageHeight = newHeight;
-  $('#imageToAnnotate').css('height',newHeight+'px');
-  simpleBoxes.zoom(window.sbHandle1.id);
+  zoomAnnotationImage(1.41); 
 });
 
-// Bind zoom out
-$('#annotationZoomOut').on('click',(e) =>{
+// Zoom Out button
+$('#annotationZoomOut').on('click', (e) => {
   e.preventDefault();
-  let newHeight = window.imageHeight / 1.1;
+  zoomAnnotationImage(1 / 1.41); 
+});
 
-  if(newHeight < minimumImageHeight){
+// Bind scroll (mousewheel) event for zoom in/out
+$('#annotationInnerWrapper').on('wheel', (e) => {
+  e.preventDefault();
+  let zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41; // Scroll up to zoom in, scroll down to zoom out
+
+  const mousePageX = e.originalEvent.pageX;
+  const mousePageY = e.originalEvent.pageY;
+
+  const imageOffset = $('#imageToAnnotate').offset();
+
+  const mouseX = mousePageX - imageOffset.left;
+  const mouseY = mousePageY - imageOffset.top;
+
+  zoomAnnotationImage(zoomFactor, mouseX, mouseY);
+});
+
+function zoomAnnotationImage(factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) {
+  const image = $('#imageToAnnotate');
+  const wrapper = $('#annotationInnerWrapper');
+
+  const oldImageWidth = image.width();
+  const oldImageHeight = image.height();
+
+  let newHeight = window.imageHeight * factor;
+  const maxImageHeight = 10000;
+
+  if (newHeight > maxImageHeight) {
+    newHeight = maxImageHeight;
+    $('#annotationZoomIn').prop('disabled', true);
+  } else {
+    $('#annotationZoomIn').prop('disabled', false);
+  }
+
+  if (newHeight < minimumImageHeight) {
     newHeight = minimumImageHeight;
-
-    // Disable zoom out button
+    $('#annotationZoomOut').prop('disabled', true);
+  } else {
+    $('#annotationZoomOut').prop('disabled', false);
   }
+
+  const newWidth = newHeight * (oldImageWidth / oldImageHeight);
+
+  const zoomLevel = Math.round(((newHeight - minimumImageHeight) / (maxImageHeight - minimumImageHeight)) * 100);
+  $('#zoomLevel').text(zoomLevel + '%');
+
+  const deltaX = (mouseX / oldImageWidth) * (newWidth - oldImageWidth);
+  const deltaY = (mouseY / oldImageHeight) * (newHeight - oldImageHeight);
+
+  const newScrollLeft = wrapper.scrollLeft() + deltaX;
+  const newScrollTop = wrapper.scrollTop() + deltaY;
+
+  image.css({
+    height: newHeight + 'px',
+    width: newWidth + 'px'
+  });
+
+  wrapper.scrollLeft(newScrollLeft);
+  wrapper.scrollTop(newScrollTop);
+
   window.imageHeight = newHeight;
-  $('#imageToAnnotate').css('height',newHeight+'px');
-  simpleBoxes.zoom(window.sbHandle1.id);
-});
+}
 
 // Bind back button
 $('#annotationBackButton').on('click',(e)=>{
@@ -1294,43 +1340,91 @@ setTimeout( async () => {
 
 },500);
 
- // Bind zoom in
- $('.gtZoomIn').on('click',(e) =>{
-   e.preventDefault();
-   let newHeight = window.imageHeight * 1.1;
-   if(newHeight >= 10000){
-     newHeight = 10000;
-     // Disable zoom in button
-   }
-   window.imageHeight = newHeight;
-   $('#imageToGroundTruth').css('height',newHeight+'px');
-   $('#imageComparison').css('height',newHeight+'px');
-   window.syncPan();
-   simpleBoxes.zoom(window.sbHandleLeft.id);
-   if(typeof(window.sbHandleRight) !== 'undefined'){
-     simpleBoxes.zoom(window.sbHandleRight.id);
-   }
+const zoomGroundTruthImage = (factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) => {
+  const image = $('#imageToGroundTruth');
+  const wrapper = $('#scrollBoxLeft'); // Wrapper for scroll handling
 
- });
+  const oldImageWidth = image.width();
+  const oldImageHeight = image.height();
 
- // Bind zoom out
- $('.gtZoomOut').on('click',(e) =>{
-   e.preventDefault();
-   let newHeight = window.imageHeight / 1.1;
+  let newHeight = window.imageHeight * factor;
+  const maxImageHeight = 10000;
 
-   if(newHeight < minimumImageHeight){
-     newHeight = minimumImageHeight;
+  if (newHeight > maxImageHeight) {
+    newHeight = maxImageHeight;
+    $('.gtZoomIn').prop('disabled', true);
+  } else {
+    $('.gtZoomIn').prop('disabled', false);
+  }
 
-   }
-   window.imageHeight = newHeight;
-   $('#imageToGroundTruth').css('height',newHeight+'px');
-   $('#imageComparison').css('height',newHeight+'px');
-   window.syncPan();
-   simpleBoxes.zoom(window.sbHandleLeft.id);
-   if(typeof(window.sbHandleRight) !== 'undefined'){
-     simpleBoxes.zoom(window.sbHandleRight.id);
-   }
- });
+  if (newHeight < minimumImageHeight) {
+    newHeight = minimumImageHeight;
+    $('.gtZoomOut').prop('disabled', true);
+  } else {
+    $('.gtZoomOut').prop('disabled', false);
+  }
+
+  const newWidth = (newHeight / oldImageHeight) * oldImageWidth;
+
+  const zoomLevel = Math.round(((newHeight - minimumImageHeight) / (maxImageHeight - minimumImageHeight)) * 100);
+  $('#zoomLevel').text(zoomLevel + '%');
+  $('#zoomLevelSideBarOpened').text(zoomLevel + '%');
+
+    const deltaX = (mouseX / oldImageWidth) * (newWidth - oldImageWidth);
+    const deltaY = (mouseY / oldImageHeight) * (newHeight - oldImageHeight);
+
+    const newScrollLeft = wrapper.scrollLeft() + deltaX;
+    const newScrollTop = wrapper.scrollTop() + deltaY;
+
+    image.css({
+      height: newHeight + 'px',
+      width: newWidth + 'px'
+    });
+
+    wrapper.scrollLeft(newScrollLeft);
+    wrapper.scrollTop(newScrollTop);
+  // }
+
+  window.imageHeight = newHeight;
+  // image.css('height', newHeight + 'px');
+  $('#imageComparison').css('height', newHeight + 'px');
+
+  window.syncPan();
+  simpleBoxes.zoom(window.sbHandleLeft.id);
+  if (typeof window.sbHandleRight !== 'undefined') {
+    simpleBoxes.zoom(window.sbHandleRight.id);
+  }
+};
+
+
+// Bind scroll (mousewheel) event for zoom in/out
+$('#scrollBoxLeft').on('wheel', (e) => {
+  e.preventDefault();
+  const zoomFactor = e.originalEvent.deltaY < 0 ? 1.41 : 1 / 1.41;
+
+  const mousePageX = e.originalEvent.pageX;
+  const mousePageY = e.originalEvent.pageY;
+
+  const imageOffset = $('#imageToGroundTruth').offset();
+
+  const mouseX = mousePageX - imageOffset.left;
+  const mouseY = mousePageY - imageOffset.top;
+
+  zoomGroundTruthImage(zoomFactor, mouseX, mouseY);
+});
+
+// Zoom In button
+$('.gtZoomIn').on('click', (e) => {
+  e.preventDefault();
+  zoomGroundTruthImage(1.41); 
+});
+
+// Zoom Out button
+$('.gtZoomOut').on('click', (e) => {
+  e.preventDefault();
+  zoomGroundTruthImage(1 / 1.41); 
+});
+
 
  // Bind sidebar open / close
  $('#gtOpenSidebar').on('click',(e) =>{
@@ -1357,7 +1451,7 @@ setTimeout( async () => {
    $('#sidebar-opened').hide();
    $('#sidebar-closed').show();
    $('#gtColumnRight').hide();
-    $('#gtColumnLeft').css('width','100%').css('float','clear').css('text-align','center');
+   $('#gtColumnLeft').css('width','100%').css('float','clear').css('text-align','center');
 
     //When clicking at the button, toggle the height of images
     $('#imageToGroundTruth').removeClass("imageToGroundTruthCompare");
