@@ -696,6 +696,7 @@ window.imageSelectionFormSavedInputs = {};
 window.imageSelectionFormUnsavedCount = 0;
 window.imageSelectionFormSavedCount = 0;
 const imageSelectionFormChange = async () => {
+  $('#filteredImageCountModal').html('<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>');
   let labels = [];
   const formData = new FormData(document.getElementById('imageSelectionForm'));
   const formValues = {};

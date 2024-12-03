@@ -134,24 +134,16 @@ module.exports = {
 
   filterByWic: async function(imageList, wicMin, wicMax) {
     if (wicMin === -99999999 && wicMax === 99999999) return imageList;    
-    let result = [];  
-    const set = new Set();
-    for (const image of imageList) {       
-      let imagesWithWic = await Annotations.find({
-        imageId : image.id,
-      });
-      imagesWithWic = imagesWithWic || [];
-      if (!imagesWithWic.length) continue;  
-      for(const wic of imagesWithWic) {
-        if (wic.wicConfidence >= wicMin && wic.wicConfidence <= wicMax) {
-            if(!set.has(image.id)) {
-              result.push(image);
-              set.add(image.id);
-            }
-            break;        
-          }     
-        }   
-      }
+
+    const imageIds = imageList.map(data => data.id);                
+    const annotations = await Annotations.find({
+      imageId: { in: imageIds},
+      wicConfidence: { ">=": wicMin, "<=": wicMax}
+    });
+
+    const imageIdSet = new Set(annotations.map(annotation => annotation.imageId));
+    const result = imageList.filter(image => imageIdSet.has(image.id));
+
     return result;
   }
 
