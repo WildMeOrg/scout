@@ -1178,12 +1178,14 @@ const invokeMl = async (fullPath,configName) => {
     }
 
     if(taskData.filterDateStart){
-      let start = Date.parse(taskData.filterDateStar);
+      let isoDate = taskData.filterDateStart.replace(' ', 'T');
+      let start = Date.parse(isoDate);
       query.exifTimestamp = { '>=': start };
     }
 
     if(taskData.filterDateEnd){
-      let end = Date.parse(taskData.filterDateEnd);
+      let isoDate = taskData.filterDateEnd.replace(' ', 'T');
+      let end = Date.parse(isoDate);
       if(typeof(query.exifTimestamp) == 'undefined'){
         query.exifTimestamp = {};
       }
