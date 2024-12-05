@@ -80,6 +80,18 @@ $( document ).ready( async () => {
       }   
   }); 
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'g' || e.key === 'G') {
+      const gridSwitch = document.querySelector('.gridswitch');
+      if (gridSwitch) {
+        // Toggle the grid switch checked state
+        gridSwitch.checked = !gridSwitch.checked;
+        // Trigger the change event manually
+        $(gridSwitch).trigger('change');
+      }
+    }
+  });
+
 $('form.handleable').each(function(index) {
 
   $(this).submit(async function(e){
