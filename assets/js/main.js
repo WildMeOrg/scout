@@ -67,6 +67,19 @@ window.debugAnnotations = async () =>{
 
 $( document ).ready( async () => {  
 
+  $('body').on('change', '.gridswitch', async (e) => {      
+      const gridOverlays = document.querySelectorAll('.gridOverlay');
+      if (e.target.checked) {
+        gridOverlays.forEach(gridOverlay => {
+          gridOverlay.style.display = 'block';
+      });
+      } else {
+        gridOverlays.forEach(gridOverlay => {
+          gridOverlay.style.display = 'none';
+      }); 
+      }   
+  }); 
+
 $('form.handleable').each(function(index) {
 
   $(this).submit(async function(e){
@@ -142,6 +155,8 @@ $('form.handleable').each(function(index) {
     }
 
   });
+
+  
 
 });
 
@@ -2058,5 +2073,4 @@ window.imagesDelete = async (imageIds) => {
         imageIds: imageIds
     };
 }
-
 

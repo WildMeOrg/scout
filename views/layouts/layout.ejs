@@ -140,7 +140,7 @@
             <div class="btn-group">
               <button id="annotationZoomIn" class="btn btn-light"><i class="bi-zoom-in"></i></button>
               <button id="zoomLevel" class="btn btn-light">0%</button>
-              <button id="annotationZoomOut" class="btn btn-light"><i class="bi-zoom-out"></i></button>
+              <button id="annotationZoomOut" class="btn btn-light"><i class="bi-zoom-out"></i></button>              
               <button
                 type="button"
                 class="btn btn-light"
@@ -151,6 +151,12 @@
                 <p>Click an existing annotation to adjust or edit the annotation.</p>"
                 data-toggle="popover">
                 <i class="bi-info-circle"></i>
+              </button>
+              <button class="btn btn-light">
+                <div class="grid-switch form-check form-switch align-items-center justify-content-center">
+                  <input class="form-check-input gridswitch" type="checkbox" id="switch" >
+                  <label class = "form-check-label" id="annotationswitch" for="annotationswitch">Grid</label>
+                </div>
               </button>
 
             </div>
@@ -186,6 +192,12 @@
                   <p>Click an existing annotation to adjust or edit the annotation.</p>"
                   data-toggle="popover">
                   <i class="bi-info-circle"></i>
+                </button>
+                <button class="btn btn-light">
+                  <div class="grid-switch form-check form-switch align-items-center justify-content-center">
+                    <input class="form-check-input gridswitch" type="checkbox" id="gtswitch1" >
+                    <label class = "form-check-label" id="gtswitch1" for="gtswitch1">Grid</label>
+                  </div>
                 </button>
 
               </div>
@@ -223,6 +235,12 @@
                   <p>Click an existing annotation to adjust or edit the annotation.</p>"
                   data-toggle="popover">
                   <i class="bi-info-circle"></i>
+                </button>
+                <button class="btn btn-light">
+                  <div class="grid-switch form-check form-switch align-items-center justify-content-center">
+                    <input class="form-check-input gridswitch" type="checkbox" id="gtswitch2" >
+                    <label class = "form-check-label" id="gtswitch2" for="gtswitch2">Grid</label>
+                  </div>
                 </button>
 
 
@@ -265,16 +283,26 @@
                 <button id="divisionBack" <% if(!backEnabled) { %>disabled<% } %>  class="btn btn-primary">
                   <i class="bi-chevron-left"></i>
                 </button>
-                <div id="lineOpenerWrapper" class="btn-group">
-                  <button id="lineOpener" class="btn btn-light">
-                    <i class="bi-slash-square"></i>
+                <div class="justify-content-center d-flex flex-row">
+                  <div id="lineOpenerWrapper" class="btn-group">
+                    <button id="lineOpener" class="btn btn-light">
+                      <i class="bi-slash-square"></i>
+                    </button>
+                  </div>
+                
+                  <div id="lineCloserWrapper" class="btn-group">
+                    <button id="lineCloser" class="btn btn-light active">
+                      <i class="bi-slash-square"></i>
+                    </button>
+                  </div>
+                  <button class="btn btn-light">
+                    <div class="grid-switch form-check form-switch align-items-center justify-content-center">
+                      <input class="form-check-input gridswitch" type="checkbox" id="dlswitch" >
+                      <label class = "form-check-label" id="dlswitch" for="dlswitch">Grid</label>
+                    </div>
                   </button>
                 </div>
-                <div id="lineCloserWrapper" class="btn-group">
-                  <button id="lineCloser" class="btn btn-light active">
-                    <i class="bi-slash-square"></i>
-                  </button>
-                </div>
+                
                 <button id="divisionDone" class="btn btn-primary">
                   Done <i class="bi-chevron-right"></i>
                 </button>

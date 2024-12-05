@@ -32,17 +32,8 @@
   position: relative;
 }
 
-#innerWrapperLeft{
-  position: relative;
-}
-
-#innerWrapperRight{
-  position: relative;
-}
-
 .gridOverlay {
-  /* display: none; Hidden by default */
-  border: 1px solid rgba(0, 0, 255, 0.8);
+  display: none; 
   z-index: 1000;
   position: absolute;
   top: 0;
@@ -51,8 +42,8 @@
   height: 100%;
   pointer-events: none; /* Makes grid non-interactive */
   background-size: 100px 100px;
-  background-image: linear-gradient(to right, rgba(0, 0, 255, 0.8) 2px, transparent 2px),
-                    linear-gradient(to bottom, rgba(0, 0, 255, 0.8) 2px, transparent 2px);
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 1px, transparent 1px);
 }
 
 #imageToBox{
