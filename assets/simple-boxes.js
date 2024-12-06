@@ -1028,6 +1028,19 @@ $( document ).ready(function() {
     }
   });
 
+  $('body').on('change', '.gridswitch', async (e) => {      
+      const gridOverlays = document.querySelectorAll('.gridOverlay');
+      if (e.target.checked) {
+        gridOverlays.forEach(gridOverlay => {
+          gridOverlay.style.display = 'block';
+      });
+      } else {
+        gridOverlays.forEach(gridOverlay => {
+          gridOverlay.style.display = 'none';
+      }); 
+      }   
+  });
+
   // resize of source image
 
   // Pan and zoom of source image
