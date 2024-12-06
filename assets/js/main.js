@@ -1226,6 +1226,7 @@ function zoomAnnotationImage(factor, mouseX = window.imageHeight/2, mouseY= wind
   wrapper.scrollTop(newScrollTop);
 
   window.imageHeight = newHeight;
+  simpleBoxes.zoom(window.sbHandle1.id);
 }
 
 // Bind back button
