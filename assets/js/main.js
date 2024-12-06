@@ -521,10 +521,30 @@ $('button#clearSearchInput').on('click',function(e){
 
  $('#tasksPage .datepicker').datepicker();
 
+ function debounce(fn, delay, immediate = false) {
+  let timer;
+
+  return function (...args) {
+    const callNow = immediate && !timer;
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      timer = null;
+      if (!immediate) fn.apply(this, args);
+    }, delay);
+
+    if (callNow) fn.apply(this, args);
+  };
+}
+
+const debouncedImageSelectionFormChange = debounce(async () => {
+  await imageSelectionFormChange();
+}, 1000); 
 
 // Handle image selection modal
-$("form#imageSelectionForm input").on("input", async (e) => {
-  await imageSelectionFormChange();
+$("form#imageSelectionForm input").on("input", (e) => {
+  debouncedImageSelectionFormChange();
 });
 $("form#imageSelectionForm select").on("input", async (e) => {
   await imageSelectionFormChange();
