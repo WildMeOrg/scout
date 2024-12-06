@@ -11,6 +11,12 @@
 
 module.exports.bootstrap = async function() {
 
+  try {
+    Labels.addMlLabelsAndReturnAllLabels();
+  }catch (e) {
+    console.log("error",e);
+  }
+
   // By convention, this is a good place to set up fake data during development.
   //
   // For example:
