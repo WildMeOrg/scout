@@ -1212,7 +1212,7 @@ $('#annotationInnerWrapper').on('wheel', (e) => {
 function zoomAnnotationImage(factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) {
   const image = $('#imageToAnnotate');
   const wrapper = $('#annotationInnerWrapper');
-
+  const gridOverlay = $('.gridOverlay');
   const oldImageWidth = image.width();
   const oldImageHeight = image.height();
 
@@ -1247,6 +1247,14 @@ function zoomAnnotationImage(factor, mouseX = window.imageHeight/2, mouseY= wind
   image.css({
     height: newHeight + 'px',
     width: newWidth + 'px'
+  });
+
+  const gridBaseSize = 100; 
+  const gridScale = newHeight / minimumImageHeight; 
+  let newGridSize = Math.max(gridBaseSize * gridScale, 100);
+
+  gridOverlay.css({
+    backgroundSize: `${newGridSize}px ${newGridSize}px`
   });
 
   wrapper.scrollLeft(newScrollLeft);
@@ -1392,7 +1400,7 @@ setTimeout( async () => {
 const zoomGroundTruthImage = (factor, mouseX = window.imageHeight/2, mouseY= window.imageHeight/2) => {
   const image = $('#imageToGroundTruth');
   const wrapper = $('#scrollBoxLeft'); // Wrapper for scroll handling
-
+  const gridOverlay = $('.gridOverlay');
   const oldImageWidth = image.width();
   const oldImageHeight = image.height();
 
@@ -1428,6 +1436,14 @@ const zoomGroundTruthImage = (factor, mouseX = window.imageHeight/2, mouseY= win
     image.css({
       height: newHeight + 'px',
       width: newWidth + 'px'
+    });
+
+    const gridBaseSize = 100; 
+    const gridScale = newHeight / minimumImageHeight; 
+    let newGridSize = Math.max(gridBaseSize * gridScale, 100);
+
+    gridOverlay.css({
+      backgroundSize: `${newGridSize}px ${newGridSize}px`
     });
 
     wrapper.scrollLeft(newScrollLeft);

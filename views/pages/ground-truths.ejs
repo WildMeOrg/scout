@@ -32,19 +32,19 @@
 
   <div class="sbsRow">
 
-    <div   id="gtColumnLeft" style="width: 100%; float: clear; text-align: center;">
-      <div class="gridOverlay"></div> 
+    <div   id="gtColumnLeft" style="width: 100%; float: clear; text-align: center;">      
       <div id="scrollBoxLeft" class="groundTruthInnerWrapper">
         <div class="simpleBoxesImageAndCanvasWrapper">
-        <img class = "imageToGroundTruth" id="imageToGroundTruth" src="/uploads/<%=imageData.id %>"/>
+          <div class="gridOverlay"></div> 
+          <img class = "imageToGroundTruth" id="imageToGroundTruth" src="/uploads/<%=imageData.id %>"/>
         </div>
       </div>
     </div>
 
-    <div  id="gtColumnRight" style="width: 49.8%; float: right; text-align: left;">
-      <div class="gridOverlay"></div> 
+    <div  id="gtColumnRight" style="width: 49.8%; float: right; text-align: left;">      
       <div id="scrollBoxRight" class="groundTruthInnerWrapperReadOnly">
         <div class="simpleBoxesImageAndCanvasWrapper">
+          <div class="gridOverlay"></div> 
         <img class = "imageToGroundTruth" id="imageComparison" src="/uploads/<%=imageData.id %>/?right=true">
         </div>
       </div>
