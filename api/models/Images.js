@@ -16,46 +16,61 @@ module.exports = {
   },
 
   // definitely would be better done as part of direct query on Images :(
-  filterByLabels: async function(imageList, labels) {
-    if (!labels || !labels.length) return imageList;
-    let imagesWithLabels = [];
-    for (const image of imageList) {
-      let annots = await Annotations.find({
-        imageId : image.id,
-      });
-      annots = annots || [];
-      let gts = await GroundTruths.find({
-        imageId : image.id,
-      });
-      gts = gts || [];
-      if (!annots.length && !gts.length) continue;
-
-      let found = false;
-      // bummer, label is within boundingBoxes
-      checkImageAnnot: for (const annot of annots) {
-        // finding just one is good enough, cuz this is an "or" search
-        for (const bbox of annot.boundingBoxes) {
-          if (labels.indexOf(bbox.label) > -1) {
+    filterByLabels: async function (imageList, labels) {
+      if (!labels || !labels.length) return imageList;
+    
+      // get all image IDs
+      const imageIds = imageList.map(image => image.id);
+    
+      // lookup Annotations and GroundTruths
+      const [annots, gts] = await Promise.all([
+        Annotations.find({ imageId: imageIds }),
+        GroundTruths.find({ imageId: imageIds }),
+      ]);
+    
+    
+      const annotMap = annots.reduce((map, annot) => {
+        if (!map[annot.imageId]) map[annot.imageId] = [];
+        map[annot.imageId].push(annot);
+        return map;
+      }, {});
+    
+      const gtMap = gts.reduce((map, gt) => {
+        if (!map[gt.imageId]) map[gt.imageId] = [];
+        map[gt.imageId].push(gt);
+        return map;
+      }, {});
+    
+      // filter images
+      const imagesWithLabels = [];
+      for (const image of imageList) {
+        const annotsForImage = annotMap[image.id] || [];
+        const gtsForImage = gtMap[image.id] || [];
+    
+        let found = false;
+    
+        // check Annotations
+        for (const annot of annotsForImage) {
+          if (annot.boundingBoxes.some(bbox => labels.includes(bbox.label))) {
             imagesWithLabels.push(image);
             found = true;
-            break checkImageAnnot;
+            break;
           }
         }
-      }
-      if (!found) {  // lets try GT as well
-        checkImageGT: for (const gt of gts) {
-          // finding just one is good enough, cuz this is an "or" search
-          for (const bbox of gt.boundingBoxes) {
-            if (labels.indexOf(bbox.label) > -1) {
+    
+        // check GroundTruths
+        if (!found) {
+          for (const gt of gtsForImage) {
+            if (gt.boundingBoxes.some(bbox => labels.includes(bbox.label))) {
               imagesWithLabels.push(image);
-              break checkImageGT;
+              break;
             }
           }
         }
       }
-    }
-    return imagesWithLabels;
-  },
+    
+      return imagesWithLabels;
+    },
 
   // Helper to add a GPS filters to an existing query object
   addGpsQueryFilter: function(latMin, latMax, longMin, longMax, query) {
