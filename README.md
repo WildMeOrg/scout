@@ -1,6 +1,6 @@
 # Scout
 
-Scout is a software application designed to support annotators and lab leads processing imagery for the Kavango–Zambezi Transfrontier Conservation Area (KAZA TFCA) aerial survey of animals.
+Scout is a software application designed to support annotation labs processing imagery from aerial surveys, such as animal counts and forest health evaluations.
 
 With Scout, you can:
 
@@ -12,7 +12,6 @@ With Scout, you can:
 
 
 ## System Requirements
-
 **NOTE**: This software is designed to run on an air-gapped private network only. (Significant security modifications are needed before this platform is suitable for installation on a public network or cloud).
 
 * A fast and stable internet connection.
@@ -21,40 +20,23 @@ With Scout, you can:
 * Laptops with the Chrome web browser to connect to the Scout server for lab leads and annotators.
 
 ## Installation
+For installation and first-time configuration steps, follow our [Server System Setup](https://scout.docs.wildme.org/setup-and-maintenance/index.html) documentation guide. 
 
-For installation and first-time configuration steps, follow our [Server System Setup](https://scout.docs.wildme.org/system-administrators/server-system-setup.html) documentation guide. 
-
-**NOTE**: Following full installation instructions will remove all data and any operating system from the Scout Server laptop and Ubuntu Linux will be installed as the operating system. Skip Ubuntu installation to run on a different OS.
-
+## Dev Setup
+We welcome any and all contributions on the Scout tool. See our documentation for information on [Dev Environment Setup](https://scout.docs.wildme.org/contribute/dev-setup.html). If you're interested in contributing on the ML side, see the [Scoutbot readme](https://github.com/WildMeOrg/scoutbot). We are still working on a method of accepting contributions for ML, but would love to hear your ideas!
 
 ## Important Links & Documentation
-
-Use our [Help Documentation](https://scout.docs.wildme.org/) to learn how to use Scout.
-
-Visit [Wild Me Professional Services](https://www.wildme.org/services) to view the range of services we can offer. 
-
-
-## Support
-
-For assistance with setup and installation, or for interest in development, join our [Wild Me Development Discord](https://discord.gg/zw4tr3RE4R).
-For usage issues and customer support, visit our [Community page](https://community.wildme.org).
+- [Help Documentation](https://scout.docs.wildme.org/) to learn how to use Scout.
+- [Wild Me Professional Services](https://www.wildme.org/services) to view the range of services we can offer. 
+- [Wild Me Development Discord](https://discord.gg/zw4tr3RE4R) for assistance with setup and installation, or for interest in development.
+- [Community forum](https://community.wildme.org) for usage issues and customer support.
 
 
 ## Usage
 
-Scout supports three user roles:
+https://github.com/user-attachments/assets/56c1dbf3-2bd4-4df1-aa3e-85e31bd48b39
 
-* System Administrators install and run Scout.
-* Lab leads create and manage user accounts, upload images, coordinate tasks, review and ground truth annotations, draw division lines, and export data.
-* Annotators draw and label bounding boxes representing animals on images.  
-
-Lab leads view, filter, manage, and export Tasks using the Task table:
-
-![Task Table](assets/images/Screenshot-TaskTable-ReadMe.png)
-
-Annotators and ML models use bounding boxes, species labels, and annotation labels to indicate animals in images:
-
-![Annotation](assets/images/Screenshot-Annotation-ReadMe.png)
+Once you've set up Scout, you can create and manage user accounts, upload images, coordinate tasks, review and ground truth annotations, draw division lines, and export data. Then collectively work with your team to draw and label bounding boxes representing animals on images, leveraging AI to process the imagery as quickly as possible.  
 
 
 ## Techstack and Features
