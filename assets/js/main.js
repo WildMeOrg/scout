@@ -65,7 +65,25 @@ window.debugAnnotations = async () =>{
   await window.debugAnnotations();
 }
 
-$( document ).ready( async () => {  
+$( document ).ready( async () => {   
+    
+  //Get external references from csv
+  console.log("getting external references");
+  const getExternalReferences = fetch('/api/external-reference', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  getExternalReferences.then(response => {
+  if(response.ok) {
+    response.json().then(data => {
+      window.externalReferences = data.data;
+    });
+  }else {
+    console.log("Error getting external references");
+  }
+  }
+  );
 
   $('body').on('change', '.gridswitch', async (e) => {      
       const gridOverlays = document.querySelectorAll('.gridOverlay');
@@ -778,6 +796,8 @@ const imageSelectionFormChange = async () => {
 
 }
 
+
+
 //If leave annotation/ground truth page, reset active label to none
 
 if(!document.querySelector("#toggle-switch")) {
@@ -1156,6 +1176,7 @@ $('#imageSelectionFormSubmit').on('click',(e) => {
 
 // Poppers
 $('[data-toggle="popover"]').popover({'html':true});
+
 
 
 /*

@@ -36,6 +36,7 @@ module.exports.routes = {
   'DELETE /api/sessions' : { action: 'api-sessions-delete' },
   'GET /api/workers/:name' : { action: 'api-workers-get'},
   'POST /api/exports/' : { action: 'api-exports-post'},
+  'GET /api/external-reference/' : { action: 'api-external-reference'},
   'GET /api/images/' : { action: 'api-images-count'},
   'PUT /api/images/:imageid' : { action: 'api-images-put' },
   'DELETE /api/images' : { action: 'api-images-delete' },
