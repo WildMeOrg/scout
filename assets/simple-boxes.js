@@ -244,7 +244,6 @@ window.simpleBoxes._.methods = {
     // Clicked on something, determine if it's center or one of the corners
     // Move the correct item into state.activebox, or set activebox to false
     // Set dragtype and dragcorner
-     
     const myX = e.clientX - $(el).offset().left + window.scrollX;
     const myY = e.clientY - $(el).offset().top + window.scrollY;   
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
@@ -694,7 +693,7 @@ window.simpleBoxes._.methods = {
     for(const label of labelContent) {
       label.remove();
     }
-    let divs = $('i.annotationBox');
+    let divs = $('div.annotationBox');
     for(const div of divs) {
       div.remove();
     }
@@ -720,18 +719,20 @@ window.simpleBoxes._.methods = {
 
     //Draw annotation box which user can select and use hot key to change label or delete
     //AnnotationBox's left and top coordinates have to be "later" than the mouse move(coly.x and copy.y), so add 2px here.
-    let div = `<i 
-      class="annotationBox tagIcon" 
+    let div = `<div 
+      class="annotationBox" 
       data-handle-id="${handle.id}" 
       data-box-id="${copy.id}" 
       style="
+      position: absolute;
       top: ${copy.h > 0 ? copy.y +2: copy.y + copy.h +2}px; 
       left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
       width: ${Math.abs(copy.w)-4}px; 
       height: ${Math.abs(copy.h)-4}px;
-      border: 2px solid red;
-      ">
-        </i>`;
+      border: 2px solid yellow;
+      z-index: auto;
+      ">      
+        </div>`;
     
     if(!handle.readOnly){
       $(div).insertAfter('#'+handle.canvas.id);
@@ -1071,7 +1072,7 @@ $( document ).ready(function() {
     }
   }
 
-  $('body').on('mousedown', 'i.annotationBox', async (e) => {
+  $('body').on('mousedown', 'div.annotationBox', async (e) => {
     // let boxId = $(e.target).attr('data-box-id');
     // let handleId = $(e.target).attr('data-handle-id');
     // const currentBox = document.querySelectorAll(`[data-box-id = ${boxId}]`)[3];  
@@ -1081,12 +1082,12 @@ $( document ).ready(function() {
     e.target.focus();
   });
 
-  $('body').on('mousemove', 'i.annotationBox', async (e) => {
+  $('body').on('mousemove', 'div.annotationBox', async (e) => {
     let handleId = $(e.target).attr('data-handle-id');
     await mousemove(e, handleId);
   });
 
-  $('body').on('mouseup', 'i.annotationBox', async (e) => {
+  $('body').on('mouseup', 'div.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     await mouseup(e, handleId);
@@ -1096,7 +1097,7 @@ $( document ).ready(function() {
   });
 
 
-  $('body').on('keydown', 'i.annotationBox', async (e) => {
+  $('body').on('keydown', 'div.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     if($(e.target).attr('tabindex') === '0') {
