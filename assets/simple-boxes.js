@@ -729,7 +729,7 @@ window.simpleBoxes._.methods = {
       left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
       width: ${Math.abs(copy.w)-4}px; 
       height: ${Math.abs(copy.h)-4}px;
-      border: 2px solid yellow;
+      border: 2px solid red;
       z-index: auto;
       ">      
         </div>`;
