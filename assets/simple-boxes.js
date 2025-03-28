@@ -740,10 +740,43 @@ window.simpleBoxes._.methods = {
     // Draw the corners
       
     // Draw the trash can
-    let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
-    trashCanX-=15;
-    let trashCanY = copy.h > 0 ? copy.y : copy.y + copy.h;
-    trashCanY-=37;
+    
+    //get right edge of the image
+    // if annotation box is on the right edge, move the trash can to the left of the annotation box    
+    const rightEdge = handle.image.currentDimensions.w;
+    let trashCanX = 0;
+    if (copy.w > 0) {
+      if (copy.x >= rightEdge - 30) {
+        trashCanX = copy.x - 30;
+      } else {
+        trashCanX = copy.x;
+      }
+    } else {
+      if (copy.x + copy.w >= rightEdge - 30) {
+        trashCanX = copy.x + copy.w- 30;
+      } else {                                  
+        trashCanX = copy.x + copy.w;
+      }
+    }
+
+    // if annotation box is on the top edge, move the trash can to the bottom of the annotation box    
+    let trashCanY = 0;
+
+    if(copy.h > 0){
+      if(copy.y <= 20){
+        trashCanY = copy.y + copy.h + 15;
+      }else {
+        trashCanY = copy.y;
+      }
+    } else {
+      if(copy.y + copy.h <= 20){
+        trashCanY = copy.y + 15;
+      }else {
+        trashCanY = copy.y + copy.h;
+      }
+    }     
+
+    trashCanY-=20;
 
     let trashCanString = `<i class="bi bi-trash3-fill deleteBoxTrigger trashIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${trashCanY}px; left: ${trashCanX}px"></i>`;
 
@@ -753,7 +786,7 @@ window.simpleBoxes._.methods = {
     }
 
     // Draw the label trigger
-    let labelX = trashCanX + 25;
+    let labelX = trashCanX + 20;
     let labelY = trashCanY;
 
     let labelString = `
@@ -766,7 +799,7 @@ window.simpleBoxes._.methods = {
 
     //Draw the label
  
-    let labelContentX = labelX + 25;
+    let labelContentX = labelX + 20;
     let labelContentY = labelY;
     let currentLabel = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
     let finalLabel = "";
