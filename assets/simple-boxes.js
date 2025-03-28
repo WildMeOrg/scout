@@ -261,6 +261,13 @@ window.simpleBoxes._.methods = {
       state.dragCornerOverride = false;
     }
 
+    // Set the current drawing canvas
+    window.simpleBoxes._.currentDrawingCanvasId = e.target.id;
+
+    // watch for mouse move and mouse up outsise the canvas
+    document.addEventListener('mousemove', window.simpleBoxes._.methods.globalMouseMove);
+    document.addEventListener('mouseup', window.simpleBoxes._.methods.globalMouseUp);
+
     // Redraw
     await window.simpleBoxes._.methods.redrawBoxes(handle);
 
@@ -293,9 +300,54 @@ window.simpleBoxes._.methods = {
     const el = handle.canvas.element;
     const ctx = handle.canvas.ctx;
     const state = handle.canvas.state;
+
     // Figure out where cursor is    
-    const myX = e.clientX - $(el).offset().left + window.scrollX;
-    const myY = e.clientY - $(el).offset().top + window.scrollY;
+    let myX = e.clientX - $(el).offset().left + window.scrollX;
+    let myY = e.clientY - $(el).offset().top + window.scrollY;
+
+    const canvasW = handle.canvas.dimensions.w;
+    const canvasH = handle.canvas.dimensions.h;
+    
+    const isOutOfBounds =
+      myX < 0 || myX > canvasW ||
+      myY < 0 || myY > canvasH;
+
+    //out of bounds
+    if (isOutOfBounds) {
+      // Clamp to edge
+      myX = Math.max(0, Math.min(myX, canvasW));
+      myY = Math.max(0, Math.min(myY, canvasH));
+    
+      if (state.drawingBox && state.activeBox) {
+        const startX = state.activeBox.x;
+        const startY = state.activeBox.y;
+    
+        const newX = Math.min(startX, myX);
+        const newY = Math.min(startY, myY);
+        const newW = Math.abs(myX - startX);
+        const newH = Math.abs(myY - startY);
+    
+        state.activeBox.x = newX;
+        state.activeBox.y = newY;
+        state.activeBox.w = newW;
+        state.activeBox.h = newH;
+    
+        // Save it
+        const copy = Object.assign({}, state.activeBox);
+        await window.simpleBoxes._.methods.saveActiveBox(handle, copy);
+    
+        //stop drawing
+        state.drawingBox = false;
+        state.mouseDown = false;
+        state.activeBox = false;
+    
+        // Redraw
+        await window.simpleBoxes._.methods.redrawBoxes(handle);
+      }    
+      return;
+    }
+
+    //on the canvas
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
@@ -422,6 +474,35 @@ window.simpleBoxes._.methods = {
       // Redraw
       await window.simpleBoxes._.methods.redrawBoxes(handle);
   },
+
+  globalMouseMove: async (e) => {
+    const handleId = window.simpleBoxes._.currentDrawingCanvasId;
+    if (!handleId) return;
+  
+    const fakeEvent = {
+      target: { id: handleId },
+      clientX: e.clientX,
+      clientY: e.clientY
+    };
+  
+    await window.simpleBoxes._.methods.handleMouseMove(fakeEvent);
+  },
+  
+  globalMouseUp: async (e) => {
+    const handleId = window.simpleBoxes._.currentDrawingCanvasId;
+
+    if (!handleId) return;
+    if (e.target && e.target.classList.contains('annotationBox')) return;
+  
+    const fakeEvent = {
+      target: { id: handleId },
+      clientX: e.clientX,
+      clientY: e.clientY
+    };
+  
+    await window.simpleBoxes._.methods.handleMouseUp(fakeEvent);
+  },
+  
   identifyBox : async(handle,x,y) => {
     let returnData = {
       box : false,
