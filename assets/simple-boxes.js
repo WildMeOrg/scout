@@ -490,7 +490,9 @@ window.simpleBoxes._.methods = {
   
   globalMouseUp: async (e) => {
     const handleId = window.simpleBoxes._.currentDrawingCanvasId;
+
     if (!handleId) return;
+    if (e.target && e.target.classList.contains('annotationBox')) return;
   
     const fakeEvent = {
       target: { id: handleId },
