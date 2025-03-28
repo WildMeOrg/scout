@@ -661,24 +661,24 @@ window.simpleBoxes._.methods = {
     // Draw the trash can
     
     //get right edge of the image
+    // if annotation box is on the right edge, move the trash can to the left of the annotation box    
     const rightEdge = handle.image.currentDimensions.w;
-    // let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
     let trashCanX = 0;
     if (copy.w > 0) {
-      console.log("new");
-      if (copy.x >= rightEdge - 20) {
-        trashCanX = copy.x - 20;
+      if (copy.x >= rightEdge - 30) {
+        trashCanX = copy.x - 30;
       } else {
         trashCanX = copy.x;
       }
     } else {
-      if (copy.x >= rightEdge - 20) {
-        trashCanX = copy.x + copy.x- 20;
+      if (copy.x + copy.w >= rightEdge - 30) {
+        trashCanX = copy.x + copy.w- 30;
       } else {                                  
-        trashCanX = copy.x;
+        trashCanX = copy.x + copy.w;
       }
     }
 
+    // if annotation box is on the top edge, move the trash can to the bottom of the annotation box    
     let trashCanY = 0;
 
     if(copy.h > 0){
