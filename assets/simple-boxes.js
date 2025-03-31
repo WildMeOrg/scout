@@ -492,6 +492,7 @@ window.simpleBoxes._.methods = {
 
     if (!handleId) return;
     if (e.target && e.target.classList.contains('annotationBox')) return;
+    if (e.target && e.target.classList.contains('labelSelector')) return;
   
     const fakeEvent = {
       target: { id: handleId },
