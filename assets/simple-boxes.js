@@ -244,7 +244,6 @@ window.simpleBoxes._.methods = {
     // Clicked on something, determine if it's center or one of the corners
     // Move the correct item into state.activebox, or set activebox to false
     // Set dragtype and dragcorner
-     
     const myX = e.clientX - $(el).offset().left + window.scrollX;
     const myY = e.clientY - $(el).offset().top + window.scrollY;   
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
@@ -260,6 +259,13 @@ window.simpleBoxes._.methods = {
       state.dragTypeOverride = false;
       state.dragCornerOverride = false;
     }
+
+    // Set the current drawing canvas
+    window.simpleBoxes._.currentDrawingCanvasId = e.target.id;
+
+    // watch for mouse move and mouse up outsise the canvas
+    document.addEventListener('mousemove', window.simpleBoxes._.methods.globalMouseMove);
+    document.addEventListener('mouseup', window.simpleBoxes._.methods.globalMouseUp);
 
     // Redraw
     await window.simpleBoxes._.methods.redrawBoxes(handle);
@@ -293,9 +299,54 @@ window.simpleBoxes._.methods = {
     const el = handle.canvas.element;
     const ctx = handle.canvas.ctx;
     const state = handle.canvas.state;
+
     // Figure out where cursor is    
-    const myX = e.clientX - $(el).offset().left + window.scrollX;
-    const myY = e.clientY - $(el).offset().top + window.scrollY;
+    let myX = e.clientX - $(el).offset().left + window.scrollX;
+    let myY = e.clientY - $(el).offset().top + window.scrollY;
+
+    const canvasW = handle.canvas.dimensions.w;
+    const canvasH = handle.canvas.dimensions.h;
+    
+    const isOutOfBounds =
+      myX < 0 || myX > canvasW ||
+      myY < 0 || myY > canvasH;
+
+    //out of bounds
+    if (isOutOfBounds) {
+      // Clamp to edge
+      myX = Math.max(0, Math.min(myX, canvasW));
+      myY = Math.max(0, Math.min(myY, canvasH));
+    
+      if (state.drawingBox && state.activeBox) {
+        const startX = state.activeBox.x;
+        const startY = state.activeBox.y;
+    
+        const newX = Math.min(startX, myX);
+        const newY = Math.min(startY, myY);
+        const newW = Math.abs(myX - startX);
+        const newH = Math.abs(myY - startY);
+    
+        state.activeBox.x = newX;
+        state.activeBox.y = newY;
+        state.activeBox.w = newW;
+        state.activeBox.h = newH;
+    
+        // Save it
+        const copy = Object.assign({}, state.activeBox);
+        await window.simpleBoxes._.methods.saveActiveBox(handle, copy);
+    
+        //stop drawing
+        state.drawingBox = false;
+        state.mouseDown = false;
+        state.activeBox = false;
+    
+        // Redraw
+        await window.simpleBoxes._.methods.redrawBoxes(handle);
+      }    
+      return;
+    }
+
+    //on the canvas
     let overWhichBox = await window.simpleBoxes._.methods.identifyBox(handle,myX,myY);
 
     if(state.mouseDown){
@@ -422,6 +473,36 @@ window.simpleBoxes._.methods = {
       // Redraw
       await window.simpleBoxes._.methods.redrawBoxes(handle);
   },
+
+  globalMouseMove: async (e) => {
+    const handleId = window.simpleBoxes._.currentDrawingCanvasId;
+    if (!handleId) return;
+  
+    const fakeEvent = {
+      target: { id: handleId },
+      clientX: e.clientX,
+      clientY: e.clientY
+    };
+  
+    await window.simpleBoxes._.methods.handleMouseMove(fakeEvent);
+  },
+  
+  globalMouseUp: async (e) => {
+    const handleId = window.simpleBoxes._.currentDrawingCanvasId;
+
+    if (!handleId) return;
+    if (e.target && e.target.classList.contains('annotationBox')) return;
+    if (e.target && e.target.classList.contains('labelSelector')) return;
+  
+    const fakeEvent = {
+      target: { id: handleId },
+      clientX: e.clientX,
+      clientY: e.clientY
+    };
+  
+    await window.simpleBoxes._.methods.handleMouseUp(fakeEvent);
+  },
+  
   identifyBox : async(handle,x,y) => {
     let returnData = {
       box : false,
@@ -613,7 +694,7 @@ window.simpleBoxes._.methods = {
     for(const label of labelContent) {
       label.remove();
     }
-    let divs = $('i.annotationBox');
+    let divs = $('div.annotationBox');
     for(const div of divs) {
       div.remove();
     }
@@ -639,18 +720,20 @@ window.simpleBoxes._.methods = {
 
     //Draw annotation box which user can select and use hot key to change label or delete
     //AnnotationBox's left and top coordinates have to be "later" than the mouse move(coly.x and copy.y), so add 2px here.
-    let div = `<i 
-      class="annotationBox tagIcon" 
+    let div = `<div 
+      class="annotationBox" 
       data-handle-id="${handle.id}" 
       data-box-id="${copy.id}" 
       style="
+      position: absolute;
       top: ${copy.h > 0 ? copy.y +2: copy.y + copy.h +2}px; 
       left: ${copy.w > 0 ? copy.x +2: copy.x + copy.w +2}px; 
       width: ${Math.abs(copy.w)-4}px; 
       height: ${Math.abs(copy.h)-4}px;
       border: 2px solid red;
-      ">
-        </i>`;
+      z-index: auto;
+      ">      
+        </div>`;
     
     if(!handle.readOnly){
       $(div).insertAfter('#'+handle.canvas.id);
@@ -659,10 +742,43 @@ window.simpleBoxes._.methods = {
     // Draw the corners
       
     // Draw the trash can
-    let trashCanX = copy.w > 0 ? copy.x : copy.x + copy.w;
-    trashCanX-=15;
-    let trashCanY = copy.h > 0 ? copy.y : copy.y + copy.h;
-    trashCanY-=37;
+    
+    //get right edge of the image
+    // if annotation box is on the right edge, move the trash can to the left of the annotation box    
+    const rightEdge = handle.image.currentDimensions.w;
+    let trashCanX = 0;
+    if (copy.w > 0) {
+      if (copy.x >= rightEdge - 30) {
+        trashCanX = copy.x - 30;
+      } else {
+        trashCanX = copy.x;
+      }
+    } else {
+      if (copy.x + copy.w >= rightEdge - 30) {
+        trashCanX = copy.x + copy.w- 30;
+      } else {                                  
+        trashCanX = copy.x + copy.w;
+      }
+    }
+
+    // if annotation box is on the top edge, move the trash can to the bottom of the annotation box    
+    let trashCanY = 0;
+
+    if(copy.h > 0){
+      if(copy.y <= 20){
+        trashCanY = copy.y + copy.h + 15;
+      }else {
+        trashCanY = copy.y;
+      }
+    } else {
+      if(copy.y + copy.h <= 20){
+        trashCanY = copy.y + 15;
+      }else {
+        trashCanY = copy.y + copy.h;
+      }
+    }     
+
+    trashCanY-=20;
 
     let trashCanString = `<i class="bi bi-trash3-fill deleteBoxTrigger trashIcon" data-handle-id="${handle.id}" data-box-id="${copy.id}" style="top: ${trashCanY}px; left: ${trashCanX}px"></i>`;
 
@@ -672,7 +788,7 @@ window.simpleBoxes._.methods = {
     }
 
     // Draw the label trigger
-    let labelX = trashCanX + 25;
+    let labelX = trashCanX + 20;
     let labelY = trashCanY;
 
     let labelString = `
@@ -685,7 +801,7 @@ window.simpleBoxes._.methods = {
 
     //Draw the label
  
-    let labelContentX = labelX + 25;
+    let labelContentX = labelX + 20;
     let labelContentY = labelY;
     let currentLabel = window.simpleBoxes._.handles[handle.id].boxes[copy.id].label;
     let finalLabel = "";
@@ -957,7 +1073,7 @@ $( document ).ready(function() {
     }
   }
 
-  $('body').on('mousedown', 'i.annotationBox', async (e) => {
+  $('body').on('mousedown', 'div.annotationBox', async (e) => {
     // let boxId = $(e.target).attr('data-box-id');
     // let handleId = $(e.target).attr('data-handle-id');
     // const currentBox = document.querySelectorAll(`[data-box-id = ${boxId}]`)[3];  
@@ -967,12 +1083,12 @@ $( document ).ready(function() {
     e.target.focus();
   });
 
-  $('body').on('mousemove', 'i.annotationBox', async (e) => {
+  $('body').on('mousemove', 'div.annotationBox', async (e) => {
     let handleId = $(e.target).attr('data-handle-id');
     await mousemove(e, handleId);
   });
 
-  $('body').on('mouseup', 'i.annotationBox', async (e) => {
+  $('body').on('mouseup', 'div.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     await mouseup(e, handleId);
@@ -982,7 +1098,7 @@ $( document ).ready(function() {
   });
 
 
-  $('body').on('keydown', 'i.annotationBox', async (e) => {
+  $('body').on('keydown', 'div.annotationBox', async (e) => {
     let boxId = $(e.target).attr('data-box-id');
     let handleId = $(e.target).attr('data-handle-id');
     if($(e.target).attr('tabindex') === '0') {
