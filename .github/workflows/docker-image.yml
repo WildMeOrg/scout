@@ -5,8 +5,8 @@ on:
      branches:
       - main
   repository_dispatch:
-    types: build-trigger 
-    
+    types: build-trigger
+
 jobs:
   devops:
     name: Docker image build
@@ -30,9 +30,12 @@ jobs:
              sudo rm -f /swapfile
              sudo rm -rf /opt/hostedtoolcache
              sudo apt clean
-             docker rmi $(docker image ls -aq)
+             if [ "$(docker image ls -aq)" ]; then
+                docker rmi $(docker image ls -aq)
+             else
+                echo "No Docker images to remove."
              df -h
-             
+
       # Build images
       - name: Build images
         run: |
@@ -54,4 +57,4 @@ jobs:
         env:
           PUBLISH_IMAGES: ${{ matrix.images }} scout
 
- 
+
