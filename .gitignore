@@ -137,3 +137,7 @@ lib-cov
 # JSON config file generated after startup
 ################################################
 .settings.json
+
+
+# mongo
+db/
