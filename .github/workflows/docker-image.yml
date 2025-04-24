@@ -34,6 +34,7 @@ jobs:
                 docker rmi $(docker image ls -aq)
              else
                 echo "No Docker images to remove."
+             fi
              df -h
 
       # Build images
