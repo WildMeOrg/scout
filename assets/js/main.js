@@ -203,13 +203,18 @@ $('form.handleable').each(function(index) {
 
 /*
  * If on a success=true page, show any success alerts
- *
+ * then clean the URL so the message doesn't reappear on refresh (#35)
  */
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const success = urlParams.get('success');
 if(success){
   $('.pageSuccessAlert[data-successType="'+success+'"]').show();
+
+  // Remove the success param from URL to prevent showing on refresh
+  const cleanUrl = new URL(window.location);
+  cleanUrl.searchParams.delete('success');
+  window.history.replaceState({}, '', cleanUrl);
 }
 
 // Turn task list buttons into links
